@@ -1,14 +1,7 @@
 package com.jjlf.rnpainter.drawables;
 
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
-import android.graphics.PixelFormat;
-import android.util.Log;
-
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PainterKit;
-import com.jjlf.rnpainter.PainterView;
 
 public class LineDrawable extends Paintable {
 
@@ -43,11 +36,11 @@ public class LineDrawable extends Paintable {
         p.path.reset();
         if(p.isViewBoxEnabled){
 
-            p.path.moveTo( ModUtil.viewBoxToWidth(x1,p.viewBoxRectF,p.bounds.width()),
-                    ModUtil.viewBoxToHeight(y1,p.viewBoxRectF,p.bounds.height())
+            p.path.moveTo( ModUtil.viewBoxToWidth(x1,p.viewBox,p.bounds.width()),
+                    ModUtil.viewBoxToHeight(y1,p.viewBox,p.bounds.height())
             );
-            p.path.lineTo(ModUtil.viewBoxToWidth(x2,p.viewBoxRectF,p.bounds.width()),
-                    ModUtil.viewBoxToHeight(y2,p.viewBoxRectF,p.bounds.height())
+            p.path.lineTo(ModUtil.viewBoxToWidth(x2,p.viewBox,p.bounds.width()),
+                    ModUtil.viewBoxToHeight(y2,p.viewBox,p.bounds.height())
             );
         }else{
             p.path.moveTo(toDip(x1),toDip(y1));

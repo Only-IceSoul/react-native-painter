@@ -15,7 +15,7 @@ public class PainterKit {
     public final RectF bounds = new RectF();
     public String align = "none";
     public int aspect = 2;
-    public final RectF viewBoxRectF = new RectF();
+    public final RectF viewBox = new RectF();
     public final Matrix matrix = new Matrix();
     public boolean isViewBoxEnabled = false;
 }

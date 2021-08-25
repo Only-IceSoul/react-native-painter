@@ -8,8 +8,6 @@ import android.view.View;
 import com.facebook.react.views.view.ReactViewGroup;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
-import com.jjlf.rnpainter.views.GView;
-import com.jjlf.rnpainter.views.GViewHardware;
 
 
 public class PainterViewHardware extends ReactViewGroup {
@@ -27,7 +25,7 @@ public class PainterViewHardware extends ReactViewGroup {
     }
 
     public void setViewBox(float[] viewBox){
-        mPainter.viewBoxRectF.set(viewBox[0] ,viewBox[1] ,(viewBox[0] + viewBox[2])  ,(viewBox[1] + viewBox[3]));
+        mPainter.viewBox.set(viewBox[0] ,viewBox[1] ,(viewBox[0] + viewBox[2])  ,(viewBox[1] + viewBox[3]));
     }
     public void enableViewBox(){
         mPainter.isViewBoxEnabled = true;
@@ -62,22 +60,18 @@ public class PainterViewHardware extends ReactViewGroup {
     }
 
     @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) { }
-
-
-    public void invalidateChildren(){
+    protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            if(child instanceof GViewHardware){
-                GViewHardware c = (GViewHardware) child;
-                c.invalidateChildren();
-            } else if(child instanceof GView){
-                GView c = (GView) child;
-                c.invalidateChildren();
-            }else{
-                child.invalidate();
-            }
+            getChildAt(i).layout(0, 0, getWidth(), getHeight());
         }
     }
 
+
+    @Override
+    public void invalidate() {
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            child.invalidate();
+        }
+    }
 }

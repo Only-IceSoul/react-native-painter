@@ -19,8 +19,7 @@ public class PathViewManager  extends PaintableViewManager {
 
     @ReactProp(name = "d")
     public void setD(PathView view ,String v) {
-        view.getDrawable().setPath(v);
-        view.getDrawable().invalidateSelf();
+        view.setPath(v);
     }
 
 }

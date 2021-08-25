@@ -13,14 +13,14 @@ import com.jjlf.rnpainter.utils.SVGPathParser;
 
 public class PathDrawable extends Paintable{
 
-    protected String mPath = "";
+
 
 
     public PathDrawable(){
         super();
 
     }
-
+    protected String mPath = "";
     public void setPath(String v){
         mPath = v;
     }

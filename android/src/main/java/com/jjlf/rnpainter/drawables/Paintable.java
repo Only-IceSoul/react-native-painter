@@ -8,11 +8,8 @@ import android.graphics.PathMeasure;
 import android.graphics.PixelFormat;
 import android.graphics.RectF;
 import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.util.Log;
 
 
-import com.jjlf.rnpainter.PainterView;
 import com.jjlf.rnpainter.utils.CommonProps;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PainterKit;
@@ -190,8 +187,8 @@ public class Paintable extends Drawable {
         p.paint2.reset();
         float sw ;
         if (p.isViewBoxEnabled) {
-            float size = p.viewBoxRectF.width() > p.viewBoxRectF.height() ? p.bounds.width() : p.bounds.height();
-            sw =  (mProps.getStrokeWidth() / Math.max( p.viewBoxRectF.width(), p.viewBoxRectF.height() )) * size;
+            float size = p.viewBox.width() > p.viewBox.height() ? p.bounds.width() : p.bounds.height();
+            sw =  (mProps.getStrokeWidth() / Math.max( p.viewBox.width(), p.viewBox.height() )) * size;
         }else{
             sw = toDip(mProps.getStrokeWidth());
         }
@@ -228,8 +225,8 @@ public class Paintable extends Drawable {
                 ox = mProps.getShadowOffsetX() * p.bounds.width();
                 oy = mProps.getShadowOffsetY() * p.bounds.height();
             } else if (p.isViewBoxEnabled) {
-                ox = (mProps.getShadowOffsetX() / p.viewBoxRectF.width()) * p.bounds.width();
-                oy = (mProps.getShadowOffsetY() / p.viewBoxRectF.height()) * p.bounds.height();
+                ox = (mProps.getShadowOffsetX() / p.viewBox.width()) * p.bounds.width();
+                oy = (mProps.getShadowOffsetY() / p.viewBox.height()) * p.bounds.height();
             } else {
                 ox = toDip(mProps.getShadowOffsetX());
                 oy = toDip(mProps.getShadowOffsetY());
@@ -237,8 +234,8 @@ public class Paintable extends Drawable {
 
             float radius;
             if (p.isViewBoxEnabled) {
-                float size = p.viewBoxRectF.width() > p.viewBoxRectF.height() ? p.bounds.width() : p.bounds.height();
-                radius =  (mProps.getShadowRadius() / Math.max( p.viewBoxRectF.width(), p.viewBoxRectF.height() )) * size;
+                float size = p.viewBox.width() > p.viewBox.height() ? p.bounds.width() : p.bounds.height();
+                radius =  (mProps.getShadowRadius() / Math.max( p.viewBox.width(), p.viewBox.height() )) * size;
             }else{
                 radius = toDip(mProps.getShadowRadius());
             }
@@ -250,7 +247,7 @@ public class Paintable extends Drawable {
     }
 
     protected void transformToViewBox(PainterKit painter) {
-        SVGViewBox.transform(painter.viewBoxRectF, painter.bounds, painter.align, painter.aspect, painter.matrix, mDensity);
+        SVGViewBox.transform(painter.viewBox, painter.bounds, painter.align, painter.aspect, painter.matrix, mDensity);
         painter.path.transform(painter.matrix);
     }
 
@@ -266,8 +263,8 @@ public class Paintable extends Drawable {
                 rotY = (transform.mPathRotationY * painter.bounds.height());
             } else if (painter.isViewBoxEnabled) {
 
-                rotX = ModUtil.viewBoxToWidth(transform.mPathRotationX, painter.viewBoxRectF, painter.bounds.width());
-                rotY = ModUtil.viewBoxToHeight(transform.mPathRotationY, painter.viewBoxRectF, painter.bounds.height());
+                rotX = ModUtil.viewBoxToWidth(transform.mPathRotationX, painter.viewBox, painter.bounds.width());
+                rotY = ModUtil.viewBoxToHeight(transform.mPathRotationY, painter.viewBox, painter.bounds.height());
             } else {
                 rotX = toDip(transform.mPathRotationX);
                 rotY = toDip(transform.mPathRotationY);
@@ -292,8 +289,8 @@ public class Paintable extends Drawable {
                 transX = (transform.mPathTranslationX * painter.bounds.width());
                 transY = (transform.mPathTranslationY * painter.bounds.height());
             } else if (painter.isViewBoxEnabled) {
-                transX = (transform.mPathTranslationX / painter.viewBoxRectF.width()) * painter.bounds.width();
-                transY = (transform.mPathTranslationY / painter.viewBoxRectF.height()) * painter.bounds.height();
+                transX = (transform.mPathTranslationX / painter.viewBox.width()) * painter.bounds.width();
+                transY = (transform.mPathTranslationY / painter.viewBox.height()) * painter.bounds.height();
             } else {
                 transX = toDip(transform.mPathTranslationX);
                 transY = toDip(transform.mPathTranslationY);

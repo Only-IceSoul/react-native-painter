@@ -1,26 +1,53 @@
 package com.jjlf.rnpainter.views;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Path;
+
 import com.jjlf.rnpainter.drawables.PathDrawable;
+import com.jjlf.rnpainter.utils.PainterKit;
+import com.jjlf.rnpainter.utils.SVGPathParser;
+
+import java.util.Objects;
 
 
 public class PathView extends PaintableView {
 
 
-    PathDrawable mDrawable = new PathDrawable();
-
     public PathView(Context context){
         super(context);
-        mDrawable.setDensity(context.getResources().getDisplayMetrics().density);
-        setBackground(mDrawable);
+    }
+
+    protected String mPath = "";
+    public void setPath(String v){
+        if(!Objects.equals(mPath, v)){
+            mPath = v;
+            invalidate();
+        }
 
     }
+
     @Override
-    public PathDrawable getDrawable() {
-        return mDrawable;
+    public void draw(Canvas canvas) {
+        if(mPath != null && !mPath.isEmpty()){
+            super.draw(canvas);
+        }
+
     }
 
+    @Override
+    protected void setupPath(PainterKit p) {
+        p.path.reset();
+        try{
+            SVGPathParser.mScale = getResources().getDisplayMetrics().density;
+            final Path np = SVGPathParser.parse(mPath);
+            p.path.set(np);
+            p.path.setFillType(mProps.getFillRule());
 
+        }catch(Error ignored) {
+
+        }
+    }
 
 
 }

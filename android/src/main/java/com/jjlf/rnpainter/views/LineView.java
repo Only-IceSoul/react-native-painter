@@ -2,27 +2,79 @@ package com.jjlf.rnpainter.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.util.Log;
-import android.view.View;
 
-import com.jjlf.rnpainter.drawables.LineDrawable;
-import com.jjlf.rnpainter.drawables.Paintable;
+import com.jjlf.rnpainter.utils.ModUtil;
+import com.jjlf.rnpainter.utils.PainterKit;
 
 
 public class LineView extends PaintableView {
 
-    LineDrawable mDrawable = new LineDrawable();
+
+    private float x1 = 0f;
+    private float x2 = 0f;
+    private float y1 = 0f;
+    private float y2 = 0f;
+
+
+
+    public void setX1(float v) {
+        if(x1 != v){
+            x1 = v;
+            invalidate();
+        }
+
+    }
+    public void setY1(float v) {
+        if(y1 != v){
+            y1 = v;
+            invalidate();
+        }
+    }
+    public void setX2(float v) {
+        if(x2 != v){
+            x2 = v;
+            invalidate();
+        }
+    }
+    public void setY2(float v) {
+        if(y2 != v){
+            y2 = v;
+            invalidate();
+        }
+    }
+
+
 
     public LineView(Context context){
         super(context);
-        mDrawable.setDensity(context.getResources().getDisplayMetrics().density);
-        setBackground(mDrawable);
+        mIgnoreVbTransform = true;
+        mIgnoreFill = true;
+        mIgnoreShadow = true;
     }
 
     @Override
-    public LineDrawable getDrawable() {
-        return mDrawable;
+    public void draw(Canvas canvas) {
+        if(x1 != 0f || x2 != 0f || y1 != 0f || y2 != 0f) {
+            super.draw(canvas);
+        }
     }
 
+    @Override
+    protected void setupPath(PainterKit p) {
+        p.path.reset();
+        if(p.isViewBoxEnabled){
+
+            p.path.moveTo( ModUtil.viewBoxToWidth(x1,p.viewBox,p.bounds.width()),
+                    ModUtil.viewBoxToHeight(y1,p.viewBox,p.bounds.height())
+            );
+            p.path.lineTo(ModUtil.viewBoxToWidth(x2,p.viewBox,p.bounds.width()),
+                    ModUtil.viewBoxToHeight(y2,p.viewBox,p.bounds.height())
+            );
+        }else{
+            p.path.moveTo(toDip(x1),toDip(y1));
+            p.path.lineTo(toDip(x2),toDip(y2));
+        }
+
+    }
 
 }

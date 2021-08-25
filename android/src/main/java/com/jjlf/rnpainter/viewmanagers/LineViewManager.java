@@ -32,26 +32,22 @@ public class LineViewManager extends PaintableViewManager {
 
     @ReactProp(name = "x1",defaultFloat = 0f)
     public void setX1(LineView view ,float v) {
-        view.getDrawable().setX1(v);
-        view.getDrawable().invalidateSelf();
+        view.setX1(v);
     }
 
     @ReactProp(name = "y1",defaultFloat = 0f)
     public void setY1(LineView view ,float v) {
-        view.getDrawable().setY1(v);
-        view.getDrawable().invalidateSelf();
+        view.setY1(v);
     }
 
     @ReactProp(name = "x2",defaultFloat = 0f)
     public void setX2(LineView view ,float v) {
-        view.getDrawable().setX2(v);
-        view.getDrawable().invalidateSelf();
+        view.setX2(v);
     }
 
     @ReactProp(name = "y2",defaultFloat = 0f)
     public void setY2(LineView view ,float v) {
-        view.getDrawable().setY2(v);
-        view.getDrawable().invalidateSelf();
+        view.setY2(v);
     }
 
 

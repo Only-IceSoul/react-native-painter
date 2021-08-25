@@ -36,15 +36,20 @@ public class PainterViewManager extends ViewGroupManager<PainterView> {
         return PainterShadowNode.class;
     }
 
+    @Override
+    public boolean needsCustomLayoutForChildren() {
+        return true;
+    }
+
     @ReactProp(name = "align")
     public void setAlign(PainterView view , String v) {
         view.setAlign(v != null ? v : "none");
-        view.invalidateChildren();
+        view.invalidate();
     }
     @ReactProp(name = "aspect")
     public void setAspect(PainterView view ,String v) {
         view.setAspect(Objects.equals(v, "meet") ? VIEW_BOX_MEET : (Objects.equals(v, "slice") ? VIEW_BOX_SLICE : VIEW_BOX_NONE));
-        view.invalidateChildren();
+        view.invalidate();
     }
 
     @ReactProp(name = "viewBox")
@@ -61,7 +66,7 @@ public class PainterViewManager extends ViewGroupManager<PainterView> {
             view.disableViewBox();
         }
 
-        view.invalidateChildren();
+        view.invalidate();
     }
 
 }

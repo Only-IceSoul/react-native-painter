@@ -11,25 +11,26 @@ const PathView = requireNativeComponent("PathView",null);
 
 export class Line extends React.PureComponent {
     render(){
-        return <LineView {...this.props} style={StyleSheet.absoluteFill} />
+        return <LineView {...this.props}/>
         
     } 
 }
+
 export class GS extends React.PureComponent {
     render(){
-        return <GView {...this.props} style={StyleSheet.absoluteFill} />
+        return <GView {...this.props}  />
         
     } 
 }
 export class G extends React.PureComponent {
     render(){
-        return <GViewHardware {...this.props} style={StyleSheet.absoluteFill} />
+        return <GViewHardware {...this.props}  />
         
     } 
 }
 export class Path extends React.PureComponent {
     render(){
-        return <PathView {...this.props} style={StyleSheet.absoluteFill} />
+        return <PathView {...this.props} />
         
     } 
 }

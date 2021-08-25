@@ -33,6 +33,10 @@ public class ModUtil {
         return viewBoxEvaluator(value,viewBox.top,viewBox.bottom) * h;
     }
 
+    public static float viewBoxToMax(float value,RectF viewBox,float w, float h){
+        float size = viewBox.width() > viewBox.height() ? w : h;
+        return ( value / Math.max(viewBox.width(), viewBox.height() ) ) * size;
+    }
     public static boolean isNull(Dynamic d){
         return d == null || d.isNull();
     }
