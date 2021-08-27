@@ -45,10 +45,7 @@ public class CircleView extends PaintableView {
 
     @Override
     public void draw(Canvas canvas) {
-        if(r != 0f){
-            super.draw(canvas);
-        }
-
+        super.draw(canvas);
     }
 
     @Override

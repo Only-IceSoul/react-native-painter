@@ -1,6 +1,7 @@
 package com.jjlf.rnpainter.viewmanagers;
 
 import android.graphics.Color;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -35,12 +36,18 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
         return new PaintableShadowNode();
     }
 
-
+    @ReactProp(name = "mask")
+    public void setMask(PaintableView view ,String v) {
+        view.setMask(v == null ? "" : v);
+    }
+    @ReactProp(name = "opacity")
+    public void setOpacity(PaintableView view ,Dynamic v) {
+        view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+    }
 
     @ReactProp(name = "fill")
     public void setFill(PaintableView view , Dynamic v) {
         view.setFill(ModUtil.getInt(v, Color.BLACK),ModUtil.isNotNull(v));
-        
     }
     @ReactProp(name = "fillRule")
     public void setFillRule(PaintableView view ,String v) {
@@ -57,6 +64,11 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
     public void setStroke(PaintableView view , Dynamic v) {
         view.setStroke(ModUtil.getInt(v,Color.TRANSPARENT),ModUtil.isNotNull(v));
         
+    }
+    @ReactProp(name = "strokeOpacity")
+    public void setStrokeOpacity(PaintableView view ,Dynamic v) {
+        view.setStrokeOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+
     }
 
     @ReactProp(name = "strokeWidth")
@@ -134,7 +146,10 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
     public void setScale(PaintableView view , ReadableMap v) {
         float x = (float) ModUtil.getDouble(v,"x",1.0);
         float y = (float) ModUtil.getDouble(v,"y",1.0);
-        view.setPathScale(x,y);
+        float ox = (float) ModUtil.getDouble(v,"ox",0.0);
+        float oy = (float) ModUtil.getDouble(v,"oy",0.0);
+        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
+        view.setPathScale(x,y,ox,oy,per);
 
     }
     @ReactProp(name = "translate")

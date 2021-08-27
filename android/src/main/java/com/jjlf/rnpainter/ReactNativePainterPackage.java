@@ -10,10 +10,14 @@ import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
+import com.jjlf.rnpainter.viewmanagers.CircleViewManager;
 import com.jjlf.rnpainter.viewmanagers.GViewManager;
 import com.jjlf.rnpainter.viewmanagers.GViewManagerHardware;
 import com.jjlf.rnpainter.viewmanagers.LineViewManager;
+import com.jjlf.rnpainter.viewmanagers.MaskViewManager;
 import com.jjlf.rnpainter.viewmanagers.PathViewManager;
+import com.jjlf.rnpainter.viewmanagers.RectViewManager;
+import com.jjlf.rnpainter.viewmanagers.TextViewManager;
 
 public class ReactNativePainterPackage implements ReactPackage {
     @Override
@@ -24,6 +28,10 @@ public class ReactNativePainterPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
+                new RectViewManager(),
+                new MaskViewManager(),
+                new CircleViewManager(),
+                new TextViewManager(),
                 new LineViewManager(),
                 new PainterViewManager(),
                 new PainterViewManagerHardware(),

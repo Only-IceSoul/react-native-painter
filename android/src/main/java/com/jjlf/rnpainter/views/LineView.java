@@ -49,7 +49,7 @@ public class LineView extends PaintableView {
         super(context);
         mIgnoreVbTransform = true;
         mIgnoreFill = true;
-        mIgnoreShadow = true;
+        mIgnoreShadowFill = true;
     }
 
     @Override

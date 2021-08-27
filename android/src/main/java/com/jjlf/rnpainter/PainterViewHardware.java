@@ -2,10 +2,12 @@ package com.jjlf.rnpainter;
 
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.view.View;
 
 import com.facebook.react.views.view.ReactViewGroup;
+import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
 
@@ -43,6 +45,28 @@ public class PainterViewHardware extends ReactViewGroup {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         mPainter.bounds.set(0f,0f,(float)w,(float)h);
+        if(mPainter.maskBitmap == null){
+            mPainter.maskBitmap  = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+            mPainter.maskCanvas.setBitmap(mPainter.maskBitmap );
+
+        }else{
+            if(mPainter.maskBitmap .getWidth() != w || mPainter.maskBitmap .getHeight() != h){
+                mPainter.maskBitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+                mPainter.maskCanvas.setBitmap(mPainter.maskBitmap );
+
+            }
+        }
+        if(mPainter.bitmap == null){
+            mPainter.bitmap  = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+            mPainter.canvas.setBitmap(mPainter.bitmap );
+
+        }else{
+            if(mPainter.bitmap .getWidth() != w || mPainter.bitmap .getHeight() != h){
+                mPainter.bitmap = Bitmap.createBitmap(w,h,Bitmap.Config.ARGB_8888);
+                mPainter.canvas.setBitmap(mPainter.bitmap );
+
+            }
+        }
         super.onSizeChanged(w, h, oldw, oldh);
 
     }
@@ -66,6 +90,14 @@ public class PainterViewHardware extends ReactViewGroup {
         }
     }
 
+
+    @Override
+    public void onViewAdded(View child) {
+        super.onViewAdded(child);
+        if(child instanceof MaskInterface){
+            child.setVisibility(View.INVISIBLE);
+        }
+    }
 
     @Override
     public void invalidate() {

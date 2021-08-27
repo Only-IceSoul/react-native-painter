@@ -21,8 +21,10 @@ interface PainterProps extends ViewProps {
 //atributo dasharray y todo el drawable view, actualizar inset con dip en android, traer el color de gradient
 interface CommonProps {
   
-   
-    scale?:{ x:number,y:number }
+    mask?:string
+    opacity?:number
+
+    scale?:{ x:number,y:number , ox?:number ,oy?:number ,percentageValue?:boolean }
     rotate?: {
         a:number,
         x?:number,
@@ -46,6 +48,7 @@ interface CommonProps {
     shadowRadius?:number
 
     stroke?: ColorType
+    strokeOpacity?:number
     strokeWidth?:number
     strokeStart?:number
     strokeEnd?:number
@@ -65,12 +68,58 @@ interface LineProps extends CommonProps , ViewProps{
     y2?:number
 }
 
+interface TextProps extends CommonProps , ViewProps{
+    x?:number
+    y?:number
+    text?:string
+    textAnchor?:'start' | 'middle' | 'end'
+    fontSize?:number
+    fontStyle?:'normal' | 'bold' | 'italic'
+    font?: 'default' | string
+    direction?:'ltr' | 'rtl'
+    baseline?:'top' | 'middle' | 'bottom' | 'none' | 'center'
+    baselineOffset?:number
+
+}
+
+interface CircleProps extends CommonProps , ViewProps{
+    cx?:number
+    cy?:number
+    r?:number
+}
+
+
 interface PathProps extends CommonProps , ViewProps{
     d?:string  
 }
 interface GProps extends CommonProps , ViewProps{
 
 }
+interface RectProps extends CommonProps , ViewProps{
+    x?:number
+    y?:number
+    width?:number
+    height?:number
+    rtl?:number
+    rtr?:number
+    rbr?:number
+    rbl?:number
+}
+interface MaskProps extends CommonProps , ViewProps{
+    name?:string
+}
+
+declare class MaskComponent extends React.Component<MaskProps> {}
+declare const MaskBase: Constructor<NativeMethods> & typeof MaskComponent;
+
+declare class RectComponent extends React.Component<RectProps> {}
+declare const RectBase: Constructor<NativeMethods> & typeof RectComponent;
+
+declare class CircleComponent extends React.Component<CircleProps> {}
+declare const CircleBase: Constructor<NativeMethods> & typeof CircleComponent;
+
+declare class TextComponent extends React.Component<TextProps> {}
+declare const TextBase: Constructor<NativeMethods> & typeof TextComponent;
 
 declare class LineComponent extends React.Component<LineProps> {}
 declare const LineBase: Constructor<NativeMethods> & typeof LineComponent;
@@ -84,10 +133,16 @@ declare const GBase: Constructor<NativeMethods> & typeof GComponent;
 declare class PainterComponent extends React.Component<PainterProps> {}
 declare const PainterBase: Constructor<NativeMethods> & typeof PainterComponent;
 
+
+export class Mask extends MaskBase {}
+export class Rect extends RectBase {}
+export class Circle extends CircleBase {}
+export class Text extends TextBase {}
 export class Line extends LineBase {}
 export class Path extends PathBase {}
 export class G extends GBase {}
 export class GS extends GBase {}
 export class Painter extends PainterBase {}
 export class PainterS extends PainterBase {}
+export function ColorWorklet(color:number | number[] | string): number; 
 export function Color(color:number | number[] | string): number; 

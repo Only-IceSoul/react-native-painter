@@ -8,16 +8,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PathMeasure;
 import android.graphics.RectF;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.jjlf.rnpainter.PainterView;
 import com.jjlf.rnpainter.utils.CommonProps;
+import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.SVGViewBox;
 import com.jjlf.rnpainter.utils.TransformProps;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -36,6 +40,11 @@ public class PaintableView extends View implements PaintableInterface {
         if(props != null){
             mProps.set(props);
         }
+    }
+
+    @Override
+    public void setIsMaskChild(boolean v) {
+         mIsMaskChild = v;
     }
 
     @Override
@@ -59,10 +68,40 @@ public class PaintableView extends View implements PaintableInterface {
 
     protected RectF mPathBounds = new RectF();
     protected boolean mIgnoreVbTransform = false;
-    protected boolean mScaleCentered = false;
+
     protected boolean mIgnoreFill = false;
     protected boolean mIgnoreStroke = false;
-    protected boolean mIgnoreShadow = false;
+    protected boolean mIgnoreShadowFill = false;
+    protected boolean mIsMaskChild = false;
+
+
+    public void setMask(String v) {
+        if(!Objects.equals(mProps.mMask, v)) {
+            String old = mProps.mMask;
+            mProps.mMask = v;
+            if(!old.isEmpty()){
+               WeakReference<MaskInterface> m = PainterView.MaskViews.get(old);
+               if(m.get() != null){
+                   m.get().removeListener(this);
+               }
+            }
+            if(!mProps.mMask.isEmpty()){
+                WeakReference<MaskInterface> m = PainterView.MaskViews.get(mProps.mMask);
+                if(m.get() != null){
+                    m.get().addListener(this);
+                }
+            }
+            invalidate();
+        }
+    }
+
+    public void setOpacity(float v, boolean status) {
+        mProps.mOpacityStatus = status;
+        if(mProps.mOpacity != v) {
+            mProps.mOpacity = v;
+            invalidate();
+        }
+    }
 
     public void setFill(int v, boolean status) {
         mProps.mFillColorStatus = status;
@@ -92,6 +131,14 @@ public class PaintableView extends View implements PaintableInterface {
         mProps.mStrokeColorStatus = status;
         if(mProps.mStrokeColor != v) {
             mProps.mStrokeColor = v;
+            invalidate();
+        }
+    }
+
+    public void setStrokeOpacity(float v, boolean status) {
+        mProps.mStrokeOpacityStatus = status;
+        if(mProps.mStrokeOpacity != v) {
+            mProps.mStrokeOpacity = v;
             invalidate();
         }
     }
@@ -199,10 +246,13 @@ public class PaintableView extends View implements PaintableInterface {
         }
     }
 
-    public void setPathScale(float x, float y) {
-        if(mTransform.mPathScaleX != x || mTransform.mPathScaleY != y){
+    public void setPathScale(float x, float y,float ox,float oy,boolean percent) {
+        if(mTransform.mPathScaleX != x || mTransform.mPathScaleY != y || mTransform.mPathScaleOriginX != ox || mTransform.mPathScaleOriginY != oy || mTransform.mPathScaleIsPercent != percent){
             mTransform.mPathScaleX = x;
             mTransform.mPathScaleY = y;
+            mTransform.mPathScaleOriginX = ox;
+            mTransform.mPathScaleOriginY = oy;
+            mTransform.mPathScaleIsPercent = percent;
             invalidate();
         }
 
@@ -219,51 +269,95 @@ public class PaintableView extends View implements PaintableInterface {
         if(mPainter != null) {
             setupPath(mPainter);
             if (!mIgnoreVbTransform) transformToViewBox(mPainter);
-            if (!mIgnoreFill) setupPaintFill(mPainter);
-            if (!mIgnoreShadow) setupShadow(mPainter);
-            if (!mIgnoreStroke){
-                setupPaintStroke(mPainter);
-                setupPathStroke(mPainter);
+            if (fill()) {
+                setupPaintFill(mPainter);
+                if (!mIgnoreShadowFill) setupShadowFill(mPainter);
             }
 
+            if (stroke()){
+                setupPaintStroke(mPainter);
+                setupPathStroke(mPainter);
+                if (!fill()) setupShadowStroke(mPainter);
+            }
             mPainter.matrix.reset();
             for (TransformProps t : mTransforms) {
                 transform(t, mPainter);
             }
 
-            int checkpoint = canvas.save();
-            canvas.concat(mPainter.matrix);
-            try{
-                if(!mIgnoreFill) canvas.drawPath(mPainter.path,mPainter.paint);
-                if (!mIgnoreStroke &&  mProps.getStrokeColor() != Color.TRANSPARENT) canvas.drawPath(mPainter.path2,mPainter.paint2);
-            } finally {
-                canvas.restoreToCount(checkpoint);
+            //draw
+            if(mProps.getMask().isEmpty()){
+                    drawPaths(canvas);
+            }else{
+                WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
+                if(maskView.get() != null){
+                    drawWithMask(canvas,maskView.get());
+                }else{
+                    drawPaths(canvas);
+                }
             }
+
+
 
         }
     }
 
+
+    protected void drawPaths(Canvas canvas){
+        int checkpoint = canvas.save();
+        canvas.concat(mPainter.matrix);
+        try{
+            if(fill()) { canvas.drawPath(mPainter.path,mPainter.paint); }
+            if (stroke()) canvas.drawPath(mPainter.path2,mPainter.paint2);
+        } finally {
+            canvas.restoreToCount(checkpoint);
+        }
+    }
+
+    protected boolean stroke(){
+        return !mIgnoreStroke &&  mProps.getStrokeColor() != Color.TRANSPARENT && mProps.getStrokeWidth() > 0f;
+    }
+    protected boolean fill(){
+        return !mIgnoreFill && mProps.getFillColor() != Color.TRANSPARENT;
+    }
+
+    protected void drawWithMask(Canvas canvas, MaskInterface mask){
+        if( mPainter.bitmap != null && ( stroke() || fill() ) ){
+            mPainter.bitmap.eraseColor(Color.TRANSPARENT);
+            drawPaths(mPainter.canvas);
+            mPainter.paint.reset();
+            mPainter.paint.setAntiAlias(true);
+            if(mPainter.maskBitmap != null){
+                mPainter.maskBitmap.eraseColor(Color.TRANSPARENT);
+                mask.render(mPainter.maskCanvas);
+                mPainter.paint.setXfermode(mPainter.porterDuffXferMode);;
+                mPainter.canvas.drawBitmap(mPainter.maskBitmap,0f,0f,mPainter.paint);
+                mPainter.paint.setXfermode(null);
+            }
+            canvas.drawBitmap(mPainter.bitmap,0f,0f, mPainter.paint);
+        }
+
+    }
     protected void setupPath(PainterKit p) {
 
     }
 
     protected void setupPaintFill(PainterKit p) {
         p.paint.reset();
+        p.paint.setAntiAlias(true);
         p.paint.setStyle(Paint.Style.FILL);
-        if (mProps.getFillOpacity() < 1f && mProps.getFillColor() != Color.TRANSPARENT) {
-            final int alpha = Color.alpha(mProps.getFillColor());
-            final int red = Color.red(mProps.getFillColor());
-            final int green = Color.green(mProps.getFillColor());
-            final int blue = Color.blue(mProps.getFillColor());
-            final int c = Color.argb((int) (mProps.getFillOpacity() * alpha), red, green, blue);
-            p.paint.setColor(c);
-        } else {
-            p.paint.setColor(mProps.getFillColor());
-        }
+        p.paint.setColor(mProps.getFillColor());
+
+        float opacity = mProps.getFillOpacity() * mProps.getOpacity();
+        p.paint.setAlpha((int) (opacity * 255f));
+
+
     }
 
     protected void setupPaintStroke(PainterKit p) {
         p.paint2.reset();
+        p.paint2.setStyle(Paint.Style.STROKE);
+        p.paint2.setAntiAlias(true);
+
         float sw ;
         if (p.isViewBoxEnabled) {
             float size = p.viewBox.width() > p.viewBox.height() ? p.bounds.width() : p.bounds.height();
@@ -272,8 +366,11 @@ public class PaintableView extends View implements PaintableInterface {
             sw = toDip(mProps.getStrokeWidth());
         }
         p.paint2.setStrokeWidth(sw);
-        p.paint2.setStyle(Paint.Style.STROKE);
         p.paint2.setColor(mProps.getStrokeColor());
+
+        float opacity = mProps.getStrokeOpacity() * mProps.getOpacity();
+        p.paint2.setAlpha((int)(opacity * 255f));
+
         p.paint2.setStrokeCap(mProps.getStrokeCap());
         p.paint2.setStrokeMiter(mProps.getStrokeMiter());
         p.paint2.setStrokeJoin(mProps.getStrokeJoin());
@@ -290,7 +387,7 @@ public class PaintableView extends View implements PaintableInterface {
         }
     }
 
-    protected void setupShadow(PainterKit p) {
+    protected void setupShadowFill(PainterKit p) {
         if (mProps.getShadowOpacity() > 0f) {
             final int alpha = Color.alpha(mProps.getShadowColor());
             final int red = Color.red(mProps.getShadowColor());
@@ -324,6 +421,41 @@ public class PaintableView extends View implements PaintableInterface {
             p.paint.clearShadowLayer();
         }
     }
+    protected void setupShadowStroke(PainterKit p) {
+        if (mProps.getShadowOpacity() > 0f) {
+            final int alpha = Color.alpha(mProps.getShadowColor());
+            final int red = Color.red(mProps.getShadowColor());
+            final int green = Color.green(mProps.getShadowColor());
+            final int blue = Color.blue(mProps.getShadowColor());
+            final int c = Color.argb((int) (mProps.getShadowOpacity() * alpha), red, green, blue);
+
+            float ox;
+            float oy;
+            if (mProps.getShadowOffsetIsPercent()) {
+                ox = mProps.getShadowOffsetX() * p.bounds.width();
+                oy = mProps.getShadowOffsetY() * p.bounds.height();
+            } else if (p.isViewBoxEnabled) {
+                ox = (mProps.getShadowOffsetX() / p.viewBox.width()) * p.bounds.width();
+                oy = (mProps.getShadowOffsetY() / p.viewBox.height()) * p.bounds.height();
+            } else {
+                ox = toDip(mProps.getShadowOffsetX());
+                oy = toDip(mProps.getShadowOffsetY());
+            }
+
+            float radius;
+            if (p.isViewBoxEnabled) {
+                float size = p.viewBox.width() > p.viewBox.height() ? p.bounds.width() : p.bounds.height();
+                radius =  (mProps.getShadowRadius() / Math.max( p.viewBox.width(), p.viewBox.height() )) * size;
+            }else{
+                radius = toDip(mProps.getShadowRadius());
+            }
+            p.paint2.setShadowLayer(radius, ox, oy, c);
+
+        } else {
+            p.paint2.clearShadowLayer();
+        }
+    }
+
 
     protected void transformToViewBox(PainterKit painter) {
         SVGViewBox.transform(painter.viewBox, painter.bounds, painter.align, painter.aspect, painter.matrix, getResources().getDisplayMetrics().density);
@@ -351,15 +483,20 @@ public class PaintableView extends View implements PaintableInterface {
         }
 
         if (transform.mPathScaleX != 1f || transform.mPathScaleY != 1f) {
+                float oX;
+                float oY;
+            if (transform.mPathScaleIsPercent) {
+                oX = (transform.mPathScaleOriginX * painter.bounds.width());
+                oY = (transform.mPathScaleOriginY * painter.bounds.height());
+            } else if (painter.isViewBoxEnabled) {
+                    oX = ModUtil.viewBoxToWidth(transform.mPathScaleOriginX, painter.viewBox, painter.bounds.width());
+                    oY = ModUtil.viewBoxToHeight(transform.mPathScaleOriginY, painter.viewBox, painter.bounds.height());
+                } else {
+                    oX = toDip(transform.mPathScaleOriginX);
+                    oY = toDip(transform.mPathScaleOriginY);
+                }
+                mPainter.matrix.postScale(transform.mPathScaleX,transform.mPathScaleY,oX,oY);
 
-            if (mScaleCentered) {
-                mPathBounds.set(0f, 0f, 0f, 0f);
-                painter.path.computeBounds(mPathBounds, true);
-                mPainter.matrix.postScale(transform.mPathScaleX,transform.mPathScaleY,mPathBounds.centerX(),mPathBounds.centerY());
-
-            } else {
-                mPainter.matrix.postScale(transform.mPathScaleX,transform.mPathScaleY);
-            }
 
         }
 
@@ -385,6 +522,22 @@ public class PaintableView extends View implements PaintableInterface {
     protected float toDip(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());
     }
+    @Override
+    public void invalidateMaskCallback() {
+        invalidate();
+    }
 
+    @Override
+    public void invalidate() {
+        if(!mIsMaskChild) {
+            super.invalidate();
+        } else{
+            if(getParent() instanceof MaskInterface){
+                for (PaintableInterface c :  ((MaskInterface)getParent()).getListeners()){
+                    c.invalidateMaskCallback();
+                }
+            }
+        }
 
+    }
 }

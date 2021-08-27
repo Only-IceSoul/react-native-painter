@@ -1,7 +1,7 @@
 {
   "name": "react-native-painter",
   "title": "React Native Painter",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "TODO, EXPERIMENTAL",
   "main": "index.js",
   "files": [

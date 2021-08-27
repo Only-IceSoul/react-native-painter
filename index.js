@@ -1,9 +1,12 @@
 // main index.js
 import React from 'react'
-import { StyleSheet, View } from 'react-native';
 import { requireNativeComponent } from 'react-native';
 import ExtractColor from './src/Color'
-
+import ExtractColorWorklet from './src/ColorWorklet'
+const MaskView = requireNativeComponent("MaskView",null);
+const RectView = requireNativeComponent("RectView",null);
+const CircleView = requireNativeComponent("CircleView",null);
+const TextView = requireNativeComponent("TextView",null);
 const LineView = requireNativeComponent("LineView",null);
 const GView = requireNativeComponent("GView",null);
 const GViewHardware = requireNativeComponent("GViewHardware",null);
@@ -34,7 +37,37 @@ export class Path extends React.PureComponent {
         
     } 
 }
+export class Text extends React.PureComponent {
+    render(){
+        return <TextView {...this.props} />
+        
+    } 
+}
+
+export class Circle extends React.PureComponent {
+    render(){
+        return <CircleView {...this.props} />
+        
+    } 
+}
+
+export class Rect extends React.PureComponent {
+    render(){
+        return <RectView {...this.props} />
+        
+    } 
+}
+
+
+export class Mask extends React.PureComponent {
+    render(){
+        return <MaskView {...this.props} />
+        
+    } 
+}
+
 
 export const PainterS = requireNativeComponent("Painter",null);
 export const Painter = requireNativeComponent("PainterHardware",null);
 export const Color = ExtractColor
+export const ColorWorklet = ExtractColorWorklet

@@ -6,6 +6,10 @@ import android.graphics.Path;
 
 public class CommonProps {
 
+    public float mOpacity = 1f;
+    public boolean mOpacityStatus = false;
+    public String mMask = "";
+
     public int mFillColor = Color.BLACK;
     public boolean mFillColorStatus = false;
     public float mFillOpacity = 1f;
@@ -15,6 +19,8 @@ public class CommonProps {
 
     public int mStrokeColor = Color.TRANSPARENT;
     public boolean mStrokeColorStatus = false;
+    public float mStrokeOpacity = 1f;
+    public boolean mStrokeOpacityStatus = false;
     public float mStrokeWidth = 1f;
     public boolean mStrokeWidthStatus = false;
     public String mStrokeCap = "none";
@@ -37,6 +43,13 @@ public class CommonProps {
     public boolean mShadowOffsetIsPercent = false;
     public boolean mShadowOffsetStatus = false;
 
+    public float getOpacity(){
+        return ModUtil.clamp(mOpacity);
+    }
+    public String getMask(){
+        return mMask;
+    }
+
     public int getFillColor(){
         return mFillColor;
     }
@@ -50,6 +63,7 @@ public class CommonProps {
     public int getStrokeColor(){
         return mStrokeColor;
     }
+    public float getStrokeOpacity(){ return  ModUtil.clamp(mStrokeOpacity); }
     public float getStrokeWidth(){
         return ModUtil.uClamp(mStrokeWidth,1f);
     }
@@ -89,11 +103,15 @@ public class CommonProps {
     }
 
     public void set(CommonProps props){
+
+        if(!mOpacityStatus) mOpacity = props.mOpacity;
+
         if(!mFillColorStatus) mFillColor = props.mFillColor;
         if(!mFillOpacityStatus) mFillOpacity = props.mFillOpacity;
         if(!mFillRuleStatus) mFillRule = props.mFillRule;
 
         if(!mStrokeColorStatus) mStrokeColor = props.mStrokeColor;
+        if(!mStrokeOpacityStatus) mStrokeOpacity = props.mStrokeOpacity;
         if(!mStrokeWidthStatus) mStrokeWidth = props.mStrokeWidth;
         if(mStrokeCap.equals("none")) mStrokeCap = props.mStrokeCap;
         if(mStrokeJoin.equals("none")) mStrokeJoin = props.mStrokeJoin;

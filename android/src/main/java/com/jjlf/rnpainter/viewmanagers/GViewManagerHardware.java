@@ -14,6 +14,7 @@ import com.jjlf.rnpainter.shadownodes.PaintableShadowNode;
 import com.jjlf.rnpainter.shadownodes.PainterShadowNode;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.views.GViewHardware;
+import com.jjlf.rnpainter.views.PaintableView;
 
 
 public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
@@ -42,6 +43,17 @@ public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
         return true;
     }
 
+    @ReactProp(name = "mask")
+    public void setMask(GViewHardware view , String v) {
+        view.setMask(v == null ? "" : v);
+    }
+
+    @ReactProp(name = "opacity")
+    public void setOpacity(GViewHardware view ,Dynamic v) {
+        view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+    }
+
+
     @ReactProp(name = "fill")
     public void setFill(GViewHardware view , Dynamic v) {
         view.setFill(ModUtil.getInt(v,Color.BLACK),ModUtil.isNotNull(v));
@@ -62,6 +74,12 @@ public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
     public void setStroke(GViewHardware view , Dynamic v) {
         view.setStroke(ModUtil.getInt(v,Color.TRANSPARENT),ModUtil.isNotNull(v));
         
+    }
+
+    @ReactProp(name = "strokeOpacity")
+    public void setStrokeOpacity(GViewHardware view ,Dynamic v) {
+        view.setStrokeOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+
     }
 
     @ReactProp(name = "strokeWidth")
@@ -138,7 +156,10 @@ public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
     public void setScale(GViewHardware view , ReadableMap v) {
         float x = (float) ModUtil.getDouble(v,"x",1.0);
         float y = (float) ModUtil.getDouble(v,"y",1.0);
-        view.setPathScale(x,y);
+        float ox = (float) ModUtil.getDouble(v,"ox",0.0);
+        float oy = (float) ModUtil.getDouble(v,"oy",0.0);
+        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
+        view.setPathScale(x,y,ox,oy,per);
         
     }
     @ReactProp(name = "translate")

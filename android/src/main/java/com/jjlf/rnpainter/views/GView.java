@@ -2,17 +2,21 @@ package com.jjlf.rnpainter.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Build;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
 
+import com.jjlf.rnpainter.PainterView;
 import com.jjlf.rnpainter.utils.CommonProps;
+import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.TransformProps;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -29,9 +33,37 @@ public class GView extends ViewGroup implements PaintableInterface  {
         super(context);
         setClipChildren(false);
         mTransforms.add(mTransform);
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            //shadow layer
-            setLayerType(LAYER_TYPE_SOFTWARE,null);
+
+        //shadow layer
+        setLayerType(LAYER_TYPE_SOFTWARE,null);
+
+    }
+
+    public void setMask(String v) {
+        if(!Objects.equals(mProps.mMask, v)) {
+            String old = mProps.mMask;
+            mProps.mMask = v;
+            if(!old.isEmpty()){
+                WeakReference<MaskInterface> m = PainterView.MaskViews.get(old);
+                if(m.get() != null){
+                    m.get().removeListener(this);
+                }
+            }
+            if(!mProps.mMask.isEmpty()){
+                WeakReference<MaskInterface> m = PainterView.MaskViews.get(mProps.mMask);
+                if(m.get() != null){
+                    m.get().addListener(this);
+                }
+            }
+            invalidate();
+        }
+    }
+
+    public void setOpacity(float v, boolean status) {
+        mProps.mOpacityStatus = status;
+        if(mProps.mOpacity != v) {
+            mProps.mOpacity = v;
+            invalidate();
         }
     }
 
@@ -63,6 +95,13 @@ public class GView extends ViewGroup implements PaintableInterface  {
         mProps.mStrokeColorStatus = status;
         if(mProps.mStrokeColor != v) {
             mProps.mStrokeColor = v;
+            invalidate();
+        }
+    }
+    public void setStrokeOpacity(float v, boolean status) {
+        mProps.mStrokeOpacityStatus = status;
+        if(mProps.mStrokeOpacity != v) {
+            mProps.mStrokeOpacity = v;
             invalidate();
         }
     }
@@ -170,13 +209,15 @@ public class GView extends ViewGroup implements PaintableInterface  {
         }
     }
 
-    public void setPathScale(float x, float y) {
-        if(mTransform.mPathScaleX != x || mTransform.mPathScaleY != y){
+    public void setPathScale(float x, float y,float ox,float oy,boolean percent) {
+        if(mTransform.mPathScaleX != x || mTransform.mPathScaleY != y || mTransform.mPathScaleOriginX != ox || mTransform.mPathScaleOriginY != oy || mTransform.mPathScaleIsPercent != percent){
             mTransform.mPathScaleX = x;
             mTransform.mPathScaleY = y;
+            mTransform.mPathScaleOriginX = ox;
+            mTransform.mPathScaleOriginY = oy;
+            mTransform.mPathScaleIsPercent = percent;
             invalidate();
         }
-
     }
 
 
@@ -192,26 +233,29 @@ public class GView extends ViewGroup implements PaintableInterface  {
             }
         }
         super.dispatchDraw(canvas);
-
+        if (!mProps.getMask().isEmpty()) {
+            WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
+            if (maskView.get() != null) {
+                drawMask(canvas, maskView.get());
+            }
+        }
     }
 
+    protected void drawMask(Canvas canvas, MaskInterface mask){
+        if(mPainter.maskBitmap != null){
+            mPainter.maskBitmap.eraseColor(Color.TRANSPARENT);
+            mask.render(mPainter.maskCanvas);
+            mPainter.paint.reset();
+            mPainter.paint.setAntiAlias(true);
+            mPainter.paint.setXfermode(mPainter.porterDuffXferMode);
+            canvas.drawBitmap(mPainter.maskBitmap,0f,0f,mPainter.paint);
+            mPainter.paint.setXfermode(null);
+        }
+    }
 
     @Override
     public void invalidate() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.P) {
-            super.invalidate();
-        }else{
-            for (int i = 0; i < getChildCount(); i++) {
-                final View child = getChildAt(i);
-                if(child instanceof PaintableInterface){
-                    PaintableInterface c = (PaintableInterface) child;
-                    c.setProps(mProps);
-                    c.setTransforms(mTransforms);
-                    c.setPainterKit(mPainter);
-                }
-                child.invalidate();
-            }
-        }
+        super.invalidate();
     }
 
     @Override
@@ -220,6 +264,9 @@ public class GView extends ViewGroup implements PaintableInterface  {
             mProps.set(props);
         }
     }
+
+    @Override
+    public void setIsMaskChild(boolean v) { }
 
     @Override
     public void setTransforms(ArrayList<TransformProps> transforms) {
@@ -234,6 +281,10 @@ public class GView extends ViewGroup implements PaintableInterface  {
     }
 
 
+    @Override
+    public void invalidateMaskCallback() {
+        invalidate();
+    }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
