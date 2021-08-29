@@ -1,7 +1,7 @@
 {
   "name": "react-native-painter",
   "title": "React Native Painter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "TODO, EXPERIMENTAL",
   "main": "index.js",
   "files": [
@@ -18,15 +18,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/github_account/react-native-painter.git",
-    "baseUrl": "https://github.com/github_account/react-native-painter"
+    "url": "git+https://github.com/Only-IceSoul/react-native-painter.git",
+    "baseUrl": "https://github.com/Only-IceSoul/react-native-painter"
   },
   "keywords": [
     "react-native"
   ],
   "author": {
-    "name": "Your Name",
-    "email": "yourname@email.com"
+    "name": "Juan Laura",
+    "email": "justinjlf21@gmail.com"
   },
   "license": "MIT",
   "licenseFilename": "LICENSE",

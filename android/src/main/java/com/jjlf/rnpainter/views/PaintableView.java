@@ -30,11 +30,8 @@ public class PaintableView extends View implements PaintableInterface {
 
     public PaintableView(Context context){
         super(context);
-        mTransforms.add(mTransform);
+
     }
-
-
-
     @Override
     public void setProps(CommonProps props) {
         if(props != null){
@@ -47,11 +44,11 @@ public class PaintableView extends View implements PaintableInterface {
          mIsMaskChild = v;
     }
 
+    public boolean getIsMaskChild(){
+        return mIsMaskChild;
+    }
     @Override
     public void setTransforms(ArrayList<TransformProps> transforms) {
-        mTransforms.clear();
-        mTransforms.addAll(transforms);
-        mTransforms.add(mTransform);
     }
     @Override
     public void setPainterKit(PainterKit painter) {
@@ -62,7 +59,7 @@ public class PaintableView extends View implements PaintableInterface {
 
     CommonProps mProps = new CommonProps();
     TransformProps mTransform = new TransformProps();
-    ArrayList<TransformProps> mTransforms = new ArrayList<>() ;
+
     protected final PathMeasure mPathMeasure = new PathMeasure();
     protected PainterKit mPainter;
 
@@ -279,22 +276,28 @@ public class PaintableView extends View implements PaintableInterface {
                 setupPathStroke(mPainter);
                 if (!fill()) setupShadowStroke(mPainter);
             }
-            mPainter.matrix.reset();
-            for (TransformProps t : mTransforms) {
-                transform(t, mPainter);
-            }
+
+            transform(mTransform, mPainter);
 
             //draw
-            if(mProps.getMask().isEmpty()){
+            int checkpoint = canvas.save();
+            canvas.concat(mPainter.matrix);
+            try{
+                if(mProps.getMask().isEmpty()){
                     drawPaths(canvas);
-            }else{
-                WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
-                if(maskView.get() != null){
-                    drawWithMask(canvas,maskView.get());
                 }else{
-                    drawPaths(canvas);
+                    WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
+                    if(maskView.get() != null){
+                        drawWithMask(canvas,maskView.get());
+                    }else{
+                        drawPaths(canvas);
+                    }
                 }
+            } finally {
+                canvas.restoreToCount(checkpoint);
             }
+
+
 
 
 
@@ -303,14 +306,11 @@ public class PaintableView extends View implements PaintableInterface {
 
 
     protected void drawPaths(Canvas canvas){
-        int checkpoint = canvas.save();
-        canvas.concat(mPainter.matrix);
-        try{
-            if(fill()) { canvas.drawPath(mPainter.path,mPainter.paint); }
-            if (stroke()) canvas.drawPath(mPainter.path2,mPainter.paint2);
-        } finally {
-            canvas.restoreToCount(checkpoint);
-        }
+
+        if(fill()) { canvas.drawPath(mPainter.path,mPainter.paint); }
+        if (stroke()) canvas.drawPath(mPainter.path2,mPainter.paint2);
+
+
     }
 
     protected boolean stroke(){
@@ -333,7 +333,10 @@ public class PaintableView extends View implements PaintableInterface {
                 mPainter.canvas.drawBitmap(mPainter.maskBitmap,0f,0f,mPainter.paint);
                 mPainter.paint.setXfermode(null);
             }
+
             canvas.drawBitmap(mPainter.bitmap,0f,0f, mPainter.paint);
+
+
         }
 
     }
@@ -464,7 +467,7 @@ public class PaintableView extends View implements PaintableInterface {
 
 
     protected void transform(TransformProps transform, PainterKit painter) {
-
+        mPainter.matrix.reset();
         if (transform.mPathRotation != 0f) {
             float rotX;
             float rotY;
@@ -519,6 +522,7 @@ public class PaintableView extends View implements PaintableInterface {
     }
 
 
+
     protected float toDip(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());
     }
@@ -528,12 +532,27 @@ public class PaintableView extends View implements PaintableInterface {
     }
 
     @Override
+    public PainterKit getPainter() {
+        return mPainter;
+    }
+
+
+    @Override
     public void invalidate() {
         if(!mIsMaskChild) {
             super.invalidate();
         } else{
+
+            //transform react style invalidate
+            super.invalidate();
+
             if(getParent() instanceof MaskInterface){
                 for (PaintableInterface c :  ((MaskInterface)getParent()).getListeners()){
+                    c.invalidateMaskCallback();
+                }
+            }
+            if(getParent() instanceof MaskGView){
+                for (PaintableInterface c :  ((MaskInterface) ((MaskGView)getParent()).getParent()).getListeners()){
                     c.invalidateMaskCallback();
                 }
             }

@@ -3,27 +3,34 @@ package com.jjlf.rnpainter.views;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.os.SystemClock;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 
+import com.facebook.react.views.view.ReactViewGroup;
 import com.jjlf.rnpainter.PainterView;
 
 import com.jjlf.rnpainter.PainterViewHardware;
 import com.jjlf.rnpainter.utils.CommonProps;
 import com.jjlf.rnpainter.utils.MaskInterface;
+import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.TransformProps;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.Objects;
 
 
-public class MaskView extends ViewGroup implements PaintableInterface, MaskInterface {
+public class MaskView extends RelativeLayout implements PaintableInterface, MaskInterface {
 
     private  ArrayList<PaintableInterface> mListeners;
-
     private PainterKit mPainter;
 
     protected String name = "";
@@ -48,15 +55,40 @@ public class MaskView extends ViewGroup implements PaintableInterface, MaskInter
 
     @Override
     public void render(Canvas canvas) {
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            if(child instanceof PaintableInterface){
-                PaintableInterface c = (PaintableInterface) child;
-                c.setPainterKit(mPainter);
-            }
-            child.draw(canvas);
-        }
+//        setupMatrix(mTransform, mPainter);
+//
+//        int checkpoint = canvas.save();
+//        canvas.concat(mMatrix);
+//        try{
+//            for (int i = 0; i < getChildCount(); i++) {
+//                final View child = getChildAt(i);
+//                if(child instanceof PaintableInterface){
+//                    PaintableInterface c = (PaintableInterface) child;
+//                    c.setProps(mProps);
+//                    c.setPainterKit(mPainter);
+//                }
+//                child.draw(canvas);
+//            }
+//
+//        } finally {
+//            canvas.restoreToCount(checkpoint);
+//        }
+        draw(canvas);
     }
+
+    @Override
+    protected void dispatchDraw(Canvas canvas) {
+            for (int i = 0; i < getChildCount(); i++) {
+                final View child = getChildAt(i);
+                if(child instanceof PaintableInterface){
+                    PaintableInterface c = (PaintableInterface) child;
+                    c.setPainterKit(mPainter);
+                }
+            }
+            super.dispatchDraw(canvas);
+    }
+
+
 
     @Override
     public String getName() {
@@ -87,17 +119,6 @@ public class MaskView extends ViewGroup implements PaintableInterface, MaskInter
     }
 
     @Override
-    protected void dispatchDraw(Canvas canvas) {
-
-    }
-
-    @SuppressLint("MissingSuperCall")
-    @Override
-    public void draw(Canvas canvas) {
-
-    }
-
-    @Override
     public void onViewAdded(View child) {
         if(child instanceof MaskInterface || child instanceof PainterView || child instanceof PainterViewHardware
          || child instanceof GView || child instanceof GViewHardware){
@@ -111,18 +132,16 @@ public class MaskView extends ViewGroup implements PaintableInterface, MaskInter
         super.onViewAdded(child);
     }
 
-    @Override
-    public void setProps(CommonProps props) { }
-    @Override
-    public void setTransforms(ArrayList<TransformProps> transforms) { }
+
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
     }
     @Override
-    public void setIsMaskChild(boolean v) { }
-    @Override
-    public void invalidateMaskCallback() { }
+    public PainterKit getPainter() {
+        return mPainter;
+    }
+
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -130,5 +149,12 @@ public class MaskView extends ViewGroup implements PaintableInterface, MaskInter
             getChildAt(i).layout(0, 0, getWidth(), getHeight());
         }
     }
-
+    @Override
+    public void setIsMaskChild(boolean v) { }
+    @Override
+    public void invalidateMaskCallback() { }
+    @Override
+    public void setProps(CommonProps props) { }
+    @Override
+    public void setTransforms(ArrayList<TransformProps> transforms) { }
 }

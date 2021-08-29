@@ -10,4 +10,5 @@ public interface MaskInterface {
      void removeListener(PaintableInterface listener);
      String getName();
      void render(Canvas canvas);
+
 }

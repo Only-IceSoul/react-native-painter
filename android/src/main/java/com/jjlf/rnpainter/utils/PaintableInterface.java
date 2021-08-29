@@ -11,4 +11,5 @@ public interface PaintableInterface {
     void setTransforms(ArrayList<TransformProps> transforms);
     void setPainterKit(PainterKit painter);
     void invalidateMaskCallback();
+    PainterKit getPainter();
 }

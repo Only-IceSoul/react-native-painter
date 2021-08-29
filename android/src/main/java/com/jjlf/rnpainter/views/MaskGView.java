@@ -1,15 +1,13 @@
 package com.jjlf.rnpainter.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
-
 
 import com.jjlf.rnpainter.PainterView;
 import com.jjlf.rnpainter.PainterViewHardware;
@@ -20,44 +18,22 @@ import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.TransformProps;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Objects;
 
-
-public class GView extends ViewGroup implements PaintableInterface  {
+public class MaskGView extends ViewGroup implements PaintableInterface {
 
 
     CommonProps mProps = new CommonProps();
     TransformProps mTransform = new TransformProps();
+    private final Matrix mMatrix = new Matrix();
     private PainterKit mPainter;
 
-    public GView(Context context){
+    public MaskGView(Context context){
         super(context);
         setClipChildren(false);
-        //shadow layer < 28
-        setLayerType(LAYER_TYPE_SOFTWARE,null);
-
-    }
-
-    public void setMask(String v) {
-        if(!Objects.equals(mProps.mMask, v)) {
-            String old = mProps.mMask;
-            mProps.mMask = v;
-            if(!old.isEmpty()){
-                WeakReference<MaskInterface> m = PainterView.MaskViews.get(old);
-                if(m.get() != null){
-                    m.get().removeListener(this);
-                }
-            }
-            if(!mProps.mMask.isEmpty()){
-                WeakReference<MaskInterface> m = PainterView.MaskViews.get(mProps.mMask);
-                if(m.get() != null){
-                    m.get().addListener(this);
-                }
-            }
-            invalidate();
-        }
+        //new
+        setLayerType(View.LAYER_TYPE_HARDWARE,null);
     }
 
     public void setOpacity(float v, boolean status) {
@@ -106,7 +82,6 @@ public class GView extends ViewGroup implements PaintableInterface  {
             invalidate();
         }
     }
-
     public void setStrokeWith(float v, boolean status) {
         mProps.mStrokeWidthStatus = status;
         if(mProps.mStrokeWidth != v) {
@@ -224,43 +199,37 @@ public class GView extends ViewGroup implements PaintableInterface  {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            if(child instanceof PaintableInterface){
-                PaintableInterface c = (PaintableInterface) child;
-                c.setProps(mProps);
-                c.setPainterKit(mPainter);
-            }
-        }
         setupMatrix(mTransform, mPainter);
+
         int checkpoint = canvas.save();
         canvas.concat(mMatrix);
         try{
-            super.dispatchDraw(canvas);
-            if (!mProps.getMask().isEmpty()) {
-                WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
-                if (maskView.get() != null) {
-                    drawMask(canvas, maskView.get());
+            for (int i = 0; i < getChildCount(); i++) {
+                final View child = getChildAt(i);
+                if(child instanceof PaintableInterface){
+                    PaintableInterface c = (PaintableInterface) child;
+                    c.setProps(mProps);
+                    c.setPainterKit(mPainter);
                 }
             }
+            super.dispatchDraw(canvas);
         } finally {
             canvas.restoreToCount(checkpoint);
         }
-
     }
 
-    protected void drawMask(Canvas canvas, MaskInterface mask){
-        if(mPainter.maskBitmap != null){
-            mPainter.maskBitmap.eraseColor(Color.TRANSPARENT);
-            mask.render(mPainter.maskCanvas);
-            mPainter.paint.reset();
-            mPainter.paint.setAntiAlias(true);
-            mPainter.paint.setXfermode(mPainter.porterDuffXferMode);
-            canvas.drawBitmap(mPainter.maskBitmap,0f,0f,mPainter.paint);
-            mPainter.paint.setXfermode(null);
+
+    @Override
+    public void invalidate() {
+        //transform react style invalidate
+        super.invalidate();
+        if(getParent() instanceof MaskInterface){
+            for (PaintableInterface c :  ((MaskInterface)getParent()).getListeners()){
+                c.invalidateMaskCallback();
+            }
         }
     }
-    private final Matrix mMatrix = new Matrix();
+
     protected void setupMatrix(TransformProps transform, PainterKit painter) {
         mMatrix.reset();
         if (transform.mPathRotation != 0f) {
@@ -318,24 +287,29 @@ public class GView extends ViewGroup implements PaintableInterface  {
     protected float toDip(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());
     }
-    @Override
-    public void invalidate() {
-        super.invalidate();
-    }
 
     @Override
-    public void setProps(CommonProps props) {
-        if(props != null){
-            mProps.set(props);
+    public void onViewAdded(View child) {
+        if(child instanceof MaskInterface || child instanceof PainterView || child instanceof PainterViewHardware
+                || child instanceof GView || child instanceof GViewHardware || child instanceof MaskGView){
+            throw new IllegalArgumentException("MaskG cannot have ViewGroup, G, Painter, Mask, MaskG");
         }
+        if(child instanceof PaintableInterface){
+            ((PaintableInterface) child).setIsMaskChild(true);
+        }else{
+            throw new IllegalArgumentException("MaskG : foreignObject cannot be child ");
+        }
+        super.onViewAdded(child);
     }
 
+    @Override
+    public void invalidateMaskCallback() { }
     @Override
     public void setIsMaskChild(boolean v) { }
-
+    @Override
+    public void setProps(CommonProps props) { }
     @Override
     public void setTransforms(ArrayList<TransformProps> transforms) { }
-
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
@@ -344,24 +318,10 @@ public class GView extends ViewGroup implements PaintableInterface  {
     public PainterKit getPainter() {
         return mPainter;
     }
-
-    @Override
-    public void invalidateMaskCallback() {
-        invalidate();
-    }
-
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for (int i = 0; i < getChildCount(); i++) {
             getChildAt(i).layout(0, 0, getWidth(), getHeight());
-        }
-    }
-    @Override
-    public void onViewAdded(View child) {
-        super.onViewAdded(child);
-        if(child instanceof PainterView || child instanceof PainterViewHardware
-                || child instanceof MaskGView || child instanceof MaskView){
-            throw new IllegalArgumentException("G cannot have MaskG,Painter,Mask.");
         }
     }
 

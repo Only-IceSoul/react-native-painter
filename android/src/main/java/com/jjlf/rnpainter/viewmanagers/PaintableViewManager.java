@@ -4,8 +4,10 @@ import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.facebook.react.bridge.Dynamic;
+import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.LayoutShadowNode;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -34,6 +36,12 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
     @Override
     public LayoutShadowNode createShadowNodeInstance() {
         return new PaintableShadowNode();
+    }
+
+    @Override
+    public void setTransform(@NonNull PaintableView view, @Nullable  ReadableArray matrix) {
+        super.setTransform(view, matrix);
+        view.invalidate();
     }
 
     @ReactProp(name = "mask")

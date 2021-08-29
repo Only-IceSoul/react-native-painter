@@ -40,6 +40,7 @@ public class PainterViewManagerHardware extends ViewGroupManager<PainterViewHard
         return true;
     }
 
+
     @ReactProp(name = "align")
     public void setAlign(PainterViewHardware view , String v) {
         view.setAlign(v != null ? v : "none");

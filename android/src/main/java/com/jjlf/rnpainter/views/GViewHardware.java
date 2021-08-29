@@ -3,13 +3,17 @@ package com.jjlf.rnpainter.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.jjlf.rnpainter.PainterView;
+import com.jjlf.rnpainter.PainterViewHardware;
 import com.jjlf.rnpainter.utils.CommonProps;
 import com.jjlf.rnpainter.utils.MaskInterface;
+import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.TransformProps;
@@ -23,13 +27,12 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
 
     CommonProps mProps = new CommonProps();
     TransformProps mTransform = new TransformProps();
-    ArrayList<TransformProps> mTransforms = new ArrayList<>();
+
     private PainterKit mPainter;
 
     public GViewHardware(Context context){
         super(context);
         setClipChildren(false);
-        mTransforms.add(mTransform);
         setLayerType(LAYER_TYPE_HARDWARE,null);
     }
 
@@ -191,6 +194,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
             mTransform.mPathTranslationX = x;
             mTransform.mPathTranslationY = y;
             mTransform.mPathTranslationIsPercent = percent;
+            mIsInvalidate = true;
             invalidate();
         }
     }
@@ -201,6 +205,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
             mTransform.mPathRotationX = x;
             mTransform.mPathRotationY = y;
             mTransform.mPathRotationIsPercent = percent;
+            mIsInvalidate = true;
             invalidate();
         }
     }
@@ -212,6 +217,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
             mTransform.mPathScaleOriginX = ox;
             mTransform.mPathScaleOriginY = oy;
             mTransform.mPathScaleIsPercent = percent;
+            mIsInvalidate = true;
             invalidate();
         }
     }
@@ -223,10 +229,14 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
                 if(child instanceof PaintableInterface){
                     PaintableInterface c = (PaintableInterface) child;
                     c.setProps(mProps);
-                    c.setTransforms(mTransforms);
                     c.setPainterKit(mPainter);
                 }
             }
+        setupMatrix(mTransform, mPainter);
+
+        int checkpoint = canvas.save();
+        canvas.concat(mMatrix);
+        try{
             super.dispatchDraw(canvas);
             if(!mProps.getMask().isEmpty()){
                 WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
@@ -234,11 +244,71 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
                     drawMask(canvas,maskView.get());
                 }
             }
+        } finally {
+            canvas.restoreToCount(checkpoint);
+        }
+
 
     }
 
+    private final Matrix mMatrix = new Matrix();
+    protected void setupMatrix(TransformProps transform, PainterKit painter) {
+        mMatrix.reset();
+        if (transform.mPathRotation != 0f) {
+            float rotX;
+            float rotY;
+            if (transform.mPathRotationIsPercent) {
+                rotX = (transform.mPathRotationX * painter.bounds.width());
+                rotY = (transform.mPathRotationY * painter.bounds.height());
+            } else if (painter.isViewBoxEnabled) {
+
+                rotX = ModUtil.viewBoxToWidth(transform.mPathRotationX, painter.viewBox, painter.bounds.width());
+                rotY = ModUtil.viewBoxToHeight(transform.mPathRotationY, painter.viewBox, painter.bounds.height());
+            } else {
+                rotX = toDip(transform.mPathRotationX);
+                rotY = toDip(transform.mPathRotationY);
+            }
+            mMatrix.postRotate(transform.mPathRotation,rotX,rotY);
+        }
+
+        if (transform.mPathScaleX != 1f || transform.mPathScaleY != 1f) {
+            float oX;
+            float oY;
+            if (transform.mPathScaleIsPercent) {
+                oX = (transform.mPathScaleOriginX * painter.bounds.width());
+                oY = (transform.mPathScaleOriginY * painter.bounds.height());
+            } else if (painter.isViewBoxEnabled) {
+                oX = ModUtil.viewBoxToWidth(transform.mPathScaleOriginX, painter.viewBox, painter.bounds.width());
+                oY = ModUtil.viewBoxToHeight(transform.mPathScaleOriginY, painter.viewBox, painter.bounds.height());
+            } else {
+                oX = toDip(transform.mPathScaleOriginX);
+                oY = toDip(transform.mPathScaleOriginY);
+            }
+            mMatrix.postScale(transform.mPathScaleX,transform.mPathScaleY,oX,oY);
 
 
+        }
+
+        if (transform.mPathTranslationX != 0f || transform.mPathTranslationY != 0f) {
+            float transX;
+            float transY;
+            if (transform.mPathTranslationIsPercent) {
+                transX = (transform.mPathTranslationX * painter.bounds.width());
+                transY = (transform.mPathTranslationY * painter.bounds.height());
+            } else if (painter.isViewBoxEnabled) {
+                transX = (transform.mPathTranslationX / painter.viewBox.width()) * painter.bounds.width();
+                transY = (transform.mPathTranslationY / painter.viewBox.height()) * painter.bounds.height();
+            } else {
+                transX = toDip(transform.mPathTranslationX);
+                transY = toDip(transform.mPathTranslationY);
+            }
+            mMatrix.postTranslate(transX,transY);
+        }
+
+    }
+    protected float toDip(float value) {
+        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());
+    }
     private boolean mIsInvalidate = false;
     @Override
     public void invalidate() {
@@ -252,7 +322,6 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
                 if(child instanceof PaintableInterface){
                     PaintableInterface c = (PaintableInterface) child;
                     c.setProps(mProps);
-                    c.setTransforms(mTransforms);
                     c.setPainterKit(mPainter);
                 }
                 child.invalidate();
@@ -289,11 +358,12 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
     }
 
     @Override
-    public void setTransforms(ArrayList<TransformProps> transforms) {
-        mTransforms.clear();
-        mTransforms.addAll(transforms);
-        mTransforms.add(mTransform);
+    public PainterKit getPainter() {
+        return mPainter;
     }
+
+    @Override
+    public void setTransforms(ArrayList<TransformProps> transforms) { }
 
     @Override
     public void setPainterKit(PainterKit painter) {
@@ -309,4 +379,12 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
         }
     }
 
+    @Override
+    public void onViewAdded(View child) {
+        super.onViewAdded(child);
+        if(child instanceof PainterView || child instanceof PainterViewHardware
+                || child instanceof MaskGView || child instanceof MaskView){
+            throw new IllegalArgumentException("G cannot have MaskG,Painter,Mask.");
+        }
+    }
 }

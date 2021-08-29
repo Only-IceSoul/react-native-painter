@@ -105,9 +105,15 @@ interface RectProps extends CommonProps , ViewProps{
     rbr?:number
     rbl?:number
 }
-interface MaskProps extends CommonProps , ViewProps{
+interface MaskProps extends ViewProps{
     name?:string
 }
+interface MaskGProps extends CommonProps , ViewProps{
+
+}
+
+declare class MaskGComponent extends React.Component<MaskGProps> {}
+declare const MaskGBase: Constructor<NativeMethods> & typeof MaskGComponent;
 
 declare class MaskComponent extends React.Component<MaskProps> {}
 declare const MaskBase: Constructor<NativeMethods> & typeof MaskComponent;
@@ -133,7 +139,7 @@ declare const GBase: Constructor<NativeMethods> & typeof GComponent;
 declare class PainterComponent extends React.Component<PainterProps> {}
 declare const PainterBase: Constructor<NativeMethods> & typeof PainterComponent;
 
-
+export class MaskG extends MaskGBase {}
 export class Mask extends MaskBase {}
 export class Rect extends RectBase {}
 export class Circle extends CircleBase {}

@@ -2,6 +2,7 @@ package com.jjlf.rnpainter.shadownodes;
 
 import com.facebook.react.bridge.Dynamic;
 import com.facebook.react.uimanager.LayoutShadowNode;
+import com.facebook.react.uimanager.NativeViewHierarchyOptimizer;
 import com.facebook.react.uimanager.annotations.ReactPropGroup;
 
 import static com.facebook.react.uimanager.ViewProps.ALIGN_CONTENT;
@@ -118,5 +119,8 @@ public class PainterShadowNode extends LayoutShadowNode {
     public void ignoreLayoutProps(int index, Dynamic value) {}
 
 
-
+    @Override
+    public Integer getHeightMeasureSpec() {
+        return super.getHeightMeasureSpec();
+    }
 }

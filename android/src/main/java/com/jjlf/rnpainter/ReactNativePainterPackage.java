@@ -14,6 +14,7 @@ import com.jjlf.rnpainter.viewmanagers.CircleViewManager;
 import com.jjlf.rnpainter.viewmanagers.GViewManager;
 import com.jjlf.rnpainter.viewmanagers.GViewManagerHardware;
 import com.jjlf.rnpainter.viewmanagers.LineViewManager;
+import com.jjlf.rnpainter.viewmanagers.MaskGViewManager;
 import com.jjlf.rnpainter.viewmanagers.MaskViewManager;
 import com.jjlf.rnpainter.viewmanagers.PathViewManager;
 import com.jjlf.rnpainter.viewmanagers.RectViewManager;
@@ -28,6 +29,7 @@ public class ReactNativePainterPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
+                new MaskGViewManager(),
                 new RectViewManager(),
                 new MaskViewManager(),
                 new CircleViewManager(),

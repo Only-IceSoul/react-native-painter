@@ -3,6 +3,8 @@ import React from 'react'
 import { requireNativeComponent } from 'react-native';
 import ExtractColor from './src/Color'
 import ExtractColorWorklet from './src/ColorWorklet'
+
+const MaskGView = requireNativeComponent("MaskGView",null);
 const MaskView = requireNativeComponent("MaskView",null);
 const RectView = requireNativeComponent("RectView",null);
 const CircleView = requireNativeComponent("CircleView",null);
@@ -62,6 +64,12 @@ export class Rect extends React.PureComponent {
 export class Mask extends React.PureComponent {
     render(){
         return <MaskView {...this.props} />
+        
+    } 
+}
+export class MaskG extends React.PureComponent {
+    render(){
+        return <MaskGView {...this.props} />
         
     } 
 }

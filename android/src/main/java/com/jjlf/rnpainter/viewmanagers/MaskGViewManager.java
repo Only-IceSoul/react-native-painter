@@ -14,167 +14,168 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.jjlf.rnpainter.shadownodes.PaintableShadowNode;
-import com.jjlf.rnpainter.shadownodes.PainterShadowNode;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.views.GViewHardware;
+import com.jjlf.rnpainter.views.MaskGView;
 import com.jjlf.rnpainter.views.PaintableView;
 
-
-public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
-
-    @Override
-    public String getName() { return "GViewHardware"; }
+public class MaskGViewManager extends ViewGroupManager<MaskGView> {
 
     @Override
-    protected GViewHardware createViewInstance(@NonNull ThemedReactContext reactContext) {
-        return new GViewHardware(reactContext);
+    public String getName() { return "MaskGView"; }
+
+    @Override
+    protected MaskGView createViewInstance(@NonNull ThemedReactContext reactContext) {
+    return new MaskGView(reactContext);
     }
 
     @Override
     public LayoutShadowNode createShadowNodeInstance() {
-        return new PaintableShadowNode();
+    return new PaintableShadowNode();
     }
 
     @Override
     public Class<? extends LayoutShadowNode> getShadowNodeClass() {
-        return PaintableShadowNode.class;
+    return PaintableShadowNode.class;
     }
 
 
     @Override
     public boolean needsCustomLayoutForChildren() {
-        return true;
+    return true;
     }
-
     @ReactProp(name = "mask")
-    public void setMask(GViewHardware view , String v) {
-        view.setMask(v == null ? "" : v);
+    public void setMask(MaskGView view , String v) {
+
     }
 
     @ReactProp(name = "opacity")
-    public void setOpacity(GViewHardware view ,Dynamic v) {
+    public void setOpacity(MaskGView view , Dynamic v) {
         view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
     }
 
 
     @ReactProp(name = "fill")
-    public void setFill(GViewHardware view , Dynamic v) {
-        view.setFill(ModUtil.getInt(v,Color.BLACK),ModUtil.isNotNull(v));
-        
+    public void setFill(MaskGView view , Dynamic v) {
+        view.setFill(ModUtil.getInt(v, Color.BLACK),ModUtil.isNotNull(v));
+
     }
     @ReactProp(name = "fillRule")
-    public void setFillRule(GViewHardware view ,String v) {
+    public void setFillRule(MaskGView view ,String v) {
         view.setFillRule(v == null ? "none" : v , v != null);
-        
+
     }
     @ReactProp(name = "fillOpacity")
-    public void setFillOpacity(GViewHardware view ,Dynamic v) {
+    public void setFillOpacity(MaskGView view ,Dynamic v) {
         view.setFillOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
-        
+
     }
 
     @ReactProp(name = "stroke")
-    public void setStroke(GViewHardware view , Dynamic v) {
+    public void setStroke(MaskGView view , Dynamic v) {
         view.setStroke(ModUtil.getInt(v,Color.TRANSPARENT),ModUtil.isNotNull(v));
-        
+
     }
 
     @ReactProp(name = "strokeOpacity")
-    public void setStrokeOpacity(GViewHardware view ,Dynamic v) {
+    public void setStrokeOpacity(MaskGView view ,Dynamic v) {
         view.setStrokeOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
 
     }
 
     @ReactProp(name = "strokeWidth")
-    public void setStrokeWith(GViewHardware view ,Dynamic v) {
+    public void setStrokeWith(MaskGView view ,Dynamic v) {
         view.setStrokeWith(ModUtil.getFloat(v,1f),ModUtil.isNotNull(v));
-        
+
     }
 
 
     @ReactProp(name = "strokeCap")
-    public void setStrokeCap(GViewHardware view ,String v) {
+    public void setStrokeCap(MaskGView view ,String v) {
         view.setStrokeCap(v == null ? "none" : v);
-        
+
     }
 
     @ReactProp(name = "strokeJoin")
-    public void setStrokeJoin(GViewHardware view ,String v) {
+    public void setStrokeJoin(MaskGView view ,String v) {
         view.setStrokeJoin(v == null ? "none" : v);
-        
+
     }
     @ReactProp(name = "strokeMiter")
-    public void setStrokeMiter(GViewHardware view ,Dynamic v) {
+    public void setStrokeMiter(MaskGView view ,Dynamic v) {
         view.setStrokeMiter(ModUtil.getFloat(v,4f),ModUtil.isNotNull(v));
-        
+
     }
 
     @ReactProp(name = "strokeStart")
-    public void setStrokeStart(GViewHardware view ,Dynamic v) {
+    public void setStrokeStart(MaskGView view ,Dynamic v) {
         view.setStrokeStart(ModUtil.getFloat(v,0f),ModUtil.isNotNull(v));
-        
+
     }
     @ReactProp(name = "strokeEnd")
-    public void setStrokeEnd(GViewHardware view ,Dynamic v) {
+    public void setStrokeEnd(MaskGView view ,Dynamic v) {
         view.setStrokeEnd(ModUtil.getFloat(v,1f),ModUtil.isNotNull(v));
-        
+
     }
 
     @ReactProp(name = "shadow")
-    public void setShadow(GViewHardware view ,Dynamic v) {
+    public void setShadow(MaskGView view ,Dynamic v) {
         view.setShadow(ModUtil.getInt(v,Color.BLACK), ModUtil.isNotNull(v));
-        
+
     }
     @ReactProp(name = "shadowOpacity")
-    public void setShadowOpacity(GViewHardware view ,Dynamic v) {
+    public void setShadowOpacity(MaskGView view ,Dynamic v) {
         view.setShadowOpacity(ModUtil.getFloat(v,0f), ModUtil.isNotNull(v));
-        
+
     }
     @ReactProp(name = "shadowRadius")
-    public void setShadowRadius(GViewHardware view ,Dynamic v) {
-        view.setShadowRadius(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
-        
+    public void setShadowRadius(MaskGView view ,Dynamic v) {
+         view.setShadowRadius(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+
     }
 
     @ReactProp(name = "shadowOffset")
-    public void setShadowOffset(GViewHardware view , ReadableMap v) {
+    public void setShadowOffset(MaskGView view , ReadableMap v) {
         float x = (float) ModUtil.getDouble(v,"x",2.0);
         float y = (float)ModUtil.getDouble(v,"y",2.0);
         boolean per = ModUtil.getBoolean(v,"percentageValue",false);
         view.setShadowOffset(x,y,per,v != null);
-        
     }
 
 
     @ReactProp(name = "rotate")
-    public void setRotate(GViewHardware view ,ReadableMap v) {
+    public void setRotate(MaskGView view ,ReadableMap v) {
         float a = (float) ModUtil.getDouble(v,"a",0.0);
         float x = (float) ModUtil.getDouble(v,"x",0.0);
         float y = (float) ModUtil.getDouble(v,"y",0.0);
         boolean per = ModUtil.getBoolean(v,"percentageValue",false);
         view.setPathRotation(a,x,y,per);
 
-        
     }
     @ReactProp(name = "scale")
-    public void setScale(GViewHardware view , ReadableMap v) {
+    public void setScale(MaskGView view , ReadableMap v) {
         float x = (float) ModUtil.getDouble(v,"x",1.0);
         float y = (float) ModUtil.getDouble(v,"y",1.0);
         float ox = (float) ModUtil.getDouble(v,"ox",0.0);
         float oy = (float) ModUtil.getDouble(v,"oy",0.0);
         boolean per = ModUtil.getBoolean(v,"percentageValue",false);
         view.setPathScale(x,y,ox,oy,per);
-        
+
     }
     @ReactProp(name = "translate")
-    public void setTranslate(GViewHardware view ,ReadableMap v) {
+    public void setTranslate(MaskGView view ,ReadableMap v) {
         float dx = (float)ModUtil.getDouble(v,"x",0.0);
         float dy = (float)ModUtil.getDouble(v,"y",0.0);
         boolean per = ModUtil.getBoolean(v,"percentageValue",false);
         view.setPathTranslation(dx,dy,per);
-        
+
     }
 
+    @Override
+    public void setTransform(@NonNull MaskGView view, @Nullable ReadableArray matrix) {
+        super.setTransform(view, matrix);
+        view.invalidate();
+    }
 
 
 }
