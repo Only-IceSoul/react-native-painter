@@ -32,30 +32,6 @@ public class PaintableView extends View implements PaintableInterface {
         super(context);
 
     }
-    @Override
-    public void setProps(CommonProps props) {
-        if(props != null){
-            mProps.set(props);
-        }
-    }
-
-    @Override
-    public void setIsMaskChild(boolean v) {
-         mIsMaskChild = v;
-    }
-
-    public boolean getIsMaskChild(){
-        return mIsMaskChild;
-    }
-    @Override
-    public void setTransforms(ArrayList<TransformProps> transforms) {
-    }
-    @Override
-    public void setPainterKit(PainterKit painter) {
-        mPainter = painter;
-    }
-
-
 
     CommonProps mProps = new CommonProps();
     TransformProps mTransform = new TransformProps();
@@ -63,7 +39,7 @@ public class PaintableView extends View implements PaintableInterface {
     protected final PathMeasure mPathMeasure = new PathMeasure();
     protected PainterKit mPainter;
 
-    protected RectF mPathBounds = new RectF();
+
     protected boolean mIgnoreVbTransform = false;
 
     protected boolean mIgnoreFill = false;
@@ -74,21 +50,34 @@ public class PaintableView extends View implements PaintableInterface {
 
     public void setMask(String v) {
         if(!Objects.equals(mProps.mMask, v)) {
-            String old = mProps.mMask;
+            mProps.mOldMask = mProps.mMask;
             mProps.mMask = v;
-            if(!old.isEmpty()){
-               WeakReference<MaskInterface> m = PainterView.MaskViews.get(old);
-               if(m.get() != null){
-                   m.get().removeListener(this);
-               }
+            invalidateMask();
+        }
+    }
+
+    private boolean mLazySetupMask = false;
+    private void setupMaskListener(){
+        if(! mProps.mOldMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get( mProps.mOldMask);
+            if(m != null && m.get() != null){
+                m.get().removeListener(this);
             }
-            if(!mProps.mMask.isEmpty()){
-                WeakReference<MaskInterface> m = PainterView.MaskViews.get(mProps.mMask);
-                if(m.get() != null){
-                    m.get().addListener(this);
-                }
+        }
+        if(!mProps.mMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get(mProps.mMask);
+            if(m != null && m.get() != null){
+                m.get().addListener(this);
             }
+        }
+    }
+
+    public void invalidateMask(){
+        if(mPainter != null){
+            setupMaskListener();
             invalidate();
+        }else{
+            mLazySetupMask = true;
         }
     }
 
@@ -286,7 +275,7 @@ public class PaintableView extends View implements PaintableInterface {
                 if(mProps.getMask().isEmpty()){
                     drawPaths(canvas);
                 }else{
-                    WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
+                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
                     if(maskView.get() != null){
                         drawWithMask(canvas,maskView.get());
                     }else{
@@ -530,10 +519,24 @@ public class PaintableView extends View implements PaintableInterface {
     public void invalidateMaskCallback() {
         invalidate();
     }
+    @Override
+    public void setProps(CommonProps props) {
+        if(props != null){
+            mProps.set(props);
+        }
+    }
 
     @Override
-    public PainterKit getPainter() {
-        return mPainter;
+    public void setIsMaskChild(boolean v) {
+        mIsMaskChild = v;
+    }
+    @Override
+    public void setPainterKit(PainterKit painter) {
+        mPainter = painter;
+        if (mLazySetupMask){
+            mLazySetupMask= false;
+            setupMaskListener();
+        }
     }
 
 

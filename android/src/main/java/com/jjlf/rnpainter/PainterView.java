@@ -11,6 +11,7 @@ import com.facebook.react.views.view.ReactViewGroup;
 import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
+import com.jjlf.rnpainter.views.MaskGView;
 import com.jjlf.rnpainter.views.MaskView;
 
 import java.lang.ref.WeakReference;
@@ -20,7 +21,7 @@ import java.util.Map;
 
 public class PainterView extends ReactViewGroup {
 
-    public static final Map<String, WeakReference<MaskInterface>> MaskViews = new HashMap<>();
+
     private final PainterKit mPainter = new PainterKit();
 
     PainterView(Context context){
@@ -101,6 +102,10 @@ public class PainterView extends ReactViewGroup {
         super.onViewAdded(child);
         if(child instanceof MaskView){
             child.setVisibility(View.INVISIBLE);
+        }
+        if(child instanceof PainterView || child instanceof PainterViewHardware
+                || child instanceof MaskGView){
+            throw new IllegalArgumentException("Painter cannot have child MaskG,Painter.");
         }
     }
 

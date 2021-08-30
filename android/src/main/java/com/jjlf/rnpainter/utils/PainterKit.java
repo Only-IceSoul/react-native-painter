@@ -10,6 +10,10 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.text.TextPaint;
 
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
+
 public class PainterKit {
 
     public final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -29,4 +33,5 @@ public class PainterKit {
     public final Canvas maskCanvas = new Canvas();
     public final Canvas canvas = new Canvas();
     public boolean isViewBoxEnabled = false;
+    public final Map<String, WeakReference<MaskInterface>> maskViews = new HashMap<>();
 }

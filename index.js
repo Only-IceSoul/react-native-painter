@@ -10,8 +10,8 @@ const RectView = requireNativeComponent("RectView",null);
 const CircleView = requireNativeComponent("CircleView",null);
 const TextView = requireNativeComponent("TextView",null);
 const LineView = requireNativeComponent("LineView",null);
-const GView = requireNativeComponent("GView",null);
-const GViewHardware = requireNativeComponent("GViewHardware",null);
+const GView = requireNativeComponent("GViewS",null);
+const GViewHardware = requireNativeComponent("GView",null);
 const PathView = requireNativeComponent("PathView",null);
 
 export class Line extends React.PureComponent {
@@ -75,7 +75,7 @@ export class MaskG extends React.PureComponent {
 }
 
 
-export const PainterS = requireNativeComponent("Painter",null);
-export const Painter = requireNativeComponent("PainterHardware",null);
+export const PainterS = requireNativeComponent("PainterS",null);
+export const Painter = requireNativeComponent("Painter",null);
 export const Color = ExtractColor
 export const ColorWorklet = ExtractColorWorklet

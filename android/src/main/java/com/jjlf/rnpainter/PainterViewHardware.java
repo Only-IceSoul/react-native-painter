@@ -78,17 +78,6 @@ public class PainterViewHardware extends ReactViewGroup {
 
     }
 
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        for (int i = 0; i < getChildCount(); i++) {
-            final View child = getChildAt(i);
-            if(child instanceof PaintableInterface){
-                PaintableInterface c = (PaintableInterface) child;
-                c.setPainterKit(mPainter);
-            }
-        }
-        super.dispatchDraw(canvas);
-    }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
@@ -97,12 +86,16 @@ public class PainterViewHardware extends ReactViewGroup {
         }
     }
 
-
+    //new
     @Override
     public void onViewAdded(View child) {
         super.onViewAdded(child);
         if(child instanceof MaskInterface){
             child.setVisibility(View.INVISIBLE);
+        }
+        if(child instanceof PaintableInterface){
+            PaintableInterface c = (PaintableInterface) child;
+            c.setPainterKit(mPainter);
         }
         if(child instanceof PainterView || child instanceof PainterViewHardware
                 || child instanceof MaskGView){

@@ -36,26 +36,38 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
         setLayerType(LAYER_TYPE_HARDWARE,null);
     }
 
+    //new
     public void setMask(String v) {
         if(!Objects.equals(mProps.mMask, v)) {
-
-            String old = mProps.mMask;
+            mProps.mOldMask = mProps.mMask;
             mProps.mMask = v;
-            if(!old.isEmpty()){
-                WeakReference<MaskInterface> m = PainterView.MaskViews.get(old);
-                if(m.get() != null){
-                    m.get().removeListener(this);
-                }
-            }
-            if(!mProps.mMask.isEmpty()){
-                WeakReference<MaskInterface> m = PainterView.MaskViews.get(mProps.mMask);
-                if(m.get() != null){
-                    m.get().addListener(this);
-                }
-            }
+            invalidateMask();
+        }
+    }
 
+    private boolean mLazySetupMask = false;
+    private void setupMaskListener(){
+        if(! mProps.mOldMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get( mProps.mOldMask);
+            if(m != null && m.get() != null){
+                m.get().removeListener(this);
+            }
+        }
+        if(!mProps.mMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get(mProps.mMask);
+            if(m != null && m.get() != null){
+                m.get().addListener(this);
+            }
+        }
+    }
+
+    public void invalidateMask(){
+        if(mPainter != null){
+            setupMaskListener();
             mIsInvalidate = true;
             invalidate();
+        }else{
+            mLazySetupMask = true;
         }
     }
 
@@ -239,7 +251,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
         try{
             super.dispatchDraw(canvas);
             if(!mProps.getMask().isEmpty()){
-                WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
+                WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
                 if(maskView.get() != null){
                     drawMask(canvas,maskView.get());
                 }
@@ -357,17 +369,14 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
         }
     }
 
-    @Override
-    public PainterKit getPainter() {
-        return mPainter;
-    }
-
-    @Override
-    public void setTransforms(ArrayList<TransformProps> transforms) { }
 
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
+        if (mLazySetupMask){
+            mLazySetupMask= false;
+            setupMaskListener();
+        }
     }
 
 

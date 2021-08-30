@@ -18,7 +18,7 @@ public class PainterViewManagerHardware extends ViewGroupManager<PainterViewHard
      static final int VIEW_BOX_NONE = 2;
 
     @Override
-    public String getName() { return "PainterHardware"; }
+    public String getName() { return "Painter"; }
 
     @Override
     protected PainterViewHardware createViewInstance(@NonNull ThemedReactContext reactContext) {

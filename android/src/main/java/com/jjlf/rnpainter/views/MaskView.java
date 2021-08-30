@@ -34,6 +34,7 @@ public class MaskView extends RelativeLayout implements PaintableInterface, Mask
     private PainterKit mPainter;
 
     protected String name = "";
+    protected String oldName = "";
 
     public MaskView(Context context){
         super(context);
@@ -41,38 +42,41 @@ public class MaskView extends RelativeLayout implements PaintableInterface, Mask
         setLayerType(View.LAYER_TYPE_HARDWARE,null);
     }
 
+    //new
     public void setName(String n) {
        if(!name.equals(n)){
-           String old = name;
+           oldName = name;
            name = n;
-           if(name.isEmpty()){
-               PainterView.MaskViews.remove(old);
-           }else{
-               PainterView.MaskViews.put(name, new WeakReference<MaskInterface>(this));
-           }
+
+          invalidateMask();
        }
+    }
+
+    private boolean mLazySetupMask = false;
+    public void invalidateMask(){
+        if(mPainter != null) {
+            setupMaskView();
+            if(mListeners != null){
+                for (PaintableInterface p : mListeners){
+                    p.invalidateMaskCallback();
+                }
+            }
+        }else{
+            mLazySetupMask = true;
+        }
+    }
+
+    public void setupMaskView(){
+        if(!oldName.isEmpty()){
+            mPainter.maskViews.remove(oldName);
+        }
+        if(!name.isEmpty()){
+            mPainter.maskViews.put(name, new WeakReference<MaskInterface>(this));
+        }
     }
 
     @Override
     public void render(Canvas canvas) {
-//        setupMatrix(mTransform, mPainter);
-//
-//        int checkpoint = canvas.save();
-//        canvas.concat(mMatrix);
-//        try{
-//            for (int i = 0; i < getChildCount(); i++) {
-//                final View child = getChildAt(i);
-//                if(child instanceof PaintableInterface){
-//                    PaintableInterface c = (PaintableInterface) child;
-//                    c.setProps(mProps);
-//                    c.setPainterKit(mPainter);
-//                }
-//                child.draw(canvas);
-//            }
-//
-//        } finally {
-//            canvas.restoreToCount(checkpoint);
-//        }
         draw(canvas);
     }
 
@@ -87,8 +91,6 @@ public class MaskView extends RelativeLayout implements PaintableInterface, Mask
             }
             super.dispatchDraw(canvas);
     }
-
-
 
     @Override
     public String getName() {
@@ -120,27 +122,31 @@ public class MaskView extends RelativeLayout implements PaintableInterface, Mask
 
     @Override
     public void onViewAdded(View child) {
+        super.onViewAdded(child);
         if(child instanceof MaskInterface || child instanceof PainterView || child instanceof PainterViewHardware
-         || child instanceof GView || child instanceof GViewHardware){
+                || child instanceof GView || child instanceof GViewHardware){
             throw new IllegalArgumentException("Mask cannot have unpaintable children, G, Painter, Mask.");
         }
         if(child instanceof PaintableInterface){
-            ((PaintableInterface) child).setIsMaskChild(true);
+            PaintableInterface c = (PaintableInterface) child;
+            c.setIsMaskChild(true);
         }else{
             throw new IllegalArgumentException("foreignObject cannot be child ");
         }
-        super.onViewAdded(child);
     }
 
 
+    //new
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
+        if(mLazySetupMask){
+            mLazySetupMask = false;
+            setupMaskView();
+        }
     }
-    @Override
-    public PainterKit getPainter() {
-        return mPainter;
-    }
+
+
 
 
     @Override
@@ -155,6 +161,5 @@ public class MaskView extends RelativeLayout implements PaintableInterface, Mask
     public void invalidateMaskCallback() { }
     @Override
     public void setProps(CommonProps props) { }
-    @Override
-    public void setTransforms(ArrayList<TransformProps> transforms) { }
+
 }

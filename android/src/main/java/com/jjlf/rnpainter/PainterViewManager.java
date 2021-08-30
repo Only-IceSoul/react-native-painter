@@ -19,7 +19,7 @@ public class PainterViewManager extends ViewGroupManager<PainterView> {
      static final int VIEW_BOX_NONE = 2;
 
     @Override
-    public String getName() { return "Painter"; }
+    public String getName() { return "PainterS"; }
 
     @Override
     protected PainterView createViewInstance(@NonNull ThemedReactContext reactContext) {

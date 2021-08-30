@@ -42,21 +42,33 @@ public class GView extends ViewGroup implements PaintableInterface  {
 
     public void setMask(String v) {
         if(!Objects.equals(mProps.mMask, v)) {
-            String old = mProps.mMask;
+            mProps.mOldMask = mProps.mMask;
             mProps.mMask = v;
-            if(!old.isEmpty()){
-                WeakReference<MaskInterface> m = PainterView.MaskViews.get(old);
-                if(m.get() != null){
-                    m.get().removeListener(this);
-                }
+            invalidateMask();
+        }
+    }
+    private boolean mLazySetupMask = false;
+    private void setupMaskListener(){
+        if(! mProps.mOldMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get( mProps.mOldMask);
+            if(m != null && m.get() != null){
+                m.get().removeListener(this);
             }
-            if(!mProps.mMask.isEmpty()){
-                WeakReference<MaskInterface> m = PainterView.MaskViews.get(mProps.mMask);
-                if(m.get() != null){
-                    m.get().addListener(this);
-                }
+        }
+        if(!mProps.mMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get(mProps.mMask);
+            if(m != null && m.get() != null){
+                m.get().addListener(this);
             }
+        }
+    }
+
+    public void invalidateMask(){
+        if(mPainter != null){
+            setupMaskListener();
             invalidate();
+        }else{
+            mLazySetupMask = true;
         }
     }
 
@@ -238,7 +250,7 @@ public class GView extends ViewGroup implements PaintableInterface  {
         try{
             super.dispatchDraw(canvas);
             if (!mProps.getMask().isEmpty()) {
-                WeakReference<MaskInterface> maskView = PainterView.MaskViews.get(mProps.getMask());
+                WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
                 if (maskView.get() != null) {
                     drawMask(canvas, maskView.get());
                 }
@@ -318,10 +330,6 @@ public class GView extends ViewGroup implements PaintableInterface  {
     protected float toDip(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());
     }
-    @Override
-    public void invalidate() {
-        super.invalidate();
-    }
 
     @Override
     public void setProps(CommonProps props) {
@@ -334,16 +342,14 @@ public class GView extends ViewGroup implements PaintableInterface  {
     public void setIsMaskChild(boolean v) { }
 
     @Override
-    public void setTransforms(ArrayList<TransformProps> transforms) { }
-
-    @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
+        if (mLazySetupMask){
+            mLazySetupMask= false;
+            setupMaskListener();
+        }
     }
-    @Override
-    public PainterKit getPainter() {
-        return mPainter;
-    }
+
 
     @Override
     public void invalidateMaskCallback() {

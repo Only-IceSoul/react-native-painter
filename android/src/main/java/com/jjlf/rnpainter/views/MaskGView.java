@@ -308,15 +308,10 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
     public void setIsMaskChild(boolean v) { }
     @Override
     public void setProps(CommonProps props) { }
-    @Override
-    public void setTransforms(ArrayList<TransformProps> transforms) { }
+
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
-    }
-    @Override
-    public PainterKit getPainter() {
-        return mPainter;
     }
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {

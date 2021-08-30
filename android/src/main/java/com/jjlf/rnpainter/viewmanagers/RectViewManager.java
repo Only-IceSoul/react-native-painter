@@ -29,13 +29,13 @@ public class RectViewManager extends PaintableViewManager {
         view.setY(v);
     }
 
-    @ReactProp(name = "width",defaultFloat = 0f)
-    public void setWidth(RectView view ,float v) {
+    @ReactProp(name = "w",defaultFloat = 0f)
+    public void setW(RectView view ,float v) {
         view.setW(v);
     }
 
-    @ReactProp(name = "height",defaultFloat = 0f)
-    public void setHeight(RectView view ,float v) {
+    @ReactProp(name = "h",defaultFloat = 0f)
+    public void setH(RectView view ,float v) {
         view.setH(v);
     }
 

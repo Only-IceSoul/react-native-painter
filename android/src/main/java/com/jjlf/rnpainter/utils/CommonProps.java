@@ -9,6 +9,7 @@ public class CommonProps {
     public float mOpacity = 1f;
     public boolean mOpacityStatus = false;
     public String mMask = "";
+    public String mOldMask = "";
 
     public int mFillColor = Color.BLACK;
     public boolean mFillColorStatus = false;

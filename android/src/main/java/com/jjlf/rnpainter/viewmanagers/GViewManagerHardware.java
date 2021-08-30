@@ -23,7 +23,7 @@ import com.jjlf.rnpainter.views.PaintableView;
 public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
 
     @Override
-    public String getName() { return "GViewHardware"; }
+    public String getName() { return "GView"; }
 
     @Override
     protected GViewHardware createViewInstance(@NonNull ThemedReactContext reactContext) {

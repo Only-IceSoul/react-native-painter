@@ -98,8 +98,8 @@ interface GProps extends CommonProps , ViewProps{
 interface RectProps extends CommonProps , ViewProps{
     x?:number
     y?:number
-    width?:number
-    height?:number
+    w?:number
+    h?:number
     rtl?:number
     rtr?:number
     rbr?:number
