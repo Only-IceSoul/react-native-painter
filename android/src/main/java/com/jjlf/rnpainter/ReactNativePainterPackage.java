@@ -29,6 +29,7 @@ public class ReactNativePainterPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
+                new EllipseViewManager(),
                 new MaskGViewManager(),
                 new RectViewManager(),
                 new MaskViewManager(),

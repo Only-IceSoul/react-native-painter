@@ -2,7 +2,7 @@
   "name": "react-native-painter",
   "title": "React Native Painter",
   "version": "1.0.0",
-  "description": "TODO",
+  "description": "Custom Painter Android IOS ",
   "main": "index.js",
   "files": [
     "README.md",
