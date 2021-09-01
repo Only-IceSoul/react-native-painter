@@ -43,13 +43,13 @@ public class TextView extends PaintableView {
     }
     public void setVerticalOffset(float v) {
         if(verticalOffset != v){
-            verticalOffset = ModUtil.clamp(v);
+            verticalOffset = v;
             invalidate();
         }
     }
     public void setHorizontalOffset(float v) {
         if(verticalOffset != v){
-            verticalOffset = ModUtil.clamp(v);
+            horizontalOffset = v;
             invalidate();
         }
     }
@@ -148,7 +148,7 @@ public class TextView extends PaintableView {
                     break;
                 }
                 case "descender": {
-                    py +=  mPainter.textPaint.getFontMetrics().descent;
+                    py -=  mPainter.textPaint.getFontMetrics().descent;
                     break;
                 }
                 case "center": {
