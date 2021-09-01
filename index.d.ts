@@ -105,7 +105,7 @@ interface RectProps extends CommonProps , ViewProps{
     rbl?:number
 }
 interface MaskProps extends ViewProps{
-    name?:string
+    name:string
 }
 interface MaskGProps extends CommonProps , ViewProps{
 
