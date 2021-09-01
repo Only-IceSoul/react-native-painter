@@ -71,7 +71,7 @@ class MaskPaintableView: UIView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if(mLazyPainter){
+        if(mLazyPainter &&  self.reactSubviews() != nil){
             mLazyPainter = false
      
             for i in 0..<self.reactSubviews()!.count {

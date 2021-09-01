@@ -348,7 +348,7 @@ public class MaskGPaintableView: PaintableView {
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if(mLazyProps || mLazyPainter){
+        if(mLazyProps || mLazyPainter && self.reactSubviews() != nil){
             let pr = mLazyProps
             let pp = mLazyPainter
             mLazyProps = false

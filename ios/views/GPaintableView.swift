@@ -343,17 +343,17 @@ public class GPaintableView: PaintableView {
             let v = self.reactSubviews()![i]
             self.addSubview(v)
         }
+  
     }
 
     
     public override func layoutSubviews() {
         super.layoutSubviews()
-        if(mLazyProps || mLazyPainter){
+        if(mLazyProps || mLazyPainter && self.reactSubviews() != nil){
             let pr = mLazyProps
             let pp = mLazyPainter
             mLazyProps = false
             mLazyPainter = false
-     
             for i in 0..<self.reactSubviews()!.count {
                 let v = self.reactSubviews()![i]
                 if let p = v as? PaintableView{

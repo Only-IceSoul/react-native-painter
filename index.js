@@ -19,8 +19,8 @@ export class Line extends React.PureComponent {
         const {style,...others} = this.props
         return <LineView {...others}
          style={Platform.OS === 'android' 
-         ? [{transform: style.transform }] 
-         : [{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
@@ -29,9 +29,9 @@ export class GS extends React.PureComponent {
     render(){
         const {style,...others} = this.props
         return Platform.OS === 'android' ?
-        <GViewS {...others} style={[{transform: style.transform }] } />
+        <GViewS {...others} style={[{transform: style?.transform }] } />
         
-         : <GView style={[{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         : <GView {...others} style={[{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
@@ -40,8 +40,8 @@ export class G extends React.PureComponent {
         const {style,...others} = this.props
         return <GView {...others}
          style={Platform.OS === 'android' 
-         ? [{transform: style.transform }] 
-         : [{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
@@ -50,8 +50,8 @@ export class Path extends React.PureComponent {
         const {style,...others} = this.props
         return <PathView {...others}
          style={Platform.OS === 'android' 
-         ? [{transform: style.transform }] 
-         : [{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
@@ -60,8 +60,8 @@ export class Text extends React.PureComponent {
         const {style,...others} = this.props
         return <TextView {...others}
          style={Platform.OS === 'android' 
-         ? [{transform: style.transform }] 
-         : [{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
@@ -71,8 +71,8 @@ export class Circle extends React.PureComponent {
         const {style,...others} = this.props
         return <CircleView {...others}
          style={Platform.OS === 'android' 
-         ? [{transform: style.transform }] 
-         : [{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
@@ -82,8 +82,8 @@ export class Rect extends React.PureComponent {
         const {style,...others} = this.props
         return <RectView {...others}
          style={Platform.OS === 'android' 
-         ? [{transform: style.transform }] 
-         : [{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
@@ -103,8 +103,8 @@ export class MaskG extends React.PureComponent {
         const {style,...others} = this.props
         return <MaskGView {...others}
          style={Platform.OS === 'android' 
-         ? [{transform: style.transform }] 
-         : [{transform:style.transform},StyleSheet.absoluteFillObject]} />
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
     } 
 }
