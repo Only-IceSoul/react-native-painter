@@ -327,7 +327,7 @@ public class TextLayer: CALayer  {
     }
     
     public func invalidateTextPosition(_ f:Bool = true){
-        if(frame.width > 0 && frame.height > 0 && mPainterKit != nil){
+        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
         if f { setupFont() }
         var x = mX
         var y = mY
@@ -381,7 +381,7 @@ public class TextLayer: CALayer  {
     
     public func invalidateText(){
    
-        if(frame.width > 0 && frame.height > 0 && mPainterKit != nil){
+        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
             
             setupFont()
             mTextAttrs[.font ] = mUIFont
@@ -410,7 +410,7 @@ public class TextLayer: CALayer  {
 
     public func invalidateTransform(){
         
-        if(frame.width > 0 && frame.height > 0 && mPainterKit != nil){
+        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
             var matrix = CATransform3DIdentity
           
             
@@ -468,7 +468,7 @@ public class TextLayer: CALayer  {
  
    
     private func invalidateShadow(){
-        if(frame.width > 0 && frame.height > 0 && mPainterKit != nil){
+        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
         let c = UIColor.parseInt(argb: mProps.getShadowColor())
         var offset = CGSize(width: 0, height: 0)
         if mProps.getShadowOffsetIsPercent(){
