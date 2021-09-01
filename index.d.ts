@@ -72,13 +72,12 @@ interface TextProps extends CommonProps , ViewProps{
     x?:number
     y?:number
     text?:string
-    textAnchor?:'start' | 'middle' | 'end'
     fontSize?:number
     fontStyle?:'normal' | 'bold' | 'italic'
     font?: 'default' | string
-    direction?:'ltr' | 'rtl'
-    baseline?:'top' | 'middle' | 'bottom' | 'none' | 'center'
-    baselineOffset?:number
+    baseline?:'ascender' | 'middle' | 'descender' | 'none'  | 'center' | 'capHeight'
+    verticalOffset?:number
+    horizontalOffset?:number
 
 }
 

@@ -6,6 +6,55 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		D03DB00A26DF315A00A578E6 /* enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFD826DF315900A578E6 /* enums.swift */; };
+		D03DB00B26DF315A00A578E6 /* SVGViewBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFD926DF315900A578E6 /* SVGViewBox.swift */; };
+		D03DB00C26DF315A00A578E6 /* SVGPathParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDA26DF315900A578E6 /* SVGPathParser.swift */; };
+		D03DB00D26DF315A00A578E6 /* TransformProps.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDB26DF315900A578E6 /* TransformProps.swift */; };
+		D03DB00E26DF315A00A578E6 /* ContainerG.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDC26DF315900A578E6 /* ContainerG.swift */; };
+		D03DB00F26DF315A00A578E6 /* PainterKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDD26DF315900A578E6 /* PainterKit.swift */; };
+		D03DB01026DF315A00A578E6 /* CommonProps.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDE26DF315900A578E6 /* CommonProps.swift */; };
+		D03DB01126DF315A00A578E6 /* PainterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDF26DF315900A578E6 /* PainterView.swift */; };
+		D03DB01226DF315A00A578E6 /* Painter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE026DF315900A578E6 /* Painter.swift */; };
+		D03DB01326DF315A00A578E6 /* extension_UIBezierPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE226DF315900A578E6 /* extension_UIBezierPath.swift */; };
+		D03DB01426DF315A00A578E6 /* extension_CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE326DF315900A578E6 /* extension_CGFloat.swift */; };
+		D03DB01526DF315A00A578E6 /* extension_NSAttrString.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE426DF315900A578E6 /* extension_NSAttrString.swift */; };
+		D03DB01626DF315A00A578E6 /* extension_UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE526DF315900A578E6 /* extension_UIColor.swift */; };
+		D03DB01726DF315A00A578E6 /* extension_CGRect.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE626DF315900A578E6 /* extension_CGRect.swift */; };
+		D03DB01826DF315A00A578E6 /* MaskGPaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE826DF315A00A578E6 /* MaskGPaintableView.swift */; };
+		D03DB01926DF315A00A578E6 /* PaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFE926DF315A00A578E6 /* PaintableView.swift */; };
+		D03DB01A26DF315A00A578E6 /* GPaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFEA26DF315A00A578E6 /* GPaintableView.swift */; };
+		D03DB01B26DF315A00A578E6 /* CirclePaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFEB26DF315A00A578E6 /* CirclePaintableView.swift */; };
+		D03DB01C26DF315A00A578E6 /* MaskPaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFEC26DF315A00A578E6 /* MaskPaintableView.swift */; };
+		D03DB01D26DF315A00A578E6 /* LinePaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFED26DF315A00A578E6 /* LinePaintableView.swift */; };
+		D03DB01E26DF315A00A578E6 /* RectPaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFEE26DF315A00A578E6 /* RectPaintableView.swift */; };
+		D03DB01F26DF315A00A578E6 /* PathPaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFEF26DF315A00A578E6 /* PathPaintableView.swift */; };
+		D03DB02026DF315A00A578E6 /* TextPaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF026DF315A00A578E6 /* TextPaintableView.swift */; };
+		D03DB02126DF315A00A578E6 /* Painter.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF126DF315A00A578E6 /* Painter.m */; };
+		D03DB02226DF315A00A578E6 /* LineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF326DF315A00A578E6 /* LineView.swift */; };
+		D03DB02326DF315A00A578E6 /* MaskView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF426DF315A00A578E6 /* MaskView.m */; };
+		D03DB02426DF315A00A578E6 /* PathView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF526DF315A00A578E6 /* PathView.m */; };
+		D03DB02526DF315A00A578E6 /* LineView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF626DF315A00A578E6 /* LineView.m */; };
+		D03DB02626DF315A00A578E6 /* MaskGView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF726DF315A00A578E6 /* MaskGView.swift */; };
+		D03DB02726DF315A00A578E6 /* CircleView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF826DF315A00A578E6 /* CircleView.m */; };
+		D03DB02826DF315A00A578E6 /* TextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFF926DF315A00A578E6 /* TextView.m */; };
+		D03DB02926DF315A00A578E6 /* GView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFFA26DF315A00A578E6 /* GView.m */; };
+		D03DB02A26DF315A00A578E6 /* RectView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFFB26DF315A00A578E6 /* RectView.m */; };
+		D03DB02B26DF315A00A578E6 /* RectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFFC26DF315A00A578E6 /* RectView.swift */; };
+		D03DB02C26DF315A00A578E6 /* MaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFFD26DF315A00A578E6 /* MaskView.swift */; };
+		D03DB02D26DF315A00A578E6 /* TextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFFE26DF315A00A578E6 /* TextView.swift */; };
+		D03DB02E26DF315A00A578E6 /* MaskGView.m in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFFF26DF315A00A578E6 /* MaskGView.m */; };
+		D03DB02F26DF315A00A578E6 /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00026DF315A00A578E6 /* CircleView.swift */; };
+		D03DB03026DF315A00A578E6 /* GView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00126DF315A00A578E6 /* GView.swift */; };
+		D03DB03126DF315A00A578E6 /* PathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00226DF315A00A578E6 /* PathView.swift */; };
+		D03DB03226DF315A00A578E6 /* TextLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00426DF315A00A578E6 /* TextLayer.swift */; };
+		D03DB03326DF315A00A578E6 /* Paintable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00526DF315A00A578E6 /* Paintable.swift */; };
+		D03DB03426DF315A00A578E6 /* LineLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00626DF315A00A578E6 /* LineLayer.swift */; };
+		D03DB03526DF315A00A578E6 /* RectLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00726DF315A00A578E6 /* RectLayer.swift */; };
+		D03DB03626DF315A00A578E6 /* PathLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00826DF315A00A578E6 /* PathLayer.swift */; };
+		D03DB03726DF315A00A578E6 /* CircleLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DB00926DF315A00A578E6 /* CircleLayer.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXCopyFilesBuildPhase section */
 		58B511D91A9E6C8500147676 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -20,6 +69,53 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libReactNativePainter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativePainter.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D03DAFD226DF311100A578E6 /* ReactNativePainter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactNativePainter-Bridging-Header.h"; sourceTree = "<group>"; };
+		D03DAFD826DF315900A578E6 /* enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = enums.swift; sourceTree = "<group>"; };
+		D03DAFD926DF315900A578E6 /* SVGViewBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGViewBox.swift; sourceTree = "<group>"; };
+		D03DAFDA26DF315900A578E6 /* SVGPathParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGPathParser.swift; sourceTree = "<group>"; };
+		D03DAFDB26DF315900A578E6 /* TransformProps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransformProps.swift; sourceTree = "<group>"; };
+		D03DAFDC26DF315900A578E6 /* ContainerG.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContainerG.swift; sourceTree = "<group>"; };
+		D03DAFDD26DF315900A578E6 /* PainterKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PainterKit.swift; sourceTree = "<group>"; };
+		D03DAFDE26DF315900A578E6 /* CommonProps.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommonProps.swift; sourceTree = "<group>"; };
+		D03DAFDF26DF315900A578E6 /* PainterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PainterView.swift; sourceTree = "<group>"; };
+		D03DAFE026DF315900A578E6 /* Painter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Painter.swift; sourceTree = "<group>"; };
+		D03DAFE226DF315900A578E6 /* extension_UIBezierPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension_UIBezierPath.swift; sourceTree = "<group>"; };
+		D03DAFE326DF315900A578E6 /* extension_CGFloat.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension_CGFloat.swift; sourceTree = "<group>"; };
+		D03DAFE426DF315900A578E6 /* extension_NSAttrString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension_NSAttrString.swift; sourceTree = "<group>"; };
+		D03DAFE526DF315900A578E6 /* extension_UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension_UIColor.swift; sourceTree = "<group>"; };
+		D03DAFE626DF315900A578E6 /* extension_CGRect.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = extension_CGRect.swift; sourceTree = "<group>"; };
+		D03DAFE826DF315A00A578E6 /* MaskGPaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaskGPaintableView.swift; sourceTree = "<group>"; };
+		D03DAFE926DF315A00A578E6 /* PaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PaintableView.swift; sourceTree = "<group>"; };
+		D03DAFEA26DF315A00A578E6 /* GPaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GPaintableView.swift; sourceTree = "<group>"; };
+		D03DAFEB26DF315A00A578E6 /* CirclePaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CirclePaintableView.swift; sourceTree = "<group>"; };
+		D03DAFEC26DF315A00A578E6 /* MaskPaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaskPaintableView.swift; sourceTree = "<group>"; };
+		D03DAFED26DF315A00A578E6 /* LinePaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinePaintableView.swift; sourceTree = "<group>"; };
+		D03DAFEE26DF315A00A578E6 /* RectPaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectPaintableView.swift; sourceTree = "<group>"; };
+		D03DAFEF26DF315A00A578E6 /* PathPaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathPaintableView.swift; sourceTree = "<group>"; };
+		D03DAFF026DF315A00A578E6 /* TextPaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextPaintableView.swift; sourceTree = "<group>"; };
+		D03DAFF126DF315A00A578E6 /* Painter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Painter.m; sourceTree = "<group>"; };
+		D03DAFF326DF315A00A578E6 /* LineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineView.swift; sourceTree = "<group>"; };
+		D03DAFF426DF315A00A578E6 /* MaskView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaskView.m; sourceTree = "<group>"; };
+		D03DAFF526DF315A00A578E6 /* PathView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathView.m; sourceTree = "<group>"; };
+		D03DAFF626DF315A00A578E6 /* LineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineView.m; sourceTree = "<group>"; };
+		D03DAFF726DF315A00A578E6 /* MaskGView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaskGView.swift; sourceTree = "<group>"; };
+		D03DAFF826DF315A00A578E6 /* CircleView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleView.m; sourceTree = "<group>"; };
+		D03DAFF926DF315A00A578E6 /* TextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TextView.m; sourceTree = "<group>"; };
+		D03DAFFA26DF315A00A578E6 /* GView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GView.m; sourceTree = "<group>"; };
+		D03DAFFB26DF315A00A578E6 /* RectView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RectView.m; sourceTree = "<group>"; };
+		D03DAFFC26DF315A00A578E6 /* RectView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectView.swift; sourceTree = "<group>"; };
+		D03DAFFD26DF315A00A578E6 /* MaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MaskView.swift; sourceTree = "<group>"; };
+		D03DAFFE26DF315A00A578E6 /* TextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextView.swift; sourceTree = "<group>"; };
+		D03DAFFF26DF315A00A578E6 /* MaskGView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MaskGView.m; sourceTree = "<group>"; };
+		D03DB00026DF315A00A578E6 /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
+		D03DB00126DF315A00A578E6 /* GView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GView.swift; sourceTree = "<group>"; };
+		D03DB00226DF315A00A578E6 /* PathView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathView.swift; sourceTree = "<group>"; };
+		D03DB00426DF315A00A578E6 /* TextLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextLayer.swift; sourceTree = "<group>"; };
+		D03DB00526DF315A00A578E6 /* Paintable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Paintable.swift; sourceTree = "<group>"; };
+		D03DB00626DF315A00A578E6 /* LineLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineLayer.swift; sourceTree = "<group>"; };
+		D03DB00726DF315A00A578E6 /* RectLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectLayer.swift; sourceTree = "<group>"; };
+		D03DB00826DF315A00A578E6 /* PathLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PathLayer.swift; sourceTree = "<group>"; };
+		D03DB00926DF315A00A578E6 /* CircleLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleLayer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -44,8 +140,95 @@
 		58B511D21A9E6C8500147676 = {
 			isa = PBXGroup;
 			children = (
+				D03DAFE126DF315900A578E6 /* extensions */,
+				D03DB00326DF315A00A578E6 /* layers */,
+				D03DAFF226DF315A00A578E6 /* managers */,
+				D03DAFF126DF315A00A578E6 /* Painter.m */,
+				D03DAFE026DF315900A578E6 /* Painter.swift */,
+				D03DAFDF26DF315900A578E6 /* PainterView.swift */,
+				D03DAFD726DF315900A578E6 /* utils */,
+				D03DAFE726DF315A00A578E6 /* views */,
 				134814211AA4EA7D00B7C361 /* Products */,
+				D03DAFD226DF311100A578E6 /* ReactNativePainter-Bridging-Header.h */,
 			);
+			sourceTree = "<group>";
+		};
+		D03DAFD726DF315900A578E6 /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				D03DAFD826DF315900A578E6 /* enums.swift */,
+				D03DAFD926DF315900A578E6 /* SVGViewBox.swift */,
+				D03DAFDA26DF315900A578E6 /* SVGPathParser.swift */,
+				D03DAFDB26DF315900A578E6 /* TransformProps.swift */,
+				D03DAFDC26DF315900A578E6 /* ContainerG.swift */,
+				D03DAFDD26DF315900A578E6 /* PainterKit.swift */,
+				D03DAFDE26DF315900A578E6 /* CommonProps.swift */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
+		D03DAFE126DF315900A578E6 /* extensions */ = {
+			isa = PBXGroup;
+			children = (
+				D03DAFE226DF315900A578E6 /* extension_UIBezierPath.swift */,
+				D03DAFE326DF315900A578E6 /* extension_CGFloat.swift */,
+				D03DAFE426DF315900A578E6 /* extension_NSAttrString.swift */,
+				D03DAFE526DF315900A578E6 /* extension_UIColor.swift */,
+				D03DAFE626DF315900A578E6 /* extension_CGRect.swift */,
+			);
+			path = extensions;
+			sourceTree = "<group>";
+		};
+		D03DAFE726DF315A00A578E6 /* views */ = {
+			isa = PBXGroup;
+			children = (
+				D03DAFE826DF315A00A578E6 /* MaskGPaintableView.swift */,
+				D03DAFE926DF315A00A578E6 /* PaintableView.swift */,
+				D03DAFEA26DF315A00A578E6 /* GPaintableView.swift */,
+				D03DAFEB26DF315A00A578E6 /* CirclePaintableView.swift */,
+				D03DAFEC26DF315A00A578E6 /* MaskPaintableView.swift */,
+				D03DAFED26DF315A00A578E6 /* LinePaintableView.swift */,
+				D03DAFEE26DF315A00A578E6 /* RectPaintableView.swift */,
+				D03DAFEF26DF315A00A578E6 /* PathPaintableView.swift */,
+				D03DAFF026DF315A00A578E6 /* TextPaintableView.swift */,
+			);
+			path = views;
+			sourceTree = "<group>";
+		};
+		D03DAFF226DF315A00A578E6 /* managers */ = {
+			isa = PBXGroup;
+			children = (
+				D03DAFF326DF315A00A578E6 /* LineView.swift */,
+				D03DAFF426DF315A00A578E6 /* MaskView.m */,
+				D03DAFF526DF315A00A578E6 /* PathView.m */,
+				D03DAFF626DF315A00A578E6 /* LineView.m */,
+				D03DAFF726DF315A00A578E6 /* MaskGView.swift */,
+				D03DAFF826DF315A00A578E6 /* CircleView.m */,
+				D03DAFF926DF315A00A578E6 /* TextView.m */,
+				D03DAFFA26DF315A00A578E6 /* GView.m */,
+				D03DAFFB26DF315A00A578E6 /* RectView.m */,
+				D03DAFFC26DF315A00A578E6 /* RectView.swift */,
+				D03DAFFD26DF315A00A578E6 /* MaskView.swift */,
+				D03DAFFE26DF315A00A578E6 /* TextView.swift */,
+				D03DAFFF26DF315A00A578E6 /* MaskGView.m */,
+				D03DB00026DF315A00A578E6 /* CircleView.swift */,
+				D03DB00126DF315A00A578E6 /* GView.swift */,
+				D03DB00226DF315A00A578E6 /* PathView.swift */,
+			);
+			path = managers;
+			sourceTree = "<group>";
+		};
+		D03DB00326DF315A00A578E6 /* layers */ = {
+			isa = PBXGroup;
+			children = (
+				D03DB00426DF315A00A578E6 /* TextLayer.swift */,
+				D03DB00526DF315A00A578E6 /* Paintable.swift */,
+				D03DB00626DF315A00A578E6 /* LineLayer.swift */,
+				D03DB00726DF315A00A578E6 /* RectLayer.swift */,
+				D03DB00826DF315A00A578E6 /* PathLayer.swift */,
+				D03DB00926DF315A00A578E6 /* CircleLayer.swift */,
+			);
+			path = layers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -79,6 +262,7 @@
 				TargetAttributes = {
 					58B511DA1A9E6C8500147676 = {
 						CreatedOnToolsVersion = 6.1.1;
+						LastSwiftMigration = 1220;
 					};
 				};
 			};
@@ -105,6 +289,52 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D03DB02326DF315A00A578E6 /* MaskView.m in Sources */,
+				D03DB01226DF315A00A578E6 /* Painter.swift in Sources */,
+				D03DB02F26DF315A00A578E6 /* CircleView.swift in Sources */,
+				D03DB01A26DF315A00A578E6 /* GPaintableView.swift in Sources */,
+				D03DB02A26DF315A00A578E6 /* RectView.m in Sources */,
+				D03DB02E26DF315A00A578E6 /* MaskGView.m in Sources */,
+				D03DB03326DF315A00A578E6 /* Paintable.swift in Sources */,
+				D03DB02B26DF315A00A578E6 /* RectView.swift in Sources */,
+				D03DB02C26DF315A00A578E6 /* MaskView.swift in Sources */,
+				D03DB00E26DF315A00A578E6 /* ContainerG.swift in Sources */,
+				D03DB02926DF315A00A578E6 /* GView.m in Sources */,
+				D03DB01B26DF315A00A578E6 /* CirclePaintableView.swift in Sources */,
+				D03DB03426DF315A00A578E6 /* LineLayer.swift in Sources */,
+				D03DB01026DF315A00A578E6 /* CommonProps.swift in Sources */,
+				D03DB01726DF315A00A578E6 /* extension_CGRect.swift in Sources */,
+				D03DB03226DF315A00A578E6 /* TextLayer.swift in Sources */,
+				D03DB01826DF315A00A578E6 /* MaskGPaintableView.swift in Sources */,
+				D03DB01126DF315A00A578E6 /* PainterView.swift in Sources */,
+				D03DB00A26DF315A00A578E6 /* enums.swift in Sources */,
+				D03DB02026DF315A00A578E6 /* TextPaintableView.swift in Sources */,
+				D03DB01E26DF315A00A578E6 /* RectPaintableView.swift in Sources */,
+				D03DB00F26DF315A00A578E6 /* PainterKit.swift in Sources */,
+				D03DB01626DF315A00A578E6 /* extension_UIColor.swift in Sources */,
+				D03DB02226DF315A00A578E6 /* LineView.swift in Sources */,
+				D03DB01926DF315A00A578E6 /* PaintableView.swift in Sources */,
+				D03DB02526DF315A00A578E6 /* LineView.m in Sources */,
+				D03DB02826DF315A00A578E6 /* TextView.m in Sources */,
+				D03DB03026DF315A00A578E6 /* GView.swift in Sources */,
+				D03DB03126DF315A00A578E6 /* PathView.swift in Sources */,
+				D03DB03726DF315A00A578E6 /* CircleLayer.swift in Sources */,
+				D03DB01C26DF315A00A578E6 /* MaskPaintableView.swift in Sources */,
+				D03DB02126DF315A00A578E6 /* Painter.m in Sources */,
+				D03DB01F26DF315A00A578E6 /* PathPaintableView.swift in Sources */,
+				D03DB02626DF315A00A578E6 /* MaskGView.swift in Sources */,
+				D03DB03626DF315A00A578E6 /* PathLayer.swift in Sources */,
+				D03DB01D26DF315A00A578E6 /* LinePaintableView.swift in Sources */,
+				D03DB01526DF315A00A578E6 /* extension_NSAttrString.swift in Sources */,
+				D03DB02426DF315A00A578E6 /* PathView.m in Sources */,
+				D03DB00B26DF315A00A578E6 /* SVGViewBox.swift in Sources */,
+				D03DB01326DF315A00A578E6 /* extension_UIBezierPath.swift in Sources */,
+				D03DB02726DF315A00A578E6 /* CircleView.m in Sources */,
+				D03DB00C26DF315A00A578E6 /* SVGPathParser.swift in Sources */,
+				D03DB02D26DF315A00A578E6 /* TextView.swift in Sources */,
+				D03DB03526DF315A00A578E6 /* RectLayer.swift in Sources */,
+				D03DB00D26DF315A00A578E6 /* TransformProps.swift in Sources */,
+				D03DB01426DF315A00A578E6 /* extension_CGFloat.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -225,32 +455,41 @@
 		58B511F01A9E6C8500147676 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactNativePainter;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ReactNativePainter-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
 		};
 		58B511F11A9E6C8500147676 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
 					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
 					"$(SRCROOT)/../../../React/**",
 					"$(SRCROOT)/../../react-native/React/**",
 				);
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = ReactNativePainter;
 				SKIP_INSTALL = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ReactNativePainter-Bridging-Header.h";
+				SWIFT_VERSION = 5.0;
 			};
 			name = Release;
 		};
