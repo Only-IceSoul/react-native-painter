@@ -1,8 +1,8 @@
 {
   "name": "react-native-painter",
   "title": "React Native Painter",
-  "version": "0.0.7",
-  "description": "TODO, EXPERIMENTAL",
+  "version": "0.0.8",
+  "description": "TODO",
   "main": "index.js",
   "files": [
     "README.md",
@@ -22,7 +22,17 @@
     "baseUrl": "https://github.com/Only-IceSoul/react-native-painter"
   },
   "keywords": [
-    "react-native"
+    "react-native",
+    "painter",
+    "custom painter",
+    "react",
+    "canvas",
+    "layer",
+    "mask",
+    "drawable",
+    "svg",
+    "paint"
+
   ],
   "author": {
     "name": "Juan Laura",

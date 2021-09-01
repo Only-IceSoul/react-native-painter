@@ -26,9 +26,13 @@ public class TextViewManager extends PaintableViewManager {
     public void setBaseline(TextView view ,String v) {
         view.setBaseline(v != null ? v : "none");
     }
-    @ReactProp(name = "baselineOffset",defaultFloat = 0f)
-    public void setBaseline(TextView view ,float v) {
-        view.setBaselineOffset(v);
+    @ReactProp(name = "verticalOffset",defaultFloat = 0f)
+    public void setVerticalOffset(TextView view ,float v) {
+        view.setVerticalOffset(v);
+    }
+    @ReactProp(name = "horizontalOffset",defaultFloat = 0f)
+    public void setHorizontalOffset(TextView view ,float v) {
+        view.setHorizontalOffset(v);
     }
     @ReactProp(name = "x",defaultFloat = 0f)
     public void setX(TextView view ,float v) {
@@ -39,30 +43,20 @@ public class TextViewManager extends PaintableViewManager {
     public void setY(TextView view ,float v) {
         view.setY(v);
     }
-    @ReactProp(name = "direction")
-    public void setDirection(TextView view ,String v) {
-        view.setDirection( v != null ? v : "ltr");
-    }
+
     @ReactProp(name = "font")
     public void setFont(TextView view ,String v) {
         view.setFont( v != null ? v : "default");
     }
-
-    //normal | bold | italic |
     @ReactProp(name = "fontStyle")
     public void setFontStyle(TextView view ,String v) {
         view.setFontStyle( v != null ? v : "normal");
     }
-
-    @ReactProp(name = "fontSize",defaultFloat = 16f)
+    @ReactProp(name = "fontSize",defaultFloat = 12f)
     public void setFontSize(TextView view ,float v) {
         view.setFontSize(v);
     }
 
 
-    @ReactProp(name = "textAnchor")
-    public void setTextAnchor(TextView view ,String v) {
-        view.setTextAnchor( v != null ? v : "start");
-    }
 
 }
