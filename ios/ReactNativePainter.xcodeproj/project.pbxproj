@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D02E65FB26E072A90023C4D8 /* EllipseLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E65FA26E072A90023C4D8 /* EllipseLayer.swift */; };
+		D02E65FF26E072C10023C4D8 /* EllipseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E65FD26E072C10023C4D8 /* EllipseView.swift */; };
+		D02E660026E072C10023C4D8 /* EllipseView.m in Sources */ = {isa = PBXBuildFile; fileRef = D02E65FE26E072C10023C4D8 /* EllipseView.m */; };
+		D02E660326E072E40023C4D8 /* EllipsePaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E660226E072E40023C4D8 /* EllipsePaintableView.swift */; };
 		D03DB00A26DF315A00A578E6 /* enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFD826DF315900A578E6 /* enums.swift */; };
 		D03DB00B26DF315A00A578E6 /* SVGViewBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFD926DF315900A578E6 /* SVGViewBox.swift */; };
 		D03DB00C26DF315A00A578E6 /* SVGPathParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDA26DF315900A578E6 /* SVGPathParser.swift */; };
@@ -69,6 +73,10 @@
 
 /* Begin PBXFileReference section */
 		134814201AA4EA6300B7C361 /* libReactNativePainter.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libReactNativePainter.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		D02E65FA26E072A90023C4D8 /* EllipseLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipseLayer.swift; sourceTree = "<group>"; };
+		D02E65FD26E072C10023C4D8 /* EllipseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipseView.swift; sourceTree = "<group>"; };
+		D02E65FE26E072C10023C4D8 /* EllipseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EllipseView.m; sourceTree = "<group>"; };
+		D02E660226E072E40023C4D8 /* EllipsePaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipsePaintableView.swift; sourceTree = "<group>"; };
 		D03DAFD226DF311100A578E6 /* ReactNativePainter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactNativePainter-Bridging-Header.h"; sourceTree = "<group>"; };
 		D03DAFD826DF315900A578E6 /* enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = enums.swift; sourceTree = "<group>"; };
 		D03DAFD926DF315900A578E6 /* SVGViewBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGViewBox.swift; sourceTree = "<group>"; };
@@ -187,6 +195,7 @@
 				D03DAFEA26DF315A00A578E6 /* GPaintableView.swift */,
 				D03DAFEB26DF315A00A578E6 /* CirclePaintableView.swift */,
 				D03DAFEC26DF315A00A578E6 /* MaskPaintableView.swift */,
+				D02E660226E072E40023C4D8 /* EllipsePaintableView.swift */,
 				D03DAFED26DF315A00A578E6 /* LinePaintableView.swift */,
 				D03DAFEE26DF315A00A578E6 /* RectPaintableView.swift */,
 				D03DAFEF26DF315A00A578E6 /* PathPaintableView.swift */,
@@ -203,6 +212,8 @@
 				D03DAFF526DF315A00A578E6 /* PathView.m */,
 				D03DAFF626DF315A00A578E6 /* LineView.m */,
 				D03DAFF726DF315A00A578E6 /* MaskGView.swift */,
+				D02E65FE26E072C10023C4D8 /* EllipseView.m */,
+				D02E65FD26E072C10023C4D8 /* EllipseView.swift */,
 				D03DAFF826DF315A00A578E6 /* CircleView.m */,
 				D03DAFF926DF315A00A578E6 /* TextView.m */,
 				D03DAFFA26DF315A00A578E6 /* GView.m */,
@@ -222,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				D03DB00426DF315A00A578E6 /* TextLayer.swift */,
+				D02E65FA26E072A90023C4D8 /* EllipseLayer.swift */,
 				D03DB00526DF315A00A578E6 /* Paintable.swift */,
 				D03DB00626DF315A00A578E6 /* LineLayer.swift */,
 				D03DB00726DF315A00A578E6 /* RectLayer.swift */,
@@ -299,6 +311,7 @@
 				D03DB02B26DF315A00A578E6 /* RectView.swift in Sources */,
 				D03DB02C26DF315A00A578E6 /* MaskView.swift in Sources */,
 				D03DB00E26DF315A00A578E6 /* ContainerG.swift in Sources */,
+				D02E660326E072E40023C4D8 /* EllipsePaintableView.swift in Sources */,
 				D03DB02926DF315A00A578E6 /* GView.m in Sources */,
 				D03DB01B26DF315A00A578E6 /* CirclePaintableView.swift in Sources */,
 				D03DB03426DF315A00A578E6 /* LineLayer.swift in Sources */,
@@ -310,6 +323,7 @@
 				D03DB00A26DF315A00A578E6 /* enums.swift in Sources */,
 				D03DB02026DF315A00A578E6 /* TextPaintableView.swift in Sources */,
 				D03DB01E26DF315A00A578E6 /* RectPaintableView.swift in Sources */,
+				D02E65FF26E072C10023C4D8 /* EllipseView.swift in Sources */,
 				D03DB00F26DF315A00A578E6 /* PainterKit.swift in Sources */,
 				D03DB01626DF315A00A578E6 /* extension_UIColor.swift in Sources */,
 				D03DB02226DF315A00A578E6 /* LineView.swift in Sources */,
@@ -321,6 +335,8 @@
 				D03DB03726DF315A00A578E6 /* CircleLayer.swift in Sources */,
 				D03DB01C26DF315A00A578E6 /* MaskPaintableView.swift in Sources */,
 				D03DB02126DF315A00A578E6 /* Painter.m in Sources */,
+				D02E65FB26E072A90023C4D8 /* EllipseLayer.swift in Sources */,
+				D02E660026E072C10023C4D8 /* EllipseView.m in Sources */,
 				D03DB01F26DF315A00A578E6 /* PathPaintableView.swift in Sources */,
 				D03DB02626DF315A00A578E6 /* MaskGView.swift in Sources */,
 				D03DB03626DF315A00A578E6 /* PathLayer.swift in Sources */,

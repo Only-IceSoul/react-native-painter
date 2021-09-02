@@ -26,6 +26,7 @@ extension UIBezierPath {
         close()
     }
     
+    
     func addRoundRect(_ r:CGRect?,radius:[CGFloat]){
         guard let rect = r else { return }
         var rtl = radius[0]
@@ -50,20 +51,22 @@ extension UIBezierPath {
         let r = rect.origin.x + rect.width
         let b = rect.origin.y + rect.height
         let t = rect.origin.y
-        move(to: CGPoint(x: l + rtl, y: t) )
+        
+        
+        move(to: CGPoint(x: l , y: b - rbl))
+        
+        addLine(to: CGPoint(x: l, y: t + rtl))
+        addArc(withCenter: CGPoint(x: l + rtl, y: t + rtl), radius: rtl, startAngle: CGFloat.pi , endAngle: (3 * CGFloat.pi ) / 2, clockwise: true)
         
         addLine(to: CGPoint(x: r - rtr, y: t))
         addArc(withCenter: CGPoint(x: r - rtr, y: t + rtr), radius: rtr, startAngle: (3 * CGFloat.pi)  / 2, endAngle: 2 * CGFloat.pi, clockwise: true)
-        
+    
         addLine(to: CGPoint(x: r , y: b - rbr))
         addArc(withCenter: CGPoint(x: r - rbr, y: b - rbr), radius: rbr, startAngle: 0 , endAngle: CGFloat.pi / 2, clockwise: true)
         
         addLine(to: CGPoint(x: l + rbl, y: b))
         addArc(withCenter: CGPoint(x: l + rbl, y: b - rbl), radius: rbl, startAngle: CGFloat.pi / 2 , endAngle: CGFloat.pi, clockwise: true)
         
-        
-        addLine(to: CGPoint(x: l, y: t + rtl))
-        addArc(withCenter: CGPoint(x: l + rtl, y: t + rtl), radius: rtl, startAngle: CGFloat.pi , endAngle: (3 * CGFloat.pi ) / 2, clockwise: true)
         
         close()
     }

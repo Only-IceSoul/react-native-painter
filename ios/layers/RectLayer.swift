@@ -119,8 +119,16 @@ public class RectLayer : Paintable{
         mRadius[1] = rtrr
         mRadius[2] = rbll
         mRadius[3] = rbrr
+        if rtll <= 0 && rtrr <= 0 && rbll <= 0 && rbrr <= 0 {
+            mPath.addRect(mBoundsRect)
+        }else{
+            mPath.addRoundRect(mBoundsRect, radius: mRadius)
+        }
         
-        mPath.addRoundRect(mBoundsRect, radius: mRadius)
+       
+      
+        
+    
      
     }
     public required init?(coder: NSCoder) {
