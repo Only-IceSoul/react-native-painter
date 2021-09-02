@@ -11,6 +11,7 @@ import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.uimanager.ViewManager;
 import com.jjlf.rnpainter.viewmanagers.CircleViewManager;
+import com.jjlf.rnpainter.viewmanagers.EllipseViewManager;
 import com.jjlf.rnpainter.viewmanagers.GViewManager;
 import com.jjlf.rnpainter.viewmanagers.GViewManagerHardware;
 import com.jjlf.rnpainter.viewmanagers.LineViewManager;

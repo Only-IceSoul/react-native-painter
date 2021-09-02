@@ -1,6 +1,7 @@
 # Line
 
 ```JS
+  import { Line } from 'react-native-painter'
     <Painter style={styles.Painter} 
     >
         <Line />      

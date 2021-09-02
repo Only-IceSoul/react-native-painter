@@ -1,6 +1,7 @@
 # Circle
 
 ```JS
+    import { Circle } from 'react-native-painter'
     <Painter style={styles.Painter} 
     >
         <Circle />      

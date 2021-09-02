@@ -1,6 +1,9 @@
 # Painter
 
 ```JS
+
+  import { Painter } from 'react-native-painter'
+  
     <Painter style={styles.Painter} 
         viewBox={[0,0,24,24] } align='xMidYMid' aspect='meet'
     >

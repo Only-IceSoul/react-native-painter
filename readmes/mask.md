@@ -5,6 +5,8 @@ A mask is defined with a ‘Mask’ element. A mask is used referenced using the
 ### The element must be at the top of the painter as first elements. ###
 
 ```JS
+
+  import { Mask } from 'react-native-painter'
     <Painter style={styles.Painter} 
     >       
        //top
