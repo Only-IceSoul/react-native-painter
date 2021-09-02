@@ -72,6 +72,14 @@ public class GView extends ViewGroup implements PaintableInterface  {
         }
     }
 
+    protected float mTranslationZ = 0f;
+    public void setTranslateZ(float v) {
+        if(mTranslationZ != v && !mIsMaskChild) {
+            mTranslationZ = v;
+            setTranslationZ(mTranslationZ);
+        }
+    }
+
     public void setOpacity(float v, boolean status) {
         mProps.mOpacityStatus = status;
         if(mProps.mOpacity != v) {

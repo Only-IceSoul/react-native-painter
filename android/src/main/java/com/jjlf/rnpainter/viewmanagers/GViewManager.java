@@ -43,6 +43,11 @@ public class GViewManager extends ViewGroupManager<GView> {
         return true;
     }
 
+
+    @ReactProp(name = "translateZ",defaultFloat = 0f)
+    public void setTranslateZ(GView view ,float v) {
+        view.setTranslateZ(v);
+    }
     @ReactProp(name = "mask")
     public void setMask(GView view , String v) {
         view.setMask(v == null ? "" : v);

@@ -23,6 +23,7 @@ interface CommonProps {
   
     mask?:string
     opacity?:number
+    translateZ?:number
 
     scale?:{ x:number,y:number , ox?:number ,oy?:number ,percentageValue?:boolean }
     rotate?: {
@@ -158,6 +159,6 @@ export class Path extends PathBase {}
 export class G extends GBase {}
 export class GS extends GBase {}
 export class Painter extends PainterBase {}
-// export class PainterS extends PainterBase {}
+export class PainterS extends PainterBase {}
 export function ColorWorklet(color:number | number[] | string): number; 
 export function Color(color:number | number[] | string): number; 

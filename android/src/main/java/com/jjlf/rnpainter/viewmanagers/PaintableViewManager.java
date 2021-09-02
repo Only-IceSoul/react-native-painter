@@ -43,7 +43,10 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
         super.setTransform(view, matrix);
         view.invalidate();
     }
-
+    @ReactProp(name = "translateZ",defaultFloat = 0f)
+    public void setTranslateZ(PaintableView view ,float v) {
+        view.setTranslateZ(v);
+    }
     @ReactProp(name = "mask")
     public void setMask(PaintableView view ,String v) {
         view.setMask(v == null ? "" : v);

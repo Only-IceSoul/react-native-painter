@@ -120,7 +120,7 @@ export class Ellipse extends React.PureComponent {
     } 
 }
 
-// export const PainterS = requireNativeComponent("PainterS",null);
+export const PainterS = requireNativeComponent("PainterS",null);
 export const Painter = requireNativeComponent("Painter",null);
 export const Color = ExtractColor
 export const ColorWorklet = ExtractColorWorklet

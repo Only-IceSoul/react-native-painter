@@ -45,7 +45,10 @@ public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
     public boolean needsCustomLayoutForChildren() {
         return true;
     }
-
+    @ReactProp(name = "translateZ",defaultFloat = 0f)
+    public void setTranslateZ(GViewHardware view ,float v) {
+        view.setTranslateZ(v);
+    }
     @ReactProp(name = "mask")
     public void setMask(GViewHardware view , String v) {
         view.setMask(v == null ? "" : v);

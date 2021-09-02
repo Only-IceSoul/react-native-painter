@@ -81,6 +81,13 @@ public class PaintableView extends View implements PaintableInterface {
         }
     }
 
+    protected float mTranslationZ = 0f;
+    public void setTranslateZ(float v) {
+        if(mTranslationZ != v && !mIsMaskChild) {
+            mTranslationZ = v;
+            setTranslationZ(mTranslationZ);
+        }
+    }
     public void setOpacity(float v, boolean status) {
         mProps.mOpacityStatus = status;
         if(mProps.mOpacity != v) {
@@ -254,7 +261,7 @@ public class PaintableView extends View implements PaintableInterface {
 
         if(mPainter != null) {
             setupPath(mPainter);
-            if (!mIgnoreVbTransform) transformToViewBox(mPainter);
+            if (!mIgnoreVbTransform && mPainter.viewBox.width() > 0f && mPainter.viewBox.height() > 0f) transformToViewBox(mPainter);
             if (fill()) {
                 setupPaintFill(mPainter);
                 if (!mIgnoreShadowFill) setupShadowFill(mPainter);
@@ -276,7 +283,7 @@ public class PaintableView extends View implements PaintableInterface {
                     drawPaths(canvas);
                 }else{
                     WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
-                    if(maskView.get() != null){
+                    if(maskView != null && maskView.get() != null){
                         drawWithMask(canvas,maskView.get());
                     }else{
                         drawPaths(canvas);

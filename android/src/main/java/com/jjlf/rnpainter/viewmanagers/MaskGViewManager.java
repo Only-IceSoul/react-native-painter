@@ -44,6 +44,12 @@ public class MaskGViewManager extends ViewGroupManager<MaskGView> {
     public boolean needsCustomLayoutForChildren() {
     return true;
     }
+
+    @ReactProp(name = "translateZ",defaultFloat = 0f)
+    public void setTranslateZ(MaskGView view ,float v) {
+
+    }
+
     @ReactProp(name = "mask")
     public void setMask(MaskGView view , String v) {
 
