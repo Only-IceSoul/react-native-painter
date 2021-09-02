@@ -35,10 +35,12 @@ add a .swift file
   - [Circle](./readmes/circle.md)
   - [Line](./readmes/line.md)
   - [Path](./readmes/path.md)
+  - [Ellipse](./readmes/ellipse.md)
   - [Text](./readmes/text.md)
   - [G](./readmes/group.md)
   - [MaskG](./readmes/maskgroup.md)
   - [Mask](./readmes/mask.md)
+
 
 
 ### Color:

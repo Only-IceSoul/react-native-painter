@@ -110,6 +110,15 @@ interface MaskProps extends ViewProps{
 interface MaskGProps extends CommonProps , ViewProps{
 
 }
+interface EllipseProps extends CommonProps , ViewProps{
+    cx?:number
+    cy?:number
+    rx?:number
+    ry?:number
+}
+
+declare class EllipseComponent extends React.Component<EllipseProps> {}
+declare const EllipseBase: Constructor<NativeMethods> & typeof EllipseComponent;
 
 declare class MaskGComponent extends React.Component<MaskGProps> {}
 declare const MaskGBase: Constructor<NativeMethods> & typeof MaskGComponent;
@@ -138,6 +147,7 @@ declare const GBase: Constructor<NativeMethods> & typeof GComponent;
 declare class PainterComponent extends React.Component<PainterProps> {}
 declare const PainterBase: Constructor<NativeMethods> & typeof PainterComponent;
 
+export class Ellipse extends EllipseBase {}
 export class MaskG extends MaskGBase {}
 export class Mask extends MaskBase {}
 export class Rect extends RectBase {}

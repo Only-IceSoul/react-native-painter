@@ -13,6 +13,7 @@ const LineView = requireNativeComponent("LineView",null);
 const GViewS = requireNativeComponent("GViewS",null);
 const GView = requireNativeComponent("GView",null);
 const PathView = requireNativeComponent("PathView",null);
+const EllipseView = requireNativeComponent("EllipseView",null);
 
 export class Line extends React.PureComponent {
     render(){
@@ -108,7 +109,16 @@ export class MaskG extends React.PureComponent {
         
     } 
 }
-
+export class Ellipse extends React.PureComponent {
+    render(){
+        const {style,...others} = this.props
+        return <EllipseView {...others}
+         style={Platform.OS === 'android' 
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
+        
+    } 
+}
 
 // export const PainterS = requireNativeComponent("PainterS",null);
 export const Painter = requireNativeComponent("Painter",null);
