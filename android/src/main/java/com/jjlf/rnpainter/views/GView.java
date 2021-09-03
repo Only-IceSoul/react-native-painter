@@ -74,7 +74,7 @@ public class GView extends ViewGroup implements PaintableInterface  {
 
     protected float mTranslationZ = 0f;
     public void setTranslateZ(float v) {
-        if(mTranslationZ != v && !mIsMaskChild) {
+        if(mTranslationZ != v) {
             mTranslationZ = v;
             setTranslationZ(mTranslationZ);
         }

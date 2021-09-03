@@ -94,5 +94,5 @@ The percentageValue property refers to the fact that the values will be multipli
 | translate | 0bject | 0 0 false |
 | scale | 0bject | 1 1 false |
 | rotate | 0bject | 0 0 0 false |
-
+| translateZ | Number (zIndex) | 0  |
 
