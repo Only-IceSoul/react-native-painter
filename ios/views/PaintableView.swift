@@ -82,6 +82,12 @@ public class PaintableView: UIView {
 
     //MARK: set and get
     
+    @objc func setTranslateZ(_ v:NSNumber?){
+        let ev = CGFloat(truncating: v ?? 0)
+        layer.zPosition = ev
+ 
+    }
+    
     @objc func setOpacity(_ v:NSNumber?) {
         let ev = Float(truncating: v ?? 1)
         

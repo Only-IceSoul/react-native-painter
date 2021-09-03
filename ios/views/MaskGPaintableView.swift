@@ -38,6 +38,10 @@ public class MaskGPaintableView: PaintableView {
         invalidatePainterKit()
     }
     
+    override func setTranslateZ(_ v: NSNumber?) {
+        
+    }
+    
     @objc override func setOpacity(_ v:NSNumber?) {
         let ev = Float(truncating: v ?? 1)
         mProps.opacityStatus = v != nil

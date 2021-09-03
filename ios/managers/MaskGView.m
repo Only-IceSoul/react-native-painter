@@ -14,7 +14,7 @@
 @interface
 RCT_EXTERN_MODULE(MaskGView,RCTViewManager)
 
-
+RCT_EXPORT_VIEW_PROPERTY(translateZ, NSNumber)
 RCT_EXPORT_VIEW_PROPERTY(mask, NSString)
 RCT_EXPORT_VIEW_PROPERTY(opacity, NSNumber)
 
