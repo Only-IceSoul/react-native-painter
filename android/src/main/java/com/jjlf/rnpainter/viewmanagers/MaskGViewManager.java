@@ -180,7 +180,7 @@ public class MaskGViewManager extends ViewGroupManager<MaskGView> {
     @Override
     public void setTransform(@NonNull MaskGView view, @Nullable ReadableArray matrix) {
         super.setTransform(view, matrix);
-        view.invalidate();
+        view.invalidateTransform();
     }
 
 

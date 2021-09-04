@@ -45,6 +45,13 @@ public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
     public boolean needsCustomLayoutForChildren() {
         return true;
     }
+
+    @Override
+    public void setTransform(@NonNull GViewHardware view, @Nullable ReadableArray matrix) {
+        super.setTransform(view, matrix);
+        view.invalidateTransform();
+    }
+
     @ReactProp(name = "translateZ",defaultFloat = 0f)
     public void setTranslateZ(GViewHardware view ,float v) {
         view.setTranslateZ(v);

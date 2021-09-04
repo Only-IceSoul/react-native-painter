@@ -41,7 +41,7 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
     @Override
     public void setTransform(@NonNull PaintableView view, @Nullable  ReadableArray matrix) {
         super.setTransform(view, matrix);
-        view.invalidate();
+        view.invalidateTransform();
     }
     @ReactProp(name = "translateZ",defaultFloat = 0f)
     public void setTranslateZ(PaintableView view ,float v) {

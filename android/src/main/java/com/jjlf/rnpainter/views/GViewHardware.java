@@ -64,8 +64,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
     public void invalidateMask(){
         if(mPainter != null){
             setupMaskListener();
-            mIsInvalidate = true;
-            invalidate();
+            invalidateTransform();
         }else{
             mLazySetupMask = true;
         }
@@ -212,8 +211,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
             mTransform.mPathTranslationX = x;
             mTransform.mPathTranslationY = y;
             mTransform.mPathTranslationIsPercent = percent;
-            mIsInvalidate = true;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -223,8 +221,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
             mTransform.mPathRotationX = x;
             mTransform.mPathRotationY = y;
             mTransform.mPathRotationIsPercent = percent;
-            mIsInvalidate = true;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -235,8 +232,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
             mTransform.mPathScaleOriginX = ox;
             mTransform.mPathScaleOriginY = oy;
             mTransform.mPathScaleIsPercent = percent;
-            mIsInvalidate = true;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -333,14 +329,9 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
     protected float toDip(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());
     }
-    private boolean mIsInvalidate = false;
+
     @Override
     public void invalidate() {
-        if(mIsInvalidate){
-            mIsInvalidate = false;
-            super.invalidate();
-
-        }else{
             for (int i = 0; i < getChildCount(); i++) {
                 final View child = getChildAt(i);
                 if(child instanceof PaintableInterface){
@@ -350,14 +341,15 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
                 }
                 child.invalidate();
             }
-        }
+    }
 
+    public void invalidateTransform(){
+        super.invalidate();
     }
 
     @Override
     public void invalidateMaskCallback() {
-        mIsInvalidate = true;
-        invalidate();
+        invalidateTransform();
     }
     @Override
     public void setIsMaskChild(boolean v) {

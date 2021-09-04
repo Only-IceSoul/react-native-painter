@@ -225,7 +225,7 @@ public class PaintableView extends View implements PaintableInterface {
             mTransform.mPathTranslationX = x;
             mTransform.mPathTranslationY = y;
             mTransform.mPathTranslationIsPercent = percent;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -235,7 +235,7 @@ public class PaintableView extends View implements PaintableInterface {
             mTransform.mPathRotationX = x;
             mTransform.mPathRotationY = y;
             mTransform.mPathRotationIsPercent = percent;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -246,7 +246,7 @@ public class PaintableView extends View implements PaintableInterface {
             mTransform.mPathScaleOriginX = ox;
             mTransform.mPathScaleOriginY = oy;
             mTransform.mPathScaleIsPercent = percent;
-            invalidate();
+            invalidateTransform();
         }
 
     }
@@ -258,7 +258,6 @@ public class PaintableView extends View implements PaintableInterface {
     @SuppressLint("MissingSuperCall")
     @Override
     public void draw(Canvas canvas) {
-
         if(mPainter != null) {
             setupPath(mPainter);
             if (!mIgnoreVbTransform && mPainter.viewBox.width() > 0f && mPainter.viewBox.height() > 0f) transformToViewBox(mPainter);
@@ -538,20 +537,38 @@ public class PaintableView extends View implements PaintableInterface {
             super.invalidate();
         } else{
 
-            //transform react style invalidate
-            super.invalidate();
-
             if(getParent() instanceof MaskInterface){
                 for (PaintableInterface c :  ((MaskInterface)getParent()).getListeners()){
                     c.invalidateMaskCallback();
                 }
-            }
-            if(getParent() instanceof MaskGView){
+            }else if(getParent() instanceof MaskGView){
                 for (PaintableInterface c :  ((MaskInterface) ((MaskGView)getParent()).getParent()).getListeners()){
                     c.invalidateMaskCallback();
                 }
+            }else{
+                Log.e("Painter","PaintableView invalidating mask failed ");
             }
         }
 
+    }
+
+    public void invalidateTransform(){
+        if(!mIsMaskChild) {
+            super.invalidate();
+        } else {
+            //transform react style invalidate
+            super.invalidate();
+            if (getParent() instanceof MaskInterface) {
+                for (PaintableInterface c : ((MaskInterface) getParent()).getListeners()) {
+                    c.invalidateMaskCallback();
+                }
+            }else if (getParent() instanceof MaskGView) {
+                for (PaintableInterface c : ((MaskInterface) ((MaskGView) getParent()).getParent()).getListeners()) {
+                    c.invalidateMaskCallback();
+                }
+            }else{
+                Log.e("Painter","PaintableView invalidating mask failed ");
+            }
+        }
     }
 }

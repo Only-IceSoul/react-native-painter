@@ -1,7 +1,7 @@
 {
   "name": "react-native-painter",
   "title": "React Native Painter",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Custom Painter Android IOS ",
   "main": "index.js",
   "files": [

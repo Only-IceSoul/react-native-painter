@@ -171,7 +171,7 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
             mTransform.mPathTranslationX = x;
             mTransform.mPathTranslationY = y;
             mTransform.mPathTranslationIsPercent = percent;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -181,7 +181,7 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
             mTransform.mPathRotationX = x;
             mTransform.mPathRotationY = y;
             mTransform.mPathRotationIsPercent = percent;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -192,7 +192,7 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
             mTransform.mPathScaleOriginX = ox;
             mTransform.mPathScaleOriginY = oy;
             mTransform.mPathScaleIsPercent = percent;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -221,6 +221,14 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
 
     @Override
     public void invalidate() {
+        if(getParent() instanceof MaskInterface){
+            for (PaintableInterface c :  ((MaskInterface)getParent()).getListeners()){
+                c.invalidateMaskCallback();
+            }
+        }
+    }
+
+    public void invalidateTransform(){
         //transform react style invalidate
         super.invalidate();
         if(getParent() instanceof MaskInterface){
