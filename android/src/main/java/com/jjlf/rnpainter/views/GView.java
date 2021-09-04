@@ -256,12 +256,17 @@ public class GView extends ViewGroup implements PaintableInterface  {
         int checkpoint = canvas.save();
         canvas.concat(mMatrix);
         try{
-            super.dispatchDraw(canvas);
-            if (!mProps.getMask().isEmpty()) {
+            if(!mProps.getMask().isEmpty()){
                 WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
-                if (maskView.get() != null) {
-                    drawMask(canvas, maskView.get());
+                if(maskView != null && maskView.get() != null){
+                    maskView.get().render(canvas);
+                    mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    super.dispatchDraw(canvas);
+                    canvas.restore();
                 }
+            }else{
+                super.dispatchDraw(canvas);
             }
         } finally {
             canvas.restoreToCount(checkpoint);
@@ -269,17 +274,7 @@ public class GView extends ViewGroup implements PaintableInterface  {
 
     }
 
-    protected void drawMask(Canvas canvas, MaskInterface mask){
-        if(mPainter.maskBitmap != null){
-            mPainter.maskBitmap.eraseColor(Color.TRANSPARENT);
-            mask.render(mPainter.maskCanvas);
-            mPainter.paint.reset();
-            mPainter.paint.setAntiAlias(true);
-            mPainter.paint.setXfermode(mPainter.porterDuffXferMode);
-            canvas.drawBitmap(mPainter.maskBitmap,0f,0f,mPainter.paint);
-            mPainter.paint.setXfermode(null);
-        }
-    }
+
     private final Matrix mMatrix = new Matrix();
     protected void setupMatrix(TransformProps transform, PainterKit painter) {
         mMatrix.reset();

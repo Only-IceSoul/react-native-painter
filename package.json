@@ -1,7 +1,7 @@
 {
   "name": "react-native-painter",
   "title": "React Native Painter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Custom Painter Android IOS ",
   "main": "index.js",
   "files": [
@@ -32,7 +32,9 @@
     "mask",
     "drawable",
     "svg",
-    "paint"
+    "paint",
+    "GPU",
+    "Hardware accelerated"
 
   ],
   "author": {

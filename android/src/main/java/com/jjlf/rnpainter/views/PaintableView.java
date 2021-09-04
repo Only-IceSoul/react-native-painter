@@ -284,7 +284,11 @@ public class PaintableView extends View implements PaintableInterface {
                 }else{
                     WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
                     if(maskView != null && maskView.get() != null){
-                        drawWithMask(canvas,maskView.get());
+                        maskView.get().render(canvas);
+                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                        drawPaths(canvas);
+                        canvas.restore();
                     }else{
                         drawPaths(canvas);
                     }
@@ -316,26 +320,7 @@ public class PaintableView extends View implements PaintableInterface {
         return !mIgnoreFill && mProps.getFillColor() != Color.TRANSPARENT;
     }
 
-    protected void drawWithMask(Canvas canvas, MaskInterface mask){
-        if( mPainter.bitmap != null && ( stroke() || fill() ) ){
-            mPainter.bitmap.eraseColor(Color.TRANSPARENT);
-            drawPaths(mPainter.canvas);
-            mPainter.paint.reset();
-            mPainter.paint.setAntiAlias(true);
-            if(mPainter.maskBitmap != null){
-                mPainter.maskBitmap.eraseColor(Color.TRANSPARENT);
-                mask.render(mPainter.maskCanvas);
-                mPainter.paint.setXfermode(mPainter.porterDuffXferMode);;
-                mPainter.canvas.drawBitmap(mPainter.maskBitmap,0f,0f,mPainter.paint);
-                mPainter.paint.setXfermode(null);
-            }
 
-            canvas.drawBitmap(mPainter.bitmap,0f,0f, mPainter.paint);
-
-
-        }
-
-    }
     protected void setupPath(PainterKit p) {
 
     }
