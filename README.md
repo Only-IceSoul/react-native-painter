@@ -2,8 +2,8 @@
 
 Paint your imagination
 
-android: api 21+    Hardware Accelerated (1.0.5+)
-ios : 10.0+    Hardware Accelerated
+android: api 21+    
+ios : 10.0+   
 
 
 ## Getting started
