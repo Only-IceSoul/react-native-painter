@@ -381,9 +381,11 @@ public class Paintable: CAShapeLayer  {
     }
     
     private func transformPathToViewbox(){
-        let aspect : SVGViewBox.AspectRatio = mPainterKit.mAspect == "meet" ? .meet : ( mPainterKit.mAspect == "slice" ? .slice : .none )
-        let trans = SVGViewBox.transform(vbRect: mPainterKit.mViewBox, eRect: mRect, align: mPainterKit.mAlign, meetOrSlice: aspect )
-        mPath.apply(trans)
+         if mPainterKit.mViewBox.width > 0 && mPainterKit.mViewBox.height > 0{
+            let aspect : SVGViewBox.AspectRatio = mPainterKit.mAspect == "meet" ? .meet : ( mPainterKit.mAspect == "slice" ? .slice : .none )
+            let trans = SVGViewBox.transform(vbRect: mPainterKit.mViewBox, eRect: mRect, align: mPainterKit.mAlign, meetOrSlice: aspect )
+            mPath.apply(trans)
+        }
     }
     
     private func setupFill(){
