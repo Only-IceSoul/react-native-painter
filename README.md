@@ -40,6 +40,9 @@ add a .swift file
   - [G](./readmes/group.md)
   - [MaskG](./readmes/maskgroup.md)
   - [Mask](./readmes/mask.md)
+  - [LinearGradient](./readmes/lineargradient.md)
+  - [RadialGradient](./readmes/radialgradient.md)
+
 
 
 

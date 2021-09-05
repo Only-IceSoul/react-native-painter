@@ -14,6 +14,9 @@ const GViewS = requireNativeComponent("GViewS",null);
 const GView = requireNativeComponent("GView",null);
 const PathView = requireNativeComponent("PathView",null);
 const EllipseView = requireNativeComponent("EllipseView",null);
+const LinearGradientView = requireNativeComponent("JJPainterLinearGradientView",null);
+const RadialGradientView = requireNativeComponent("JJPainterRadialGradientView",null);
+
 
 export class Line extends React.PureComponent {
     render(){
@@ -113,6 +116,28 @@ export class Ellipse extends React.PureComponent {
     render(){
         const {style,...others} = this.props
         return <EllipseView {...others}
+         style={Platform.OS === 'android' 
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
+        
+    } 
+}
+
+export class LinearGradient extends React.PureComponent {
+    render(){
+        const {style,...others} = this.props
+        return <LinearGradientView {...others}
+         style={Platform.OS === 'android' 
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
+        
+    } 
+}
+
+export class RadialGradient extends React.PureComponent {
+    render(){
+        const {style,...others} = this.props
+        return <RadialGradientView {...others}
          style={Platform.OS === 'android' 
          ? [{transform: style?.transform }] 
          : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />

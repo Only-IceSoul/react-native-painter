@@ -20,6 +20,8 @@ import com.jjlf.rnpainter.viewmanagers.MaskViewManager;
 import com.jjlf.rnpainter.viewmanagers.PathViewManager;
 import com.jjlf.rnpainter.viewmanagers.RectViewManager;
 import com.jjlf.rnpainter.viewmanagers.TextViewManager;
+import com.jjlf.rnpainter.viewmanagers.RadialGradientViewManager;
+import com.jjlf.rnpainter.viewmanagers.LinearGradientViewManager;
 
 public class ReactNativePainterPackage implements ReactPackage {
     @Override
@@ -30,6 +32,8 @@ public class ReactNativePainterPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
+              new RadialGradientViewManager(),
+                new LinearGradientViewManager(),
                 new EllipseViewManager(),
                 new MaskGViewManager(),
                 new RectViewManager(),
