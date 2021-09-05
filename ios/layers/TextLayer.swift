@@ -369,7 +369,9 @@ public class TextLayer: CALayer  {
         }
      
         mLayer.frame = CGRect(x: 0, y: 0, width: mBoundsText.width, height: mBoundsText.height)
+            disableAnimation()
         mLayer.position = CGPoint(x: x , y: y)
+            commit()
         }
     }
     
