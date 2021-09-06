@@ -25,8 +25,7 @@ import java.util.Objects;
 public class LinearGradientView extends View implements PaintableInterface {
 
     PainterKit mPainter;
-    private String mMask ="";
-    private String mOldMask = "";
+
     protected boolean mIsMaskChild = false;
     protected float mTranslationZ = 0f;
     TransformProps mTransform = new TransformProps();
@@ -108,38 +107,6 @@ public class LinearGradientView extends View implements PaintableInterface {
     }
 
 
-    public void setMask(String v) {
-        if(!Objects.equals(mMask, v)) {
-            mOldMask = mMask;
-            mMask = v;
-            invalidateMask();
-        }
-    }
-
-    private boolean mLazySetupMask = false;
-    private void setupMaskListener(){
-        if(!mOldMask.isEmpty()){
-            WeakReference<MaskInterface> m = mPainter.maskViews.get( mOldMask);
-            if(m != null && m.get() != null){
-                m.get().removeListener(this);
-            }
-        }
-        if(!mMask.isEmpty()){
-            WeakReference<MaskInterface> m = mPainter.maskViews.get(mMask);
-            if(m != null && m.get() != null){
-                m.get().addListener(this);
-            }
-        }
-    }
-
-    public void invalidateMask(){
-        if(mPainter != null){
-            setupMaskListener();
-            invalidate();
-        }else{
-            mLazySetupMask = true;
-        }
-    }
 
 
     public void setTranslateZ(float v) {
@@ -193,20 +160,9 @@ public class LinearGradientView extends View implements PaintableInterface {
             int checkpoint = canvas.save();
             canvas.concat(mPainter.matrix);
             try{
-                if(mMask.isEmpty()){
-                    canvas.drawRect(mRect,mPainter.paint);
-                }else{
-                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
-                    if(maskView != null && maskView.get() != null){
-                        maskView.get().render(canvas);
-                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
-                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                        canvas.drawRect(mRect,mPainter.paint);
-                        canvas.restore();
-                    }else{
-                        canvas.drawRect(mRect,mPainter.paint);
-                    }
-                }
+
+                canvas.drawRect(mRect,mPainter.paint);
+
             } finally {
                 canvas.restoreToCount(checkpoint);
             }
@@ -355,15 +311,10 @@ public class LinearGradientView extends View implements PaintableInterface {
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
-        if (mLazySetupMask){
-            mLazySetupMask= false;
-            setupMaskListener();
-        }
     }
 
     @Override
     public void invalidateMaskCallback() {
-        invalidate();
     }
 
     protected float toDip(float value) {

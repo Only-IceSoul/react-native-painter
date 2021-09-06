@@ -18,10 +18,9 @@ interface PainterProps extends ViewProps {
     'none'
 }
 
-//atributo dasharray y todo el drawable view, actualizar inset con dip en android, traer el color de gradient
 interface CommonProps {
   
-    mask?:string
+
     opacity?:number
     translateZ?:number
 
@@ -93,7 +92,7 @@ interface PathProps extends CommonProps , ViewProps{
     d?:string  
 }
 interface GProps extends CommonProps , ViewProps{
-
+    mask?:string
 }
 interface RectProps extends CommonProps , ViewProps{
     x?:number
@@ -129,7 +128,6 @@ interface GradientProps {
     positions?:number[]
     colors?: ColorType[]
 
-    mask?:string
     opacity?:number
     translateZ?:number
 
