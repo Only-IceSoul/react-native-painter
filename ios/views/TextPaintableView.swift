@@ -65,7 +65,9 @@ class TextPaintableView: PaintableView {
     
     
     
-    
+    override func getCALayer() -> CALayer? {
+        return mLayer
+    }
     
 
    

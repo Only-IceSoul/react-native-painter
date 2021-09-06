@@ -46,7 +46,9 @@ class EllipsePaintableView: PaintableView {
     override func getLayer() -> Paintable? {
         return mLayer
     }
-
+    override func getCALayer() -> CALayer? {
+        return mLayer
+    }
 
     
     required init?(coder: NSCoder) {

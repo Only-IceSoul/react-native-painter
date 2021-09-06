@@ -19,6 +19,9 @@ public class GPaintableView: PaintableView {
    
     }
     
+    public override func getCALayer() -> CALayer? {
+        return layer
+    }
     
     public override var bounds: CGRect{
         didSet{

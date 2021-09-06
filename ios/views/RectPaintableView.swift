@@ -62,7 +62,9 @@ class RectPaintableView: PaintableView {
         return mLayer
     }
 
-
+    override func getCALayer() -> CALayer? {
+        return mLayer
+    }
 
     
     required init?(coder: NSCoder) {

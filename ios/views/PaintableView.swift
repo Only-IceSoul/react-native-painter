@@ -55,7 +55,7 @@ public class PaintableView: UIView {
         if  mPainter != nil  {
             if !mMask.isEmpty{
                 if let m = mPainter.mMaskViews[mMask]{
-                    self.mask = m
+                    getCALayer()?.mask = m.layer
                 }else{
                     self.mask = nil
                 }
@@ -69,6 +69,9 @@ public class PaintableView: UIView {
     }
     
     open func getLayer() -> Paintable?{
+        return nil
+    }
+    open func getCALayer() -> CALayer?{
         return nil
     }
     

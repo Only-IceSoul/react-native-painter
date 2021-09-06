@@ -84,7 +84,9 @@ class RadialGradientView :  PaintableView {
     }
 
 
-  
+    override func getCALayer() -> CALayer? {
+        return mLayer
+    }
     
     open override func setProps(_ p : CommonProps){
         mLayer.setProps(p)
