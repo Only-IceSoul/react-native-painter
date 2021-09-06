@@ -128,6 +128,7 @@ interface GradientProps {
     positions?:number[]
     colors?: ColorType[]
 
+    mask?:string
     opacity?:number
     translateZ?:number
 
