@@ -20,7 +20,7 @@ interface PainterProps extends ViewProps {
 
 interface CommonProps {
   
-
+    mask?:string
     opacity?:number
     translateZ?:number
 
@@ -92,7 +92,7 @@ interface PathProps extends CommonProps , ViewProps{
     d?:string  
 }
 interface GProps extends CommonProps , ViewProps{
-    mask?:string
+    
 }
 interface RectProps extends CommonProps , ViewProps{
     x?:number

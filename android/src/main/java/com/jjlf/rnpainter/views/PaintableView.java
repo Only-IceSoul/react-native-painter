@@ -7,6 +7,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PathMeasure;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.util.Log;
 import android.util.TypedValue;
@@ -30,6 +32,7 @@ public class PaintableView extends View implements PaintableInterface {
 
     public PaintableView(Context context){
         super(context);
+        setLayerType(View.LAYER_TYPE_HARDWARE,null);
 
     }
 
@@ -48,7 +51,38 @@ public class PaintableView extends View implements PaintableInterface {
     protected boolean mIsMaskChild = false;
 
 
+    public void setMask(String v) {
+        if(!Objects.equals(mProps.mMask, v)) {
+            mProps.mOldMask = mProps.mMask;
+            mProps.mMask = v;
+            invalidateMask();
+        }
+    }
 
+    private boolean mLazySetupMask = false;
+    private void setupMaskListener(){
+        if(! mProps.mOldMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get( mProps.mOldMask);
+            if(m != null && m.get() != null){
+                m.get().removeListener(this);
+            }
+        }
+        if(!mProps.mMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get(mProps.mMask);
+            if(m != null && m.get() != null){
+                m.get().addListener(this);
+            }
+        }
+    }
+
+    public void invalidateMask(){
+        if(mPainter != null){
+            setupMaskListener();
+            invalidate();
+        }else{
+            mLazySetupMask = true;
+        }
+    }
 
     protected float mTranslationZ = 0f;
     public void setTranslateZ(float v) {
@@ -247,8 +281,20 @@ public class PaintableView extends View implements PaintableInterface {
             int checkpoint = canvas.save();
             canvas.concat(mPainter.matrix);
             try{
-                drawPaths(canvas);
-
+                if(mProps.getMask().isEmpty()){
+                    drawPaths(canvas);
+                }else{
+                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
+                    if(maskView != null && maskView.get() != null){
+                        drawPaths(canvas);
+                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                        maskView.get().render(canvas);
+                        canvas.restore();
+                    }else{
+                        drawPaths(canvas);
+                    }
+                }
             } finally {
                 canvas.restoreToCount(checkpoint);
             }
@@ -461,7 +507,7 @@ public class PaintableView extends View implements PaintableInterface {
     }
     @Override
     public void invalidateMaskCallback() {
-
+        invalidate();
     }
     @Override
     public void setProps(CommonProps props) {
@@ -477,6 +523,10 @@ public class PaintableView extends View implements PaintableInterface {
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
+        if (mLazySetupMask){
+            mLazySetupMask= false;
+            setupMaskListener();
+        }
     }
 
 

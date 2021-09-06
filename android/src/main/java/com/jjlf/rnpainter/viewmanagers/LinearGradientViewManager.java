@@ -95,7 +95,10 @@ public class LinearGradientViewManager extends SimpleViewManager<LinearGradientV
     public void setTranslateZ(LinearGradientView view ,float v) {
         view.setTranslateZ(v);
     }
-
+    @ReactProp(name = "mask")
+    public void setMask(LinearGradientView view ,String v) {
+        view.setMask(v == null ? "" : v);
+    }
     @ReactProp(name = "opacity")
     public void setOpacity(LinearGradientView view , Dynamic v) {
         view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));

@@ -259,10 +259,10 @@ public class GView extends ViewGroup implements PaintableInterface  {
             if(!mProps.getMask().isEmpty()){
                 WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
                 if(maskView != null && maskView.get() != null){
-                    maskView.get().render(canvas);
+                    super.dispatchDraw(canvas);
                     mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
                     canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                    super.dispatchDraw(canvas);
+                    maskView.get().render(canvas);
                     canvas.restore();
                 }
             }else{

@@ -26,6 +26,8 @@ import java.util.Objects;
 public class RadialGradientView  extends View implements PaintableInterface {
 
     PainterKit mPainter;
+    private String mMask ="";
+    private String mOldMask = "";
     protected boolean mIsMaskChild = false;
     protected float mTranslationZ = 0f;
     TransformProps mTransform = new TransformProps();
@@ -50,6 +52,7 @@ public class RadialGradientView  extends View implements PaintableInterface {
 
     public RadialGradientView(Context context){
         super(context);
+        setLayerType(View.LAYER_TYPE_HARDWARE,null);
     }
 
     public void setOpacity(float op,boolean status){
@@ -120,7 +123,38 @@ public class RadialGradientView  extends View implements PaintableInterface {
     }
 
 
+    public void setMask(String v) {
+        if(!Objects.equals(mMask, v)) {
+            mOldMask = mMask;
+            mMask = v;
+            invalidateMask();
+        }
+    }
 
+    private boolean mLazySetupMask = false;
+    private void setupMaskListener(){
+        if(!mOldMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get( mOldMask);
+            if(m != null && m.get() != null){
+                m.get().removeListener(this);
+            }
+        }
+        if(!mMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get(mMask);
+            if(m != null && m.get() != null){
+                m.get().addListener(this);
+            }
+        }
+    }
+
+    public void invalidateMask(){
+        if(mPainter != null){
+            setupMaskListener();
+            invalidate();
+        }else{
+            mLazySetupMask = true;
+        }
+    }
 
 
     public void setTranslateZ(float v) {
@@ -174,9 +208,20 @@ public class RadialGradientView  extends View implements PaintableInterface {
             int checkpoint = canvas.save();
             canvas.concat(mPainter.matrix);
             try{
-
-                canvas.drawRect(mRect,mPainter.paint);
-
+                if(mMask.isEmpty()){
+                    canvas.drawRect(mRect,mPainter.paint);
+                }else{
+                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
+                    if(maskView != null && maskView.get() != null){
+                        canvas.drawRect(mRect,mPainter.paint);
+                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                        maskView.get().render(canvas);
+                        canvas.restore();
+                    }else{
+                        canvas.drawRect(mRect,mPainter.paint);
+                    }
+                }
             } finally {
                 canvas.restoreToCount(checkpoint);
             }
@@ -329,11 +374,15 @@ public class RadialGradientView  extends View implements PaintableInterface {
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
-
+        if (mLazySetupMask){
+            mLazySetupMask= false;
+            setupMaskListener();
+        }
     }
 
     @Override
     public void invalidateMaskCallback() {
+        invalidate();
     }
 
     protected float toDip(float value) {

@@ -98,7 +98,10 @@ public class RadialGradientViewManager extends SimpleViewManager<RadialGradientV
     public void setTranslateZ(RadialGradientView view ,float v) {
         view.setTranslateZ(v);
     }
-
+    @ReactProp(name = "mask")
+    public void setMask(RadialGradientView view ,String v) {
+        view.setMask(v == null ? "" : v);
+    }
     @ReactProp(name = "opacity")
     public void setOpacity(RadialGradientView view , Dynamic v) {
         view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
