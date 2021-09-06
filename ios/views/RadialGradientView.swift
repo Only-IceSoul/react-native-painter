@@ -90,6 +90,7 @@ class RadialGradientView :  PaintableView {
         mLayer.setProps(p)
     }
     open override func setPainterKit(_ p:PainterKit){
+        mPainter = p
         mLayer.setPainterKit(p)
     }
 

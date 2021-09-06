@@ -144,8 +144,9 @@ export class RadialGradient extends React.PureComponent {
         
     } 
 }
-
-export const PainterS = requireNativeComponent("PainterS",null);
-export const Painter = requireNativeComponent("Painter",null);
+const PainterSoftware = requireNativeComponent("PainterS",null);
+const PainterHarwdare = requireNativeComponent("Painter",null);
+export const PainterS = Platform.OS === 'android' ? PainterSoftware : PainterHarwdare
+export const Painter = PainterHarwdare
 export const Color = ExtractColor
 export const ColorWorklet = ExtractColorWorklet
