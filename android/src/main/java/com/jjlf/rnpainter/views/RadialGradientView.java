@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.RadialGradient;
 import android.graphics.RectF;
 import android.graphics.Shader;
+import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
@@ -214,10 +215,23 @@ public class RadialGradientView  extends View implements PaintableInterface {
                     WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
                     if(maskView != null && maskView.get() != null){
                         canvas.drawRect(mRect,mPainter.paint);
-                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                        mPainter.paintMask.setXfermode(mPainter.dstIn);
                         canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                         maskView.get().render(canvas);
                         canvas.restore();
+
+
+                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
+                            mPainter.paintMask.setXfermode(mPainter.dstOut);
+                            int main = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            canvas.drawColor(Color.BLACK);
+                            mPainter.paintMask.setXfermode(mPainter.dstOut);
+                            int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            maskView.get().render(canvas);
+                            canvas.restoreToCount(clip);
+                            canvas.restoreToCount(main);
+                        }
+
                     }else{
                         canvas.drawRect(mRect,mPainter.paint);
                     }

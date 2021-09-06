@@ -7,14 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PathMeasure;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
+import android.os.Build;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 
-import com.jjlf.rnpainter.PainterView;
 import com.jjlf.rnpainter.utils.CommonProps;
 import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.ModUtil;
@@ -24,7 +21,6 @@ import com.jjlf.rnpainter.utils.SVGViewBox;
 import com.jjlf.rnpainter.utils.TransformProps;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class PaintableView extends View implements PaintableInterface {
@@ -286,11 +282,26 @@ public class PaintableView extends View implements PaintableInterface {
                 }else{
                     WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
                     if(maskView != null && maskView.get() != null){
+
+
                         drawPaths(canvas);
-                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                        mPainter.paintMask.setXfermode(mPainter.dstIn);
                         canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                         maskView.get().render(canvas);
                         canvas.restore();
+
+
+                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
+                            mPainter.paintMask.setXfermode(mPainter.dstOut);
+                            int main = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            canvas.drawColor(Color.BLACK);
+                            mPainter.paintMask.setXfermode(mPainter.dstOut);
+                            int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            maskView.get().render(canvas);
+                            canvas.restoreToCount(clip);
+                            canvas.restoreToCount(main);
+                        }
+
                     }else{
                         drawPaths(canvas);
                     }

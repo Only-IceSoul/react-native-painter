@@ -2,9 +2,7 @@ package com.jjlf.rnpainter.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +17,6 @@ import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.TransformProps;
 
 import java.lang.ref.WeakReference;
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class GViewHardware extends ViewGroup implements PaintableInterface  {
@@ -255,10 +252,10 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
             if(!mProps.getMask().isEmpty()){
                 WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
                 if(maskView != null && maskView.get() != null){
-                    super.dispatchDraw(canvas);
-                    mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
-                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                     maskView.get().render(canvas);
+                    mPainter.paintMask.setXfermode(mPainter.srcIn);
+                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    super.dispatchDraw(canvas);
                     canvas.restore();
                 }
             }else{

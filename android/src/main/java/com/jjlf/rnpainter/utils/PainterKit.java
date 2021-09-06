@@ -28,7 +28,9 @@ public class PainterKit {
     public final RectF viewBox = new RectF();
     public final Matrix matrix = new Matrix();
 
-    public final PorterDuffXfermode porterDuffXferMode = new PorterDuffXfermode(PorterDuff.Mode.DST_IN);
+    public final PorterDuffXfermode dstIn = new PorterDuffXfermode(PorterDuff.Mode.DST_IN);
+    public final PorterDuffXfermode srcIn = new PorterDuffXfermode(PorterDuff.Mode.SRC_IN);
+    public final PorterDuffXfermode dstOut = new PorterDuffXfermode(PorterDuff.Mode.DST_OUT);
     public final Paint paintMask = new Paint(Paint.ANTI_ALIAS_FLAG);
 
     public boolean isViewBoxEnabled = false;

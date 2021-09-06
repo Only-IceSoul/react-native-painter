@@ -7,8 +7,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.os.SystemClock;
-import android.util.Log;
+import android.os.Build;
 
 import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.ModUtil;
@@ -187,10 +186,21 @@ public class TextView extends PaintableView {
                     if(maskView != null && maskView.get() != null){
                         if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
                         if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
-                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                        mPainter.paintMask.setXfermode(mPainter.dstIn);
                         canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                         maskView.get().render(canvas);
                         canvas.restore();
+
+                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
+                            mPainter.paintMask.setXfermode(mPainter.dstOut);
+                            int main = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            canvas.drawColor(Color.BLACK);
+                            mPainter.paintMask.setXfermode(mPainter.dstOut);
+                            int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            maskView.get().render(canvas);
+                            canvas.restoreToCount(clip);
+                            canvas.restoreToCount(main);
+                        }
                     }else{
                         if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
                         if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
