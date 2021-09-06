@@ -10,8 +10,11 @@ import android.graphics.Typeface;
 import android.os.SystemClock;
 import android.util.Log;
 
+import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PainterKit;
+
+import java.lang.ref.WeakReference;
 
 public class TextView extends PaintableView {
 
@@ -170,8 +173,34 @@ public class TextView extends PaintableView {
                 px += mBoundsText.width() * horizontalOffset;
             }
 
-            if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
-            if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
+            transform(mTransform, mPainter);
+
+            //draw
+            int checkpoint = canvas.save();
+            canvas.concat(mPainter.matrix);
+            try{
+                if(mProps.getMask().isEmpty()){
+                    if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
+                    if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
+                }else{
+                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
+                    if(maskView != null && maskView.get() != null){
+                        if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
+                        if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
+                        mPainter.paintMask.setXfermode(mPainter.porterDuffXferMode);
+                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                        maskView.get().render(canvas);
+                        canvas.restore();
+                    }else{
+                        if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
+                        if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
+                    }
+                }
+            } finally {
+                canvas.restoreToCount(checkpoint);
+            }
+
+
 
 
         }
