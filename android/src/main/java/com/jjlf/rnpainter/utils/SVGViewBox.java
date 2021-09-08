@@ -6,9 +6,9 @@ import android.util.Log;
 
 public class SVGViewBox {
 
-    private static final int MOS_MEET = 0;
-    private static final int MOS_SLICE = 1;
-    private static final int MOS_NONE = 2;
+    public static final int MOS_MEET = 0;
+    public static final int MOS_SLICE = 1;
+    public static final int MOS_NONE = 2;
 
     public static void transform(RectF vbRect,RectF eRect, String align, int meetOrSlice, Matrix dst,float density) {
         // based on https://svgwg.org/svg2-draft/coords.html#ComputingAViewportsTransform

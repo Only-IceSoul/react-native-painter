@@ -25,6 +25,6 @@ Pod::Spec.new do |s|
 
   s.dependency "React"
   # ...
-  # s.dependency "..."
+  s.dependency 'JJGuiso','~> 1.9.4'
 end
 
