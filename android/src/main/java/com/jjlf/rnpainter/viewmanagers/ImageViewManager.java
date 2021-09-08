@@ -69,11 +69,11 @@ public class ImageViewManager extends SimpleViewManager<ImageView> {
 
     @ReactProp(name = "align")
     public void setAlign(ImageView view , String v) {
-        view.setAlign(v != null ? v : "none");
+        view.setAlign(v != null ? v : "xMidYMid");
     }
     @ReactProp(name = "aspect")
     public void setAspect(ImageView view ,String v) {
-        view.setAspect(Objects.equals(v, "meet") ? SVGViewBox.MOS_MEET : (Objects.equals(v, "slice") ? SVGViewBox.MOS_SLICE : SVGViewBox.MOS_NONE));
+        view.setAspect(Objects.equals(v, "none") ? SVGViewBox.MOS_NONE : (Objects.equals(v, "slice") ? SVGViewBox.MOS_SLICE : SVGViewBox.MOS_MEET));
     }
 
     @ReactProp(name = "bgColor",defaultInt = Color.TRANSPARENT)
@@ -81,7 +81,7 @@ public class ImageViewManager extends SimpleViewManager<ImageView> {
         view.setBgColor(v);
     }
 
-    @ReactProp(name = "clipToBounds",defaultBoolean = true)
+    @ReactProp(name = "clipToBounds",defaultBoolean = false)
     public void setClipToBounds(ImageView view ,boolean v) {
         view.setClipToBounds(v);
     }

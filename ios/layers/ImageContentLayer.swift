@@ -13,8 +13,8 @@ class ImageContentLayer: CALayer , ViewTarget {
     private var mLayer = CALayer()
     private var mRect = CGRect()
     private var mSource = ""
-    private var mAlign = "none"
-    private var mAspect = "none"
+    private var mAlign = "xMidYMid"
+    private var mAspect = "meet"
     override init() {
         super.init()
         addSublayer(mLayer)

@@ -44,11 +44,11 @@ class ImageView :  PaintableView {
     }
    
     @objc func setAlign(_ v:String?){
-        let s = v == nil ? "none" : v!
+        let s = v == nil ? "xMidYMid" : v!
         mLayer.setAlign(s) 
     }
     @objc func setAspect(_ v:String?){
-        let s = v == nil ? "none" : v!
+        let s = v == nil ? "meet" : v!
         mLayer.setAspect(s)
     }
     @objc func setBgColor(_ v:NSNumber?){
@@ -56,7 +56,7 @@ class ImageView :  PaintableView {
         mLayer.setBgColor(s)
     }
     @objc func setClipToBounds(_ v:NSNumber?){
-        let n = v == nil ? 1 : Int(truncating: v!)
+        let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         mLayer.setClipToBounds(b)
     }

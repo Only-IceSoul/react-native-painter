@@ -20,9 +20,9 @@
 | w | the width | Number | 0 |
 | h | the height | Number | 0 |
 | bgColor | set the backgroundColor | Color | transparent |
-| align | Alignment value | String | none |
-| aspect |   Meet or slice  | String | none |
-| clipToBounds | A Boolean value that determines whether Imgae is confined to the bounds.   | boolean | true |
+| align | Alignment value | String | xMidYMid |
+| aspect |   Meet or slice  | String | meet |
+| clipToBounds | A Boolean value that determines whether Imgae is confined to the bounds.   | boolean | false |
 | source | uri to load the image  | String | undefined |
 
 

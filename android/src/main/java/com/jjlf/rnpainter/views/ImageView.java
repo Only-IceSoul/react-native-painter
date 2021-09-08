@@ -57,7 +57,7 @@ public class ImageView extends View implements PaintableInterface {
     protected String align = "xMidYMid";
     protected int aspect = SVGViewBox.MOS_MEET;
     private int bgColor = Color.TRANSPARENT;
-    private boolean clipToBounds = true;
+    private boolean clipToBounds = false;
 
     protected float mOpacity = 1f;
     protected boolean mOpacityStatus = false;
