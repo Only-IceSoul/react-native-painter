@@ -11,6 +11,11 @@
 		D02E65FF26E072C10023C4D8 /* EllipseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E65FD26E072C10023C4D8 /* EllipseView.swift */; };
 		D02E660026E072C10023C4D8 /* EllipseView.m in Sources */ = {isa = PBXBuildFile; fileRef = D02E65FE26E072C10023C4D8 /* EllipseView.m */; };
 		D02E660326E072E40023C4D8 /* EllipsePaintableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D02E660226E072E40023C4D8 /* EllipsePaintableView.swift */; };
+		D034011A26E84B4700FB9902 /* ImageContentLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034011826E84B4700FB9902 /* ImageContentLayer.swift */; };
+		D034011B26E84B4700FB9902 /* ImageLayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034011926E84B4700FB9902 /* ImageLayer.swift */; };
+		D034011F26E84B5300FB9902 /* JJPainterImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034011D26E84B5300FB9902 /* JJPainterImageView.swift */; };
+		D034012026E84B5300FB9902 /* JJPainterImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = D034011E26E84B5300FB9902 /* JJPainterImageView.m */; };
+		D034012326E84B6900FB9902 /* ImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D034012226E84B6900FB9902 /* ImageView.swift */; };
 		D03DB00A26DF315A00A578E6 /* enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFD826DF315900A578E6 /* enums.swift */; };
 		D03DB00B26DF315A00A578E6 /* SVGViewBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFD926DF315900A578E6 /* SVGViewBox.swift */; };
 		D03DB00C26DF315A00A578E6 /* SVGPathParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = D03DAFDA26DF315900A578E6 /* SVGPathParser.swift */; };
@@ -85,6 +90,11 @@
 		D02E65FD26E072C10023C4D8 /* EllipseView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipseView.swift; sourceTree = "<group>"; };
 		D02E65FE26E072C10023C4D8 /* EllipseView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EllipseView.m; sourceTree = "<group>"; };
 		D02E660226E072E40023C4D8 /* EllipsePaintableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EllipsePaintableView.swift; sourceTree = "<group>"; };
+		D034011826E84B4700FB9902 /* ImageContentLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageContentLayer.swift; sourceTree = "<group>"; };
+		D034011926E84B4700FB9902 /* ImageLayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageLayer.swift; sourceTree = "<group>"; };
+		D034011D26E84B5300FB9902 /* JJPainterImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JJPainterImageView.swift; sourceTree = "<group>"; };
+		D034011E26E84B5300FB9902 /* JJPainterImageView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JJPainterImageView.m; sourceTree = "<group>"; };
+		D034012226E84B6900FB9902 /* ImageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageView.swift; sourceTree = "<group>"; };
 		D03DAFD226DF311100A578E6 /* ReactNativePainter-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ReactNativePainter-Bridging-Header.h"; sourceTree = "<group>"; };
 		D03DAFD826DF315900A578E6 /* enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = enums.swift; sourceTree = "<group>"; };
 		D03DAFD926DF315900A578E6 /* SVGViewBox.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SVGViewBox.swift; sourceTree = "<group>"; };
@@ -208,6 +218,7 @@
 			children = (
 				D0B0CF6E26E562090039A203 /* LinearGradientView.swift */,
 				D0B0CF6F26E562090039A203 /* RadialGradientView.swift */,
+				D034012226E84B6900FB9902 /* ImageView.swift */,
 				D03DAFE826DF315A00A578E6 /* MaskGPaintableView.swift */,
 				D03DAFE926DF315A00A578E6 /* PaintableView.swift */,
 				D03DAFEA26DF315A00A578E6 /* GPaintableView.swift */,
@@ -225,6 +236,8 @@
 		D03DAFF226DF315A00A578E6 /* managers */ = {
 			isa = PBXGroup;
 			children = (
+				D034011E26E84B5300FB9902 /* JJPainterImageView.m */,
+				D034011D26E84B5300FB9902 /* JJPainterImageView.swift */,
 				D0B0CF6626E561EF0039A203 /* JJPainterLinearGradientView.m */,
 				D0B0CF6826E561EF0039A203 /* JJPainterLinearGradientView.swift */,
 				D0B0CF6726E561EF0039A203 /* JJPainterRadialGradientView.m */,
@@ -258,6 +271,8 @@
 				D0B0CF7426E5621F0039A203 /* RadialGradientLayer.swift */,
 				D03DB00426DF315A00A578E6 /* TextLayer.swift */,
 				D02E65FA26E072A90023C4D8 /* EllipseLayer.swift */,
+				D034011826E84B4700FB9902 /* ImageContentLayer.swift */,
+				D034011926E84B4700FB9902 /* ImageLayer.swift */,
 				D03DB00526DF315A00A578E6 /* Paintable.swift */,
 				D03DB00626DF315A00A578E6 /* LineLayer.swift */,
 				D03DB00726DF315A00A578E6 /* RectLayer.swift */,
@@ -329,9 +344,11 @@
 				D03DB01226DF315A00A578E6 /* Painter.swift in Sources */,
 				D03DB02F26DF315A00A578E6 /* CircleView.swift in Sources */,
 				D03DB01A26DF315A00A578E6 /* GPaintableView.swift in Sources */,
+				D034011A26E84B4700FB9902 /* ImageContentLayer.swift in Sources */,
 				D03DB02A26DF315A00A578E6 /* RectView.m in Sources */,
 				D03DB02E26DF315A00A578E6 /* MaskGView.m in Sources */,
 				D03DB03326DF315A00A578E6 /* Paintable.swift in Sources */,
+				D034012026E84B5300FB9902 /* JJPainterImageView.m in Sources */,
 				D03DB02B26DF315A00A578E6 /* RectView.swift in Sources */,
 				D03DB02C26DF315A00A578E6 /* MaskView.swift in Sources */,
 				D03DB00E26DF315A00A578E6 /* ContainerG.swift in Sources */,
@@ -356,9 +373,11 @@
 				D03DB00F26DF315A00A578E6 /* PainterKit.swift in Sources */,
 				D03DB01626DF315A00A578E6 /* extension_UIColor.swift in Sources */,
 				D03DB02226DF315A00A578E6 /* LineView.swift in Sources */,
+				D034012326E84B6900FB9902 /* ImageView.swift in Sources */,
 				D03DB01926DF315A00A578E6 /* PaintableView.swift in Sources */,
 				D03DB02526DF315A00A578E6 /* LineView.m in Sources */,
 				D0B0CF6926E561EF0039A203 /* JJPainterRadialGradientView.swift in Sources */,
+				D034011F26E84B5300FB9902 /* JJPainterImageView.swift in Sources */,
 				D03DB02826DF315A00A578E6 /* TextView.m in Sources */,
 				D03DB03026DF315A00A578E6 /* GView.swift in Sources */,
 				D03DB03126DF315A00A578E6 /* PathView.swift in Sources */,
@@ -371,6 +390,7 @@
 				D03DB01F26DF315A00A578E6 /* PathPaintableView.swift in Sources */,
 				D03DB02626DF315A00A578E6 /* MaskGView.swift in Sources */,
 				D03DB03626DF315A00A578E6 /* PathLayer.swift in Sources */,
+				D034011B26E84B4700FB9902 /* ImageLayer.swift in Sources */,
 				D03DB01D26DF315A00A578E6 /* LinePaintableView.swift in Sources */,
 				D03DB01526DF315A00A578E6 /* extension_NSAttrString.swift in Sources */,
 				D03DB02426DF315A00A578E6 /* PathView.m in Sources */,
