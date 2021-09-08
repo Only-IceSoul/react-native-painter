@@ -52,7 +52,7 @@ class ImageContentLayer: CALayer , ViewTarget {
     
     func invalidateImageTransform(){
         if self.frame.width > 0 && self.frame.height > 0 && mLayer.frame.width > 0 && mLayer.frame.height > 0 {
-            let a = mAspect == "meet" ? SVGViewBox.AspectRatio.meet : ( mAspect == "slice" ? SVGViewBox.AspectRatio.slice : SVGViewBox.AspectRatio.none)
+             let a = mAspect == "none" ? SVGViewBox.AspectRatio.none : ( mAspect == "slice" ? SVGViewBox.AspectRatio.slice : SVGViewBox.AspectRatio.meet)
             
             let trans =  SVGViewBox.transform3D(vbRect: CGRect(x: 0, y: 0, width: mLayer.frame.width, height: mLayer.frame.height), eRect: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), align: mAlign, meetOrSlice: a)
             disableAnimation()
