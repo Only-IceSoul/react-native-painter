@@ -22,6 +22,7 @@ import com.jjlf.rnpainter.viewmanagers.RectViewManager;
 import com.jjlf.rnpainter.viewmanagers.TextViewManager;
 import com.jjlf.rnpainter.viewmanagers.RadialGradientViewManager;
 import com.jjlf.rnpainter.viewmanagers.LinearGradientViewManager;
+import com.jjlf.rnpainter.viewmanagers.ImageViewManager;
 
 public class ReactNativePainterPackage implements ReactPackage {
     @Override
@@ -32,6 +33,7 @@ public class ReactNativePainterPackage implements ReactPackage {
     @Override
     public List<ViewManager> createViewManagers(ReactApplicationContext reactContext) {
         return Arrays.<ViewManager>asList(
+            new ImageViewManager(),
               new RadialGradientViewManager(),
                 new LinearGradientViewManager(),
                 new EllipseViewManager(),

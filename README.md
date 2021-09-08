@@ -42,7 +42,7 @@ add a .swift file
   - [Mask](./readmes/mask.md)
   - [LinearGradient](./readmes/lineargradient.md)
   - [RadialGradient](./readmes/radialgradient.md)
-
+  - [Image](./readmes/image.md)
 
 
 
@@ -95,7 +95,7 @@ The percentageValue property refers to the fact that the values will be multipli
 | Name | type | default |
 | --- | --- | --- |
 | translate | 0bject | 0 0 false |
-| scale | 0bject | 1 1 false |
+| scale | 0bject | 1 1 0 0 false |
 | rotate | 0bject | 0 0 0 false |
-| translateZ | Number (zIndex) | 0  |
+| translateZ | Number (zIndex) | 0 |
 

@@ -16,7 +16,7 @@ const PathView = requireNativeComponent("PathView",null);
 const EllipseView = requireNativeComponent("EllipseView",null);
 const LinearGradientView = requireNativeComponent("JJPainterLinearGradientView",null);
 const RadialGradientView = requireNativeComponent("JJPainterRadialGradientView",null);
-
+const ImageView = requireNativeComponent("JJPainterImageView",null);
 
 export class Line extends React.PureComponent {
     render(){
@@ -144,6 +144,18 @@ export class RadialGradient extends React.PureComponent {
         
     } 
 }
+export class Image extends React.PureComponent {
+    render(){
+        const {style,...others} = this.props
+        return <ImageView {...others}
+         style={Platform.OS === 'android' 
+         ? [{transform: style?.transform }] 
+         : [{transform:style?.transform},StyleSheet.absoluteFillObject]} />
+        
+    } 
+}
+
+
 const PainterSoftware = requireNativeComponent("PainterS",null);
 const PainterHarwdare = requireNativeComponent("Painter",null);
 export const PainterS = Platform.OS === 'android' ? PainterSoftware : PainterHarwdare

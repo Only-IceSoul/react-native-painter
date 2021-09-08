@@ -117,16 +117,11 @@ interface EllipseProps extends CommonProps , ViewProps{
     ry?:number
 }
 
-
-interface GradientProps {
+interface CustomViewProps {
     x?:number
     y?:number
     w?:number
     h?:number
-
-
-    positions?:number[]
-    colors?: ColorType[]
 
     mask?:string
     opacity?:number
@@ -147,6 +142,13 @@ interface GradientProps {
 
 }
 
+interface GradientProps extends CustomViewProps {
+
+    positions?:number[]
+    colors?: ColorType[]
+
+}
+
 interface LinearGradientProps extends GradientProps,  ViewProps{
     startPoint?:{ x:number,y:number }
     endPoint?:{ x:number,y:number }
@@ -161,6 +163,26 @@ interface RadialGradientProps extends GradientProps,  ViewProps{
     ry?:number
 
 }
+interface ImageProps extends CustomViewProps,  ViewProps{
+    source?:string
+    clipToBounds?:boolean
+    bgColor?:ColorType
+    aspect?: 'meet' | 'slice' | 'none'
+    align?:'xMinYMin'|
+    'xMidYMin' |
+    'xMaxYMin' |
+    'xMinYMid' |
+    'xMidYMid' |
+    'xMaxYMid' |
+    'xMinYMax' |
+    'xMidYMax' |
+    'xMaxYMax' |
+    'none'
+}
+
+
+declare class ImageComponent extends React.Component<ImageProps> {}
+declare const ImageBase: Constructor<NativeMethods> & typeof ImageComponent;
 
 declare class RadialGradientComponent extends React.Component<RadialGradientProps> {}
 declare const RadialGradientBase: Constructor<NativeMethods> & typeof RadialGradientComponent;
@@ -199,6 +221,7 @@ declare const GBase: Constructor<NativeMethods> & typeof GComponent;
 declare class PainterComponent extends React.Component<PainterProps> {}
 declare const PainterBase: Constructor<NativeMethods> & typeof PainterComponent;
 
+export class Image extends ImageBase {}
 export class RadialGradient extends RadialGradientBase {}
 export class LinearGradient extends LinearGradientBase {}
 export class Ellipse extends EllipseBase {}
