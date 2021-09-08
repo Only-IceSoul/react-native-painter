@@ -8,7 +8,6 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.graphics.Region;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -46,6 +45,7 @@ public class ImageView extends View implements PaintableInterface {
     private String mOldMask = "";
     protected boolean mIsMaskChild = false;
     protected float mTranslationZ = 0f;
+    CommonProps mProps = new CommonProps();
     TransformProps mTransform = new TransformProps();
     protected RectF mRect = new RectF();
 
@@ -56,13 +56,8 @@ public class ImageView extends View implements PaintableInterface {
     protected String source = "";
     protected String align = "xMidYMid";
     protected int aspect = SVGViewBox.MOS_MEET;
-    private int bgColor = Color.TRANSPARENT;
     private boolean clipToBounds = false;
 
-    protected float mOpacity = 1f;
-    protected boolean mOpacityStatus = false;
-
-    private final RectF mImageRect = new RectF();
     private Bitmap mBitmapImage ;
 
 
@@ -71,14 +66,7 @@ public class ImageView extends View implements PaintableInterface {
         setLayerType(View.LAYER_TYPE_HARDWARE,null);
     }
 
-    public void setOpacity(float op,boolean status){
-        mOpacityStatus = status;
-        if(mOpacity != op){
-            mOpacity = op;
-            setAlpha(mOpacity);
-            if(mIsMaskChild) invalidate();
-        }
-    }
+
 
     public void setY(float v) {
         if(y != v){
@@ -121,12 +109,7 @@ public class ImageView extends View implements PaintableInterface {
             invalidate();
         }
     }
-    public void setBgColor(int v){
-        if(bgColor !=  v){
-            bgColor = v;
-            invalidate();
-        }
-    }
+
     public void setClipToBounds(boolean v){
         if(clipToBounds !=  v){
             clipToBounds = v;
@@ -134,6 +117,8 @@ public class ImageView extends View implements PaintableInterface {
         }
     }
 
+
+    //MARK: Paintable Props
 
     public void setMask(String v) {
         if(!Objects.equals(mMask, v)) {
@@ -167,12 +152,62 @@ public class ImageView extends View implements PaintableInterface {
             mLazySetupMask = true;
         }
     }
-
+    public void setOpacity(float op,boolean status){
+        mProps.mOpacityStatus = status;
+        if(mProps.mOpacity != op){
+            mProps.mOpacity = op;
+            setAlpha(mProps.getOpacity());
+            if(mIsMaskChild) invalidate();
+        }
+    }
 
     public void setTranslateZ(float v) {
         if(mTranslationZ != v && !mIsMaskChild) {
             mTranslationZ = v;
             setTranslationZ(mTranslationZ);
+        }
+    }
+
+    public void setFill(int v, boolean status) {
+        mProps.mFillColorStatus = status;
+        if(mProps.mFillColor != v) {
+            mProps.mFillColor = v;
+            invalidate();
+        }
+    }
+
+    public void setShadow(int v, boolean status) {
+        mProps.mShadowColorStatus = status;
+        if(mProps.mShadowColor != v){
+            mProps.mShadowColor = v;
+            invalidate();
+        }
+    }
+
+    public void setShadowOffset(float x, float y, boolean percent, boolean status) {
+        mProps.mShadowOffsetStatus = status;
+        if(mProps.mShadowOffsetX != x || mProps.mShadowOffsetY != y || mProps.mShadowOffsetIsPercent != percent){
+            mProps.mShadowOffsetX = x;
+            mProps.mShadowOffsetY = y;
+            mProps.mShadowOffsetIsPercent = percent;
+            invalidate();
+        }
+
+    }
+
+    public void setShadowOpacity(float v, boolean status) {
+        mProps.mShadowOpacityStatus = status;
+        if(mProps.mShadowOpacity != v) {
+            mProps.mShadowOpacity = v;
+            invalidate();
+        }
+    }
+
+    public void setShadowRadius(float v, boolean status) {
+        mProps.mShadowRadiusStatus = status;
+        if(mProps.mShadowRadius != v){
+            mProps.mShadowRadius = v;
+            invalidate();
         }
     }
 
@@ -206,43 +241,37 @@ public class ImageView extends View implements PaintableInterface {
         }
     }
 
+    //si es cliptobounds y slice al rect, si es clip false a la imagen, si clip y meet a la imagen.
     @SuppressLint("MissingSuperCall")
     @Override
     public void draw(Canvas canvas) {
         if(mPainter != null && w > 0  && h > 0 ) {
 
             setupRect(mPainter);
-            setupPaintBg(mPainter);
-
             transform(mTransform, mPainter);
 
             //draw
             int checkpoint = canvas.save();
             canvas.concat(mPainter.matrix);
             try{
-                if(mMask.isEmpty()){
-                    drawImage(canvas);
-                }else{
+                drawImage(canvas);
+                if(!mMask.isEmpty()){
                     WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
                     if(maskView != null && maskView.get() != null){
-                        drawImage(canvas);
-                        mPainter.paintMask.setXfermode(mPainter.dstIn);
-                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                        maskView.get().render(canvas);
-                        canvas.restore();
-
                         if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
                             mPainter.paintMask.setXfermode(mPainter.dstOut);
-                            int main = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                             canvas.drawColor(Color.BLACK);
                             mPainter.paintMask.setXfermode(mPainter.dstOut);
                             int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                             maskView.get().render(canvas);
                             canvas.restoreToCount(clip);
-                            canvas.restoreToCount(main);
+                        }else{
+                            mPainter.paintMask.setXfermode(mPainter.dstIn);
+                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            maskView.get().render(canvas);
                         }
-                    }else{
-                        canvas.drawRect(mRect,mPainter.paint);
+                        canvas.restore();
                     }
                 }
             } finally {
@@ -355,25 +384,38 @@ public class ImageView extends View implements PaintableInterface {
     }
 
     private void drawImage(Canvas canvas ){
-        //bg
-        if(bgColor != Color.TRANSPARENT) canvas.drawRect(mRect,mPainter.paint);
+        //fill
+         setupPaintFill();
+         drawFill(canvas);
 
         //image
         if(mBitmapImage != null){
-            mImageRect.set(0f,0f,mBitmapImage.getWidth(),mBitmapImage.getHeight());
+            mPainter.rect.set(0f,0f,mBitmapImage.getWidth(),mBitmapImage.getHeight());
             mPainter.matrix.reset();
-            SVGViewBox.transform(mImageRect,mRect,align,aspect,mPainter.matrix,1f);
-            canvas.drawBitmap(mBitmapImage,mPainter.matrix,null);
-            if(clipToBounds) {
-                mPainter.paint.setColor(Color.WHITE);
-                mPainter.paintMask.setXfermode(mPainter.dstOut);
-                int main = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                canvas.drawColor(Color.BLACK);
-                mPainter.paintMask.setXfermode(mPainter.dstOut);
-                int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                canvas.drawRect(mRect,mPainter.paint);
-                canvas.restoreToCount(clip);
-                canvas.restoreToCount(main);
+            SVGViewBox.transform(mPainter.rect,mRect,align,aspect,mPainter.matrix,1f);
+            mPainter.matrix.mapRect(mPainter.rect);
+            if(!clipToBounds){
+                drawBitmapShadow(canvas);
+                canvas.drawBitmap(mBitmapImage,mPainter.matrix,null);
+            }else{
+                canvas.saveLayer(0f,0f,getWidth(),getHeight(),null);
+                canvas.drawBitmap(mBitmapImage,mPainter.matrix,null);
+                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
+                    mPainter.paintMask.setXfermode(mPainter.dstOut);
+                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    canvas.drawColor(Color.BLACK);
+                    mPainter.paintMask.setXfermode(mPainter.dstOut);
+                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    drawClipRect(canvas);
+                    canvas.restore();
+                }else{
+                    mPainter.paintMask.setXfermode(mPainter.dstIn);
+                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    drawClipRect(canvas);
+                }
+                canvas.restore();
+                canvas.restore();
+
             }
         }
 
@@ -399,10 +441,71 @@ public class ImageView extends View implements PaintableInterface {
         mRect.set(l,t,r,b);
     }
 
-    protected void setupPaintBg(PainterKit p){
-        p.paint.reset();
-        p.paint.setStyle(Paint.Style.FILL);
-        p.paint.setColor(bgColor);
+    private void setupPaintFill(){
+        mPainter.paint.reset();
+        mPainter.paint.setAntiAlias(true);
+        mPainter.paint.setStyle(Paint.Style.FILL);
+        mPainter.paint.setColor(mProps.getFillColor());
+        if(clipToBounds) setupShadow(false);
+    }
+
+    private void drawClipRect(Canvas canvas){
+        mPainter.paint2.reset();
+        mPainter.paint2.setAntiAlias(true);
+        mPainter.paint2.setStyle(Paint.Style.FILL);
+        mPainter.paint2.setColor(Color.WHITE);
+        canvas.drawRect(mRect,mPainter.paint2);
+    }
+
+    protected void drawFill(Canvas canvas){
+        if(mProps.getFillColor() != Color.TRANSPARENT) canvas.drawRect(mRect,mPainter.paint);
+    }
+    private void drawBitmapShadow(Canvas canvas) {
+        if (mProps.getShadowOpacity() > 0f){
+            mPainter.paint2.reset();
+            mPainter.paint2.setAntiAlias(true);
+            mPainter.paint2.setStyle(Paint.Style.FILL);
+            mPainter.paint2.setColor(Color.GRAY);
+            setupShadow(true);
+            canvas.drawRect(mPainter.rect, mPainter.paint2);
+        }
+    }
+
+    protected void setupShadow(boolean paint2 ) {
+        Paint paint = paint2 ? mPainter.paint2 : mPainter.paint;
+        if (mProps.getShadowOpacity() > 0f) {
+            final int alpha = Color.alpha(mProps.getShadowColor());
+            final int red = Color.red(mProps.getShadowColor());
+            final int green = Color.green(mProps.getShadowColor());
+            final int blue = Color.blue(mProps.getShadowColor());
+            final int c = Color.argb((int) (mProps.getShadowOpacity() * alpha), red, green, blue);
+
+            float ox;
+            float oy;
+            if (mProps.getShadowOffsetIsPercent()) {
+                ox = mProps.getShadowOffsetX() * mPainter.bounds.width();
+                oy = mProps.getShadowOffsetY() * mPainter.bounds.height();
+            } else if (mPainter.isViewBoxEnabled) {
+                ox = (mProps.getShadowOffsetX() / mPainter.viewBox.width()) * mPainter.bounds.width();
+                oy = (mProps.getShadowOffsetY() / mPainter.viewBox.height()) * mPainter.bounds.height();
+            } else {
+                ox = toDip(mProps.getShadowOffsetX());
+                oy = toDip(mProps.getShadowOffsetY());
+            }
+
+            float radius;
+            if (mPainter.isViewBoxEnabled) {
+                float size = mPainter.viewBox.width() > mPainter.viewBox.height() ? mPainter.bounds.width() : mPainter.bounds.height();
+                radius =  (mProps.getShadowRadius() / Math.max( mPainter.viewBox.width(), mPainter.viewBox.height() )) * size;
+            }else{
+                radius = toDip(mProps.getShadowRadius());
+            }
+
+            paint.setShadowLayer(radius, ox, oy, c);
+
+        } else {
+            paint.clearShadowLayer();
+        }
     }
 
     protected void transform(TransformProps transform, PainterKit painter) {
@@ -503,7 +606,7 @@ public class ImageView extends View implements PaintableInterface {
 
     @Override
     public void setProps(CommonProps props) {
-        if(!mOpacityStatus) mOpacity = props.getOpacity();
+        mProps.set(props);
     }
 
     @Override

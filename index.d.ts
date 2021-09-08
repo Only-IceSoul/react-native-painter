@@ -3,23 +3,35 @@ import { Constructor, NativeMethods, ViewProps } from "react-native";
 
 type ColorType = number | string;
 
-interface PainterProps extends ViewProps {
-    viewBox?:number[] 
-    aspect?: 'meet' | 'slice' | 'none'
-    align?:'xMinYMin'|
-    'xMidYMin' |
-    'xMaxYMin' |
-    'xMinYMid' |
-    'xMidYMid' |
-    'xMaxYMid' |
-    'xMinYMax' |
-    'xMidYMax' |
-    'xMaxYMax' |
-    'none'
+interface ShadowProps {
+    shadow?: ColorType
+    shadowOffset?:{
+        x:number,
+        y:number,
+        percentageValue?:boolean
+    }
+    shadowOpacity?: number
+    shadowRadius?:number
 }
 
-interface CommonProps {
-  
+interface CommonPathProps {
+    
+    fill?:ColorType
+    fillRule?: 'evenodd' | 'nonzero'
+    fillOpacity?:number
+
+    stroke?: ColorType
+    strokeOpacity?:number
+    strokeWidth?:number
+    strokeStart?:number
+    strokeEnd?:number
+    strokeCap?:'butt' | 'round' | 'square'
+    strokeJoin?: 'bevel' | 'miter' | 'round'
+    strokeMiter?:number
+
+}
+
+interface CommonTransformProps {
     mask?:string
     opacity?:number
     translateZ?:number
@@ -36,30 +48,34 @@ interface CommonProps {
         y:number,
         percentageValue?:boolean
     }
-
-    
-    shadow?: ColorType
-    shadowOffset?:{
-        x:number,
-        y:number,
-        percentageValue?:boolean
-    }
-    shadowOpacity?: number
-    shadowRadius?:number
-
-    stroke?: ColorType
-    strokeOpacity?:number
-    strokeWidth?:number
-    strokeStart?:number
-    strokeEnd?:number
-    strokeCap?:'butt' | 'round' | 'square'
-    strokeJoin?: 'bevel' | 'miter' | 'round'
-    strokeMiter?:number
-
-    fill?:ColorType
-    fillRule?: 'evenodd' | 'nonzero'
-    fillOpacity?:number
 }
+
+interface PreserveAspectRatioProps {
+    aspect?: 'meet' | 'slice' | 'none'
+    align?:'xMinYMin'|
+    'xMidYMin' |
+    'xMaxYMin' |
+    'xMinYMid' |
+    'xMidYMid' |
+    'xMaxYMid' |
+    'xMinYMax' |
+    'xMidYMax' |
+    'xMaxYMax' |
+    'none'
+}
+
+interface LayoutProps{
+    x?:number
+    y?:number
+    w?:number
+    h?:number
+}
+
+interface PainterProps extends ViewProps ,PreserveAspectRatioProps {
+    viewBox?:number[] 
+}
+
+interface CommonProps extends ShadowProps, CommonPathProps ,CommonTransformProps {}
 
 interface LineProps extends CommonProps , ViewProps{
     x1?:number
@@ -87,18 +103,9 @@ interface CircleProps extends CommonProps , ViewProps{
     r?:number
 }
 
-
-interface PathProps extends CommonProps , ViewProps{
-    d?:string  
-}
-interface GProps extends CommonProps , ViewProps{
-    
-}
-interface RectProps extends CommonProps , ViewProps{
-    x?:number
-    y?:number
-    w?:number
-    h?:number
+interface PathProps extends CommonProps , ViewProps{ d?:string  }
+interface GProps extends CommonProps , ViewProps{}
+interface RectProps extends CommonProps , ViewProps,LayoutProps{
     rtl?:number
     rtr?:number
     rbr?:number
@@ -117,67 +124,29 @@ interface EllipseProps extends CommonProps , ViewProps{
     ry?:number
 }
 
-interface CustomViewProps {
-    x?:number
-    y?:number
-    w?:number
-    h?:number
-
-    mask?:string
-    opacity?:number
-    translateZ?:number
-
-    scale?:{ x:number,y:number , ox?:number ,oy?:number ,percentageValue?:boolean }
-    rotate?: {
-        a:number,
-        x?:number,
-        y?:number,
-        percentageValue?:boolean
-    }
-    translate?:{
-        x:number,
-        y:number,
-        percentageValue?:boolean
-    }
-
-}
+interface CustomViewProps extends LayoutProps, CommonTransformProps {}
 
 interface GradientProps extends CustomViewProps {
-
     positions?:number[]
     colors?: ColorType[]
-
 }
 
 interface LinearGradientProps extends GradientProps,  ViewProps{
     startPoint?:{ x:number,y:number }
     endPoint?:{ x:number,y:number }
-
 }
 
 interface RadialGradientProps extends GradientProps,  ViewProps{
- 
     cx?:number
     cy?:number
     rx?:number
     ry?:number
-
 }
-interface ImageProps extends CustomViewProps,  ViewProps{
+interface ImageProps extends  ViewProps,CustomViewProps,PreserveAspectRatioProps,ShadowProps{
     source?:string
     clipToBounds?:boolean
-    bgColor?:ColorType
-    aspect?: 'meet' | 'slice' | 'none'
-    align?:'xMinYMin'|
-    'xMidYMin' |
-    'xMaxYMin' |
-    'xMinYMid' |
-    'xMidYMid' |
-    'xMaxYMid' |
-    'xMinYMax' |
-    'xMidYMax' |
-    'xMaxYMax' |
-    'none'
+    fill?:ColorType
+ 
 }
 
 

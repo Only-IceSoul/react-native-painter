@@ -23,6 +23,7 @@ public class PainterKit {
     public final TextPaint textPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
     public final TextPaint textPaint2 = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
     public final RectF bounds = new RectF();
+    public final RectF rect = new RectF();
     public String align = "none";
     public int aspect = 2;
     public final RectF viewBox = new RectF();

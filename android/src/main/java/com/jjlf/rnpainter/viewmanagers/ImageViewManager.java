@@ -16,6 +16,7 @@ import com.jjlf.rnpainter.shadownodes.PaintableShadowNode;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.SVGViewBox;
 import com.jjlf.rnpainter.views.ImageView;
+import com.jjlf.rnpainter.views.PaintableView;
 
 import java.util.Objects;
 
@@ -75,16 +76,11 @@ public class ImageViewManager extends SimpleViewManager<ImageView> {
     public void setAspect(ImageView view ,String v) {
         view.setAspect(Objects.equals(v, "none") ? SVGViewBox.MOS_NONE : (Objects.equals(v, "slice") ? SVGViewBox.MOS_SLICE : SVGViewBox.MOS_MEET));
     }
-
-    @ReactProp(name = "bgColor",defaultInt = Color.TRANSPARENT)
-    public void setBgColor(ImageView view ,int v) {
-        view.setBgColor(v);
-    }
-
     @ReactProp(name = "clipToBounds",defaultBoolean = false)
     public void setClipToBounds(ImageView view ,boolean v) {
         view.setClipToBounds(v);
     }
+
 
     @ReactProp(name = "translateZ",defaultFloat = 0f)
     public void setTranslateZ(ImageView view ,float v) {
@@ -97,6 +93,34 @@ public class ImageViewManager extends SimpleViewManager<ImageView> {
     @ReactProp(name = "opacity")
     public void setOpacity(ImageView view , Dynamic v) {
         view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+    }
+
+    @ReactProp(name = "fill")
+    public void setFill(ImageView view , Dynamic v) {
+        view.setFill(ModUtil.getInt(v, Color.BLACK),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadow")
+    public void setShadow(ImageView view ,Dynamic v) {
+        view.setShadow(ModUtil.getInt(v,Color.BLACK), ModUtil.isNotNull(v));
+
+    }
+    @ReactProp(name = "shadowOpacity")
+    public void setShadowOpacity(ImageView view ,Dynamic v) {
+        view.setShadowOpacity(ModUtil.getFloat(v,0f), ModUtil.isNotNull(v));
+
+    }
+    @ReactProp(name = "shadowRadius")
+    public void setShadowRadius(ImageView view ,Dynamic v) {
+        view.setShadowRadius(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+
+    }
+    @ReactProp(name = "shadowOffset")
+    public void setShadowOffset(ImageView view , ReadableMap v) {
+        float x = (float) ModUtil.getDouble(v,"x",2.0);
+        float y = (float)ModUtil.getDouble(v,"y",2.0);
+        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
+        view.setShadowOffset(x,y,per,v != null);
+
     }
 
     @ReactProp(name = "rotate")
