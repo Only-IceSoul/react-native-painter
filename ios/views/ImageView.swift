@@ -11,7 +11,6 @@ class ImageView :  PaintableView {
     
     
     private var mLayer = ImageLayer()
-    private var mBridge: RCTBridge?
     
     override init() {
         super.init()
@@ -51,10 +50,6 @@ class ImageView :  PaintableView {
         let s = v == nil ? "meet" : v!
         mLayer.setAspect(s)
     }
-    @objc func setBgColor(_ v:NSNumber?){
-        let s = v == nil ? 0 : Int(truncating: v!)
-        mLayer.setBgColor(s)
-    }
     @objc func setClipToBounds(_ v:NSNumber?){
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
@@ -84,12 +79,15 @@ class ImageView :  PaintableView {
     
     @objc override func setOpacity(_ v:NSNumber?) {
         let ev = Float(truncating: v ?? 1)
-        
         mLayer.setOpacity(ev, v != nil)
     }
     
     
-    @objc override func setFill(_ v:NSNumber?) {}
+    @objc override func setFill(_ v:NSNumber?) {
+        let ev = Int(truncating: v ?? 0)
+        mLayer.setFill(ev, v != nil)
+       
+   }
     @objc override func setFillRule(_ v:String?) {}
     @objc override func setFillOpacity(_ v:NSNumber?) {}
     @objc override func setStroke(_ v:NSNumber?) {}
@@ -100,10 +98,31 @@ class ImageView :  PaintableView {
     @objc override func setStrokeMiter(_ v:NSNumber?) {}
     @objc override func setStrokeStart(_ v:NSNumber?) {}
     @objc override func setStrokeEnd(_ v:NSNumber?) {}
-    @objc override func setShadow(_ v:NSNumber?) {}
-    @objc override func setShadowOpacity(_ v:NSNumber?) {}
-    @objc override func setShadowRadius(_ v:NSNumber?) {}
-    @objc override func setShadowOffset(_ v:[String:Any]?) {}
+    
+    @objc override func setShadow(_ v:NSNumber?) {
+        let ev = Int(truncating: v ?? 0)
+        mLayer.setShadow(ev, v != nil)
+       
+    }
+    
+    @objc override func setShadowOpacity(_ v:NSNumber?) {
+        let ev = Float(truncating: v ?? 0)
+        mLayer.setShadowOpacity(ev, v != nil)
+    }
+    
+    
+    @objc override func setShadowRadius(_ v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 2)
+        mLayer.setShadowRadius(ev, v != nil)
+    }
+    
+    
+    @objc override func setShadowOffset(_ v:[String:Any]?) {
+        let x = v?["x"] as? CGFloat ?? 2
+        let y = v?["y"] as? CGFloat ?? 2
+        let percent = v?["percentageValue"] as? Bool ?? false
+        mLayer.setShadowOffset(x, y, percent, v != nil)
+    }
     
  
     @objc override func setRotate(_ v:[String:Any]?) {

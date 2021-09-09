@@ -13,7 +13,7 @@ class ImageLayer: CALayer {
     
     
     var mLayer = ImageContentLayer()
-    
+    var mProps = CommonProps()
     var mPainterKit : PainterKit!
     var mTransform = TransformProps()
     var mRect = CGRect()
@@ -40,17 +40,9 @@ class ImageLayer: CALayer {
     }
     
     func setProps(_ p:CommonProps){
-        if !mOpacityStatus { mOpacity = p.getOpacity() }
-        invalidateOpacity()
+        mProps.set(p)
+        invalidateCommonProps()
         
-    }
-    public func setOpacity(_ v:Float,_ status:Bool){
-        mOpacityStatus = status
-        if mOpacity != v{
-            mOpacity = v
-            invalidateOpacity()
-        }
-      
     }
     
     //MARK : PROPS
@@ -89,13 +81,64 @@ class ImageLayer: CALayer {
     public func setAspect(_ v:String){
         mLayer.setAspect(v)
     }
-    public func setBgColor(_ v:Int){
-        mLayer.setBgColor(v)
-    }
+    private var mClipToBounds = false
     public func setClipToBounds(_ v:Bool){
         mLayer.setClipToBounds(v)
+        mClipToBounds = v
+        invalidateCommonProps()
     }
     
+    //MARK: Common props
+    
+    public func setOpacity(_ v:Float,_ status:Bool){
+        mProps.opacityStatus = status
+        if mProps.opacity != v{
+            mProps.opacity = v
+            invalidateCommonProps()
+        }
+      
+    }
+    public func setFill(_ v:Int,_ status:Bool){
+        mProps.fillColorStatus = status
+        if mProps.fillColor != v{
+            mProps.fillColor = v
+            invalidateCommonProps()
+        }
+   }
+    public func setShadow(_ v:Int,_ status:Bool){
+        mProps.shadowColorStatus = status
+        if mProps.shadowColor != v{
+            mProps.shadowColor = v
+            invalidateCommonProps()
+        }
+    }
+    
+    public func setShadowOffset(_ x:CGFloat,_ y:CGFloat,_ percent:Bool,_ status:Bool){
+        mProps.shadowOffsetStatus = status
+        if mProps.shadowOffsetX != x || mProps.shadowOffsetY != y || mProps.shadowOffsetIsPercent != percent {
+            mProps.shadowOffsetX = x
+            mProps.shadowOffsetY = y
+            mProps.shadowOffsetIsPercent = percent
+            invalidateCommonProps()
+        }
+    }
+    
+
+    public func setShadowOpacity(_ v:Float,_ status:Bool){
+        mProps.shadowOpacityStatus = status
+        if mProps.shadowOpacity != v{
+            mProps.shadowOpacity = v
+            invalidateCommonProps()
+        }
+    }
+    
+    public func setShadowRadius(_ v:CGFloat,_ status:Bool){
+        mProps.shadowRadiusStatus = status
+        if mProps.shadowRadius != v{
+            mProps.shadowRadius = v
+            invalidateCommonProps()
+        }
+    }
     
     public func setTranslation(_ x:CGFloat,_ y:CGFloat,_ percent:Bool){
         if mTransform.mTranslationX != x || mTransform.mTranslationY != y || mTransform.mTranslationIsPercent != percent {
@@ -143,8 +186,8 @@ class ImageLayer: CALayer {
     }
     
     public func invalidateSelf(){
-        invalidateOpacity()
         invalidatePosition()
+        invalidateCommonProps()
         invalidateTransform()
     }
     
@@ -164,11 +207,9 @@ class ImageLayer: CALayer {
             hh = h.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
         }
         
-        disableAnimation()
-        mLayer.frame = CGRect(x: 0, y: 0, width:ww, height: hh)
-        mLayer.position = CGPoint(x: xx , y: yy)
-        commit()
-        mLayer.invalidateImageTransform()
+       
+        mLayer.setBounds(xx,yy,ww,hh)
+   
         }
     }
     
@@ -231,13 +272,51 @@ class ImageLayer: CALayer {
     
     
     
-    public func invalidateOpacity(){
-        disableAnimation()
-        super.opacity = mOpacity
-        commit()
+    public func invalidateCommonProps(){
+        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
+            disableAnimation()
+            super.opacity = mProps.getOpacity()
+            let c = UIColor.parseInt(argb: mProps.getFillColor())
+            mLayer.backgroundColor = c.cgColor
+            if mClipToBounds  {
+                mLayer.getImageLayer().shadowOpacity = 0
+                setupShadow(mLayer)
+            }else{
+                mLayer.shadowOpacity = 0
+                setupShadow(mLayer.getImageLayer())
+            }
+            commit()
+        }
     }
     
-    
+    private func setupShadow(_ layer:CALayer){
+        let c = UIColor.parseInt(argb: mProps.getShadowColor())
+        layer.shadowColor = c.cgColor
+       
+        var offset = CGSize(width: 0, height: 0)
+        if mProps.getShadowOffsetIsPercent(){
+            offset.width = mProps.getShadowOffsetX() * mRect.width
+            offset.height = mProps.getShadowOffsetY() * mRect.height
+        }else if mPainterKit.mIsViewBoxEnabled {
+            offset.width = (mProps.getShadowOffsetX() / mPainterKit.mViewBox.width) * mRect.width
+            offset.height = (mProps.getShadowOffsetY() / mPainterKit.mViewBox.height) * mRect.height
+        }else{
+            offset.width = mProps.getShadowOffsetX()
+            offset.height = mProps.getShadowOffsetY()
+        }
+        
+        layer.shadowOffset = offset
+        
+        var radius = mProps.getShadowRadius()
+        if mPainterKit.mIsViewBoxEnabled {
+            let size = mPainterKit.mViewBox.width > mPainterKit.mViewBox.height ? mRect.width : mRect.height
+            radius = (mProps.getShadowRadius() / max(mPainterKit.mViewBox.width,mPainterKit.mViewBox.height)) * size
+        }
+        layer.shadowRadius = radius
+        layer.shadowOpacity = mProps.getShadowOpacity()
+        
+    }
+ 
      func disableAnimation(){
         CATransaction.begin()
         CATransaction.setDisableActions(true)

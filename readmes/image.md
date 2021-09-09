@@ -19,7 +19,6 @@
 | y | top position | Number | 0 |
 | w | the width | Number | 0 |
 | h | the height | Number | 0 |
-| bgColor | set the backgroundColor | Color | transparent |
 | align | Alignment value | String | xMidYMid |
 | aspect |   Meet or slice  | String | meet |
 | clipToBounds | A Boolean value that determines whether Imgae is confined to the bounds.   | boolean | false |

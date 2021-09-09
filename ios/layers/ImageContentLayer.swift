@@ -10,15 +10,18 @@ import JJGuiso
 
 class ImageContentLayer: CALayer , ViewTarget {
     
-    private var mLayer = CALayer()
+    private var mImageLayer = CALayer()
+    private var mContainer = CALayer()
     private var mRect = CGRect()
     private var mSource = ""
     private var mAlign = "xMidYMid"
     private var mAspect = "meet"
     override init() {
         super.init()
-        addSublayer(mLayer)
-        mLayer.anchorPoint = CGPoint(x: 0, y: 0)
+        addSublayer(mContainer)
+        mContainer.anchorPoint = CGPoint(x: 0, y: 0)
+        mContainer.addSublayer(mImageLayer)
+        mImageLayer.anchorPoint = CGPoint(x: 0, y: 0)
     }
     
     public func setSrc(_ v:String){
@@ -39,24 +42,42 @@ class ImageContentLayer: CALayer , ViewTarget {
             invalidateImageTransform()
         }
     }
-    public func setBgColor(_ v:Int){
-        disableAnimation()
-        self.backgroundColor = UIColor.parseInt(argb: v).cgColor
-        commit()
-    }
     public func setClipToBounds(_ v:Bool){
         disableAnimation()
-        self.masksToBounds = v
+        mContainer.masksToBounds = v
         commit()
+       
+    }
+    
+    public func getContainer()->CALayer{
+        return mContainer
+    }
+    
+    public func getImageLayer() -> CALayer{
+        return mImageLayer
+    }
+    
+    public func setBounds(_ x:CGFloat,_ y:CGFloat,_ w:CGFloat,_ h:CGFloat){
+        disableAnimation()
+        let b = CGRect(x: 0, y: 0, width:w, height: h)
+        self.frame = b
+        self.position = CGPoint(x: x , y: y)
+        mContainer.frame = b
+        mContainer.position = CGPoint(x: 0 , y: 0)
+        commit()
+        invalidateImageTransform()
     }
     
     func invalidateImageTransform(){
-        if self.frame.width > 0 && self.frame.height > 0 && mLayer.frame.width > 0 && mLayer.frame.height > 0 {
+        if mContainer.frame.width > 0 && mContainer.frame.height > 0 && mImageLayer.frame.width > 0 && mImageLayer.frame.height > 0 {
+           
              let a = mAspect == "none" ? SVGViewBox.AspectRatio.none : ( mAspect == "slice" ? SVGViewBox.AspectRatio.slice : SVGViewBox.AspectRatio.meet)
-            
-            let trans =  SVGViewBox.transform3D(vbRect: CGRect(x: 0, y: 0, width: mLayer.frame.width, height: mLayer.frame.height), eRect: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), align: mAlign, meetOrSlice: a)
+           
+            let trans =  SVGViewBox.transformArray(vbRect: CGRect(x: 0, y: 0, width: mImageLayer.frame.width, height: mImageLayer.frame.height), eRect: CGRect(x: 0, y: 0, width: mContainer.frame.width, height: mContainer.frame.height), align: mAlign, meetOrSlice: a)
             disableAnimation()
-            mLayer.transform = trans
+            mImageLayer.frame.size.width *= trans[2]
+            mImageLayer.frame.size.height *= trans[3]
+            mImageLayer.position = CGPoint(x:trans[0], y: trans[1])
             commit()
      
         }
@@ -131,16 +152,15 @@ class ImageContentLayer: CALayer , ViewTarget {
     }
     func invalidateImage(_ i :CGImage){
         disableAnimation()
-        mLayer.contents = i
-        mLayer.frame = CGRect(x: 0, y: 0, width: i.width,  height: i.height  )
-        mLayer.position = CGPoint(x: 0, y: 0)
+        mImageLayer.contents = i
+        mImageLayer.frame = CGRect(x: 0, y: 0, width: i.width,  height: i.height  )
         commit()
         invalidateImageTransform()
     }
     
     func removeImage(){
         disableAnimation()
-        mLayer.contents = nil
+        mImageLayer.contents = nil
         commit()
     }
     func onLoadFailed(_ error:String){
