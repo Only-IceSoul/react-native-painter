@@ -94,8 +94,20 @@ The percentageValue property refers to the fact that the values will be multipli
   
 | Name | type | default |
 | --- | --- | --- |
-| translate | 0bject | 0 0 false |
-| scale | 0bject | 1 1 0 0 false |
-| rotate | 0bject | 0 0 0 false |
 | translateZ | Number (zIndex) | 0 |
+| transX | Number | 0 |
+| transY | Number | 0 |
+| transPercentageValue | Bool | false |
+| rot | Number | 0 |
+| rotOx | Number | 0 |
+| rotOy | Number | 0 |
+| rotPercentageValue | Bool | false |
+| sc | Number | 1 |
+| scX | Number | 1 |
+| scY | Number | 1 |
+| scO | Number | 0 |
+| scOx | Number | 0 |
+| scOy | Number | 0 |
+| scPercentageValue | Number | 0 |
+
 
