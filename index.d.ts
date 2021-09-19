@@ -36,18 +36,24 @@ interface CommonTransformProps {
     opacity?:number
     translateZ?:number
 
-    scale?:{ x:number,y:number , ox?:number ,oy?:number ,percentageValue?:boolean }
-    rotate?: {
-        a:number,
-        x?:number,
-        y?:number,
-        percentageValue?:boolean
-    }
-    translate?:{
-        x:number,
-        y:number,
-        percentageValue?:boolean
-    }
+    transX?:number
+    transY?:number
+    transPercentageValue?:boolean
+    
+    rot?:number
+    rotO?:number
+    rotOx?:number
+    rotOy?:number
+    rotPercentageValue?:boolean
+
+    sc?:number
+    scX?:number
+    scY?:number
+    scO?:number
+    scOx?:number
+    scOy?:number
+    scPercentageValue?:boolean
+
 }
 
 interface PreserveAspectRatioProps {

@@ -212,31 +212,31 @@ public class ImageView extends View implements PaintableInterface {
     }
 
     public void setPathTranslation(float x, float y, boolean percent) {
-        if(mTransform.mPathTranslationX != x || mTransform.mPathTranslationY != y || mTransform.mPathTranslationIsPercent != percent) {
-            mTransform.mPathTranslationX = x;
-            mTransform.mPathTranslationY = y;
-            mTransform.mPathTranslationIsPercent = percent;
+        if(mTransform.mTranslationX != x || mTransform.mTranslationY != y || mTransform.mTranslationIsPercent != percent) {
+            mTransform.mTranslationX = x;
+            mTransform.mTranslationY = y;
+            mTransform.mTranslationIsPercent = percent;
             invalidateTransform();
         }
     }
 
     public void setPathRotation(float a, float x, float y, boolean percent) {
-        if(mTransform.mPathRotation != a || mTransform.mPathRotationX != x || mTransform.mPathRotationY != y || mTransform.mPathRotationIsPercent != percent){
-            mTransform.mPathRotation = a;
-            mTransform.mPathRotationX = x;
-            mTransform.mPathRotationY = y;
-            mTransform.mPathRotationIsPercent = percent;
+        if(mTransform.mRotation != a || mTransform.mRotationOx != x || mTransform.mRotationOy != y || mTransform.mRotationIsPercent != percent){
+            mTransform.mRotation = a;
+            mTransform.mRotationOx = x;
+            mTransform.mRotationOy = y;
+            mTransform.mRotationIsPercent = percent;
             invalidateTransform();
         }
     }
 
     public void setPathScale(float x, float y,float ox,float oy,boolean percent) {
-        if(mTransform.mPathScaleX != x || mTransform.mPathScaleY != y || mTransform.mPathScaleOriginX != ox || mTransform.mPathScaleOriginY != oy || mTransform.mPathScaleIsPercent != percent){
-            mTransform.mPathScaleX = x;
-            mTransform.mPathScaleY = y;
-            mTransform.mPathScaleOriginX = ox;
-            mTransform.mPathScaleOriginY = oy;
-            mTransform.mPathScaleIsPercent = percent;
+        if(mTransform.mScaleX != x || mTransform.mScaleY != y || mTransform.mScaleOriginX != ox || mTransform.mScaleOriginY != oy || mTransform.mScaleIsPercent != percent){
+            mTransform.mScaleX = x;
+            mTransform.mScaleY = y;
+            mTransform.mScaleOriginX = ox;
+            mTransform.mScaleOriginY = oy;
+            mTransform.mScaleIsPercent = percent;
             invalidateTransform();
         }
     }
@@ -510,53 +510,53 @@ public class ImageView extends View implements PaintableInterface {
 
     protected void transform(TransformProps transform, PainterKit painter) {
         mPainter.matrix.reset();
-        if (transform.mPathRotation != 0f) {
+        if (transform.mRotation != 0f) {
             float rotX;
             float rotY;
-            if (transform.mPathRotationIsPercent) {
-                rotX = (transform.mPathRotationX * painter.bounds.width());
-                rotY = (transform.mPathRotationY * painter.bounds.height());
+            if (transform.mRotationIsPercent) {
+                rotX = (transform.mRotationOx * painter.bounds.width());
+                rotY = (transform.mRotationOy * painter.bounds.height());
             } else if (painter.isViewBoxEnabled) {
 
-                rotX = ModUtil.viewBoxToWidth(transform.mPathRotationX, painter.viewBox, painter.bounds.width());
-                rotY = ModUtil.viewBoxToHeight(transform.mPathRotationY, painter.viewBox, painter.bounds.height());
+                rotX = ModUtil.viewBoxToWidth(transform.mRotationOx, painter.viewBox, painter.bounds.width());
+                rotY = ModUtil.viewBoxToHeight(transform.mRotationOy, painter.viewBox, painter.bounds.height());
             } else {
-                rotX = toDip(transform.mPathRotationX);
-                rotY = toDip(transform.mPathRotationY);
+                rotX = toDip(transform.mRotationOx);
+                rotY = toDip(transform.mRotationOy);
             }
-            mPainter.matrix.postRotate(transform.mPathRotation,rotX,rotY);
+            mPainter.matrix.postRotate(transform.mRotation,rotX,rotY);
         }
 
-        if (transform.mPathScaleX != 1f || transform.mPathScaleY != 1f) {
+        if (transform.mScaleX != 1f || transform.mScaleY != 1f) {
             float oX;
             float oY;
-            if (transform.mPathScaleIsPercent) {
-                oX = (transform.mPathScaleOriginX * painter.bounds.width());
-                oY = (transform.mPathScaleOriginY * painter.bounds.height());
+            if (transform.mScaleIsPercent) {
+                oX = (transform.mScaleOriginX * painter.bounds.width());
+                oY = (transform.mScaleOriginY * painter.bounds.height());
             } else if (painter.isViewBoxEnabled) {
-                oX = ModUtil.viewBoxToWidth(transform.mPathScaleOriginX, painter.viewBox, painter.bounds.width());
-                oY = ModUtil.viewBoxToHeight(transform.mPathScaleOriginY, painter.viewBox, painter.bounds.height());
+                oX = ModUtil.viewBoxToWidth(transform.mScaleOriginX, painter.viewBox, painter.bounds.width());
+                oY = ModUtil.viewBoxToHeight(transform.mScaleOriginY, painter.viewBox, painter.bounds.height());
             } else {
-                oX = toDip(transform.mPathScaleOriginX);
-                oY = toDip(transform.mPathScaleOriginY);
+                oX = toDip(transform.mScaleOriginX);
+                oY = toDip(transform.mScaleOriginY);
             }
-            mPainter.matrix.postScale(transform.mPathScaleX,transform.mPathScaleY,oX,oY);
+            mPainter.matrix.postScale(transform.mScaleX,transform.mScaleY,oX,oY);
 
 
         }
 
-        if (transform.mPathTranslationX != 0f || transform.mPathTranslationY != 0f) {
+        if (transform.mTranslationX != 0f || transform.mTranslationY != 0f) {
             float transX;
             float transY;
-            if (transform.mPathTranslationIsPercent) {
-                transX = (transform.mPathTranslationX * painter.bounds.width());
-                transY = (transform.mPathTranslationY * painter.bounds.height());
+            if (transform.mTranslationIsPercent) {
+                transX = (transform.mTranslationX * painter.bounds.width());
+                transY = (transform.mTranslationY * painter.bounds.height());
             } else if (painter.isViewBoxEnabled) {
-                transX = (transform.mPathTranslationX / painter.viewBox.width()) * painter.bounds.width();
-                transY = (transform.mPathTranslationY / painter.viewBox.height()) * painter.bounds.height();
+                transX = (transform.mTranslationX / painter.viewBox.width()) * painter.bounds.width();
+                transY = (transform.mTranslationY / painter.viewBox.height()) * painter.bounds.height();
             } else {
-                transX = toDip(transform.mPathTranslationX);
-                transY = toDip(transform.mPathTranslationY);
+                transX = toDip(transform.mTranslationX);
+                transY = toDip(transform.mTranslationY);
             }
             mPainter.matrix.postTranslate(transX,transY);
         }

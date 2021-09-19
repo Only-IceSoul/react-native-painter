@@ -41,7 +41,7 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
     @Override
     public void setTransform(@NonNull PaintableView view, @Nullable  ReadableArray matrix) {
         super.setTransform(view, matrix);
-        view.invalidateTransform();
+        view.invalidateReactTransform();
     }
     @ReactProp(name = "translateZ",defaultFloat = 0f)
     public void setTranslateZ(PaintableView view ,float v) {
@@ -143,34 +143,71 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
     }
 
 
-    @ReactProp(name = "rotate")
-    public void setRotate(PaintableView view ,ReadableMap v) {
-        float a = (float) ModUtil.getDouble(v,"a",0.0);
-        float x = (float) ModUtil.getDouble(v,"x",0.0);
-        float y = (float) ModUtil.getDouble(v,"y",0.0);
-        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
+    //MARK: Transform
 
-        view.setPathRotation(a,x,y,per);
-
+    @ReactProp(name = "transX",defaultFloat = 0f)
+    public void setTransX(PaintableView view, float v) {
+        view.setTransX(v);
     }
-    @ReactProp(name = "scale")
-    public void setScale(PaintableView view , ReadableMap v) {
-        float x = (float) ModUtil.getDouble(v,"x",1.0);
-        float y = (float) ModUtil.getDouble(v,"y",1.0);
-        float ox = (float) ModUtil.getDouble(v,"ox",0.0);
-        float oy = (float) ModUtil.getDouble(v,"oy",0.0);
-        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
-        view.setPathScale(x,y,ox,oy,per);
-
+    @ReactProp(name = "transY",defaultFloat = 0f)
+    public void setTransY(PaintableView view, float v) {
+        view.setTransY(v);
     }
-    @ReactProp(name = "translate")
-    public void setTranslate(PaintableView view ,ReadableMap v) {
-        float dx = (float)ModUtil.getDouble(v,"x",0.0);
-        float dy = (float)ModUtil.getDouble(v,"y",0.0);
-        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
-        view.setPathTranslation(dx,dy,per);
-
+    @ReactProp(name = "transPercentageValue",defaultBoolean = false)
+    public void setTransPercentageValue(PaintableView view, boolean v) {
+        view.setTransPercentageValue(v);
     }
+    
+    @ReactProp(name = "rot",defaultFloat = 0f)
+    public void setRot(PaintableView view , float v) {
+        view.setRot(v);
+    }
+    @ReactProp(name = "rotO",defaultFloat = 0f)
+    public void setRotO(PaintableView view , float v) {
+        view.setRotO(v);
+    }
+    @ReactProp(name = "rotOx",defaultFloat = 0f)
+    public void setRotOx(PaintableView view , float v) {
+        view.setRotOx(v);
+    }
+    @ReactProp(name = "rotOy",defaultFloat = 0f)
+    public void setRotOy(PaintableView view , float v) {
+        view.setRotOy(v);
+    }
+    @ReactProp(name = "rotPercentageValue",defaultBoolean  = false)
+    public void setRotPercentageValue(PaintableView view , boolean v) {
+        view.setRotPercentageValue(v);
+    }
+
+    @ReactProp(name = "sc",defaultFloat = 1f)
+    public void setSc(PaintableView view, float v) {
+        view.setSc(v);
+    }
+    @ReactProp(name = "scX",defaultFloat = 1f)
+    public void setScX(PaintableView view, float v) {
+        view.setScX(v);
+    }
+    @ReactProp(name = "scY",defaultFloat = 1f)
+    public void setScY(PaintableView view, float v) {
+        view.setScY(v);
+    }
+    @ReactProp(name = "scO",defaultFloat = 0f)
+    public void setScO(PaintableView view, float v) {
+        view.setScO(v);
+    }
+    @ReactProp(name = "scOx",defaultFloat = 0f)
+    public void setScOx(PaintableView view, float v) {
+        view.setScOx(v);
+    }
+    @ReactProp(name = "scOy",defaultFloat = 0f)
+    public void setScOy(PaintableView view, float v) {
+        view.setScOy(v);
+    }
+    @ReactProp(name = "scPercentageValue",defaultBoolean = false)
+    public void setScPercentageValue(PaintableView view, boolean v) {
+        view.setScPercentageValue(v);
+    }
+   
 
 
 
