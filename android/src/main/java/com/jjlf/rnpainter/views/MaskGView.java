@@ -38,7 +38,7 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
         if(mTranslationZ != v) {
             mTranslationZ = v;
             setTranslationZ(mTranslationZ);
-            invalidateTransform();
+            invalidateReactTransform();
         }
     }
 
@@ -177,51 +177,51 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
     public void setTransX(float v) {
         if(mTransform.mTranslationX != v ){
             mTransform.mTranslationX = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setTransY(float v) {
         if(mTransform.mTranslationY != v ){
             mTransform.mTranslationY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setTransPercentageValue(boolean v) {
         if(mTransform.mTranslationIsPercent != v ){
             mTransform.mTranslationIsPercent = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
     public void setRot(float v) {
         if(mTransform.mRotation != v ){
             mTransform.mRotation = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotO(float v) {
         if(mTransform.mRotationOx != v || mTransform.mRotationOy != v ){
             mTransform.mRotationOx = v;
             mTransform.mRotationOy = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotOx(float v) {
         if(mTransform.mRotationOx != v ){
             mTransform.mRotationOx = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotOy(float v) {
         if(mTransform.mRotationOy != v ){
             mTransform.mRotationOy = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotPercentageValue(boolean v) {
         if(mTransform.mRotationIsPercent != v ){
             mTransform.mRotationIsPercent = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
@@ -229,45 +229,45 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
         if(mTransform.mScaleX != v || mTransform.mScaleY != v){
             mTransform.mScaleX = v;
             mTransform.mScaleY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScX(float v) {
         if(mTransform.mScaleX != v ){
             mTransform.mScaleX = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
     public void setScY(float v) {
         if(mTransform.mScaleY != v ){
             mTransform.mScaleY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScO(float v){
         if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
             mTransform.mScaleOriginX = v;
             mTransform.mScaleOriginY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScOx(float v) {
         if(mTransform.mScaleOriginX != v ){
             mTransform.mScaleOriginX = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScOy(float v) {
         if(mTransform.mScaleOriginY != v ){
             mTransform.mScaleOriginY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScPercentageValue(boolean v) {
         if(mTransform.mScaleIsPercent != v ){
             mTransform.mScaleIsPercent = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
@@ -302,7 +302,7 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
         }
     }
 
-    public void invalidateTransform(){
+    public void invalidateReactTransform(){
         //transform react style invalidate
         super.invalidate();
         if(getParent() instanceof MaskInterface){

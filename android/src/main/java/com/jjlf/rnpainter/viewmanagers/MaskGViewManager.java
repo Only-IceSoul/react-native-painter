@@ -1,7 +1,6 @@
 package com.jjlf.rnpainter.viewmanagers;
 
 import android.graphics.Color;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -150,7 +149,7 @@ public class MaskGViewManager extends ViewGroupManager<MaskGView> {
     @Override
     public void setTransform(@NonNull MaskGView view, @Nullable ReadableArray matrix) {
         super.setTransform(view, matrix);
-        view.invalidateTransform();
+        view.invalidateReactTransform();
     }
 
     //MARK: Transform

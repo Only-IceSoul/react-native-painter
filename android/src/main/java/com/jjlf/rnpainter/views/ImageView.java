@@ -165,6 +165,7 @@ public class ImageView extends View implements PaintableInterface {
         if(mTranslationZ != v && !mIsMaskChild) {
             mTranslationZ = v;
             setTranslationZ(mTranslationZ);
+             invalidateReactTransform();
         }
     }
 
@@ -211,35 +212,105 @@ public class ImageView extends View implements PaintableInterface {
         }
     }
 
-    public void setPathTranslation(float x, float y, boolean percent) {
-        if(mTransform.mTranslationX != x || mTransform.mTranslationY != y || mTransform.mTranslationIsPercent != percent) {
-            mTransform.mTranslationX = x;
-            mTransform.mTranslationY = y;
-            mTransform.mTranslationIsPercent = percent;
+    //MARK: Transform props
+
+    public void setTransX(float v) {
+        if(mTransform.mTranslationX != v ){
+            mTransform.mTranslationX = v;
+            invalidateTransform();
+        }
+    }
+    public void setTransY(float v) {
+        if(mTransform.mTranslationY != v ){
+            mTransform.mTranslationY = v;
+            invalidateTransform();
+        }
+    }
+    public void setTransPercentageValue(boolean v) {
+        if(mTransform.mTranslationIsPercent != v ){
+            mTransform.mTranslationIsPercent = v;
             invalidateTransform();
         }
     }
 
-    public void setPathRotation(float a, float x, float y, boolean percent) {
-        if(mTransform.mRotation != a || mTransform.mRotationOx != x || mTransform.mRotationOy != y || mTransform.mRotationIsPercent != percent){
-            mTransform.mRotation = a;
-            mTransform.mRotationOx = x;
-            mTransform.mRotationOy = y;
-            mTransform.mRotationIsPercent = percent;
+    public void setRot(float v) {
+        if(mTransform.mRotation != v ){
+            mTransform.mRotation = v;
+            invalidateTransform();
+        }
+    }
+    public void setRotO(float v) {
+        if(mTransform.mRotationOx != v || mTransform.mRotationOy != v ){
+            mTransform.mRotationOx = v;
+            mTransform.mRotationOy = v;
+            invalidateTransform();
+        }
+    }
+    public void setRotOx(float v) {
+        if(mTransform.mRotationOx != v ){
+            mTransform.mRotationOx = v;
+            invalidateTransform();
+        }
+    }
+    public void setRotOy(float v) {
+        if(mTransform.mRotationOy != v ){
+            mTransform.mRotationOy = v;
+            invalidateTransform();
+        }
+    }
+    public void setRotPercentageValue(boolean v) {
+        if(mTransform.mRotationIsPercent != v ){
+            mTransform.mRotationIsPercent = v;
             invalidateTransform();
         }
     }
 
-    public void setPathScale(float x, float y,float ox,float oy,boolean percent) {
-        if(mTransform.mScaleX != x || mTransform.mScaleY != y || mTransform.mScaleOriginX != ox || mTransform.mScaleOriginY != oy || mTransform.mScaleIsPercent != percent){
-            mTransform.mScaleX = x;
-            mTransform.mScaleY = y;
-            mTransform.mScaleOriginX = ox;
-            mTransform.mScaleOriginY = oy;
-            mTransform.mScaleIsPercent = percent;
+    public void setSc(float v){
+        if(mTransform.mScaleX != v || mTransform.mScaleY != v){
+            mTransform.mScaleX = v;
+            mTransform.mScaleY = v;
             invalidateTransform();
         }
     }
+    public void setScX(float v) {
+        if(mTransform.mScaleX != v ){
+            mTransform.mScaleX = v;
+            invalidateTransform();
+        }
+    }
+
+    public void setScY(float v) {
+        if(mTransform.mScaleY != v ){
+            mTransform.mScaleY = v;
+            invalidateTransform();
+        }
+    }
+    public void setScO(float v){
+        if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
+            mTransform.mScaleOriginX = v;
+            mTransform.mScaleOriginY = v;
+            invalidateTransform();
+        }
+    }
+    public void setScOx(float v) {
+        if(mTransform.mScaleOriginX != v ){
+            mTransform.mScaleOriginX = v;
+            invalidateTransform();
+        }
+    }
+    public void setScOy(float v) {
+        if(mTransform.mScaleOriginY != v ){
+            mTransform.mScaleOriginY = v;
+            invalidateTransform();
+        }
+    }
+    public void setScPercentageValue(boolean v) {
+        if(mTransform.mScaleIsPercent != v ){
+            mTransform.mScaleIsPercent = v;
+            invalidateTransform();
+        }
+    }
+
 
     //si es cliptobounds y slice al rect, si es clip false a la imagen, si clip y meet a la imagen.
     @SuppressLint("MissingSuperCall")
@@ -588,6 +659,22 @@ public class ImageView extends View implements PaintableInterface {
         if(!mIsMaskChild) {
             super.invalidate();
         } else {
+            if (getParent() instanceof MaskInterface) {
+                for (PaintableInterface c : ((MaskInterface) getParent()).getListeners()) {
+                    c.invalidateMaskCallback();
+                }
+            }else if (getParent() instanceof MaskGView) {
+                for (PaintableInterface c : ((MaskInterface) ((MaskGView) getParent()).getParent()).getListeners()) {
+                    c.invalidateMaskCallback();
+                }
+            }else{
+                Log.e("Painter","PaintableView invalidating mask failed ");
+            }
+        }
+    }
+
+    public void invalidateReactTransform(){
+        if(mIsMaskChild) {
             //transform react style invalidate
             super.invalidate();
             if (getParent() instanceof MaskInterface) {

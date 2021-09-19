@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Path;
 
-import com.jjlf.rnpainter.drawables.PathDrawable;
 import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.SVGPathParser;
 
