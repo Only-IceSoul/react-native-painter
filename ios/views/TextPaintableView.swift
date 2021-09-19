@@ -194,31 +194,74 @@ class TextPaintableView: PaintableView {
         mLayer.setShadowOffset(x, y, percent, v != nil)
     }
     
- 
-    @objc override func setRotate(_ v:[String:Any]?) {
-        let a = v?["a"] as? CGFloat ?? 0
-        let y = v?["y"] as? CGFloat ?? 0
-        let x = v?["x"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        mLayer.setRotation(a, x, y, percent)
-    }
-    
-    @objc override func setScale(_ v:[String:Any]?) {
-        let y = v?["y"] as? CGFloat ?? 1
-        let x = v?["x"] as? CGFloat ?? 1
-        let oy = v?["oy"] as? CGFloat ?? 0
-        let ox = v?["ox"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        mLayer.setScale(x, y, ox, oy, percent)
-    }
-    
-    @objc override func setTranslate(_ v:[String:Any]?) {
-        let y = v?["y"] as? CGFloat ?? 0
-        let x = v?["x"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        mLayer.setTranslation(x, y, percent)
-       
-    }
+    //MARK: Transform props
+
+    @objc override func setTransX(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setTransX(v: ev) 
+       }
+    @objc override func setTransY(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setTransY(v: ev)
+       }
+    @objc override func setTransPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        mLayer.setTransPercentageValue(v: b)
+       }
+
+    @objc override func setRot(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setRot(v: ev)
+       }
+    @objc override func setRotO(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setRotO(v: ev)
+       }
+    @objc override func setRotOx(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setRotOx(v: ev)
+       }
+    @objc override func setRotOy(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setRotOy(v: ev)
+       }
+    @objc override func setRotPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        mLayer.setRotPercentageValue(v: b)
+       }
+
+    @objc override func setSc(v:NSNumber?){
+        let ev = CGFloat(truncating: v ?? 1)
+        mLayer.setSc(v: ev)
+       }
+    @objc override func setScX(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 1)
+        mLayer.setScX(v: ev)
+       }
+
+    @objc override func setScY(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 1)
+        mLayer.setScY(v: ev)
+       }
+    @objc override func setScO(v:NSNumber?){
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setScO(v: ev)
+       }
+    @objc override func setScOx(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setScOx(v: ev)
+       }
+    @objc override func setScOy(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        mLayer.setScOy(v: ev)
+       }
+    @objc override func setScPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        mLayer.setScPercentageValue(v: b)
+       }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

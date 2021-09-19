@@ -195,30 +195,74 @@ public class PaintableView: UIView {
     }
     
  
-    @objc func setRotate(_ v:[String:Any]?) {
-        let a = v?["a"] as? CGFloat ?? 0
-        let y = v?["y"] as? CGFloat ?? 0
-        let x = v?["x"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        getLayer()?.setRotation(a, x, y, percent)
-    }
-    
-    @objc func setScale(_ v:[String:Any]?) {
-        let y = v?["y"] as? CGFloat ?? 1
-        let x = v?["x"] as? CGFloat ?? 1
-        let oy = v?["oy"] as? CGFloat ?? 0
-        let ox = v?["ox"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        getLayer()?.setScale(x, y, ox, oy, percent)
-    }
-    
-    @objc func setTranslate(_ v:[String:Any]?) {
-        let y = v?["y"] as? CGFloat ?? 0
-        let x = v?["x"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        getLayer()?.setTranslation(x, y, percent)
-       
-    }
+    //MARK: Transform props
+
+    @objc func setTransX(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setTransX(v: ev)
+       }
+    @objc func setTransY(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setTransY(v: ev)
+       }
+    @objc func setTransPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        getLayer()?.setTransPercentageValue(v: b)
+       }
+
+    @objc func setRot(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setRot(v: ev)
+       }
+    @objc func setRotO(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setRotO(v: ev)
+       }
+    @objc func setRotOx(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setRotOx(v: ev)
+       }
+    @objc func setRotOy(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setRotOy(v: ev)
+       }
+    @objc func setRotPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        getLayer()?.setRotPercentageValue(v: b)
+       }
+
+    @objc func setSc(v:NSNumber?){
+        let ev = CGFloat(truncating: v ?? 1)
+        getLayer()?.setSc(v: ev)
+       }
+    @objc func setScX(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 1)
+        getLayer()?.setScX(v: ev)
+       }
+
+    @objc func setScY(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 1)
+        getLayer()?.setScY(v: ev)
+       }
+    @objc func setScO(v:NSNumber?){
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setScO(v: ev)
+       }
+    @objc func setScOx(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setScOx(v: ev)
+       }
+    @objc func setScOy(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        getLayer()?.setScOy(v: ev)
+       }
+    @objc func setScPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        getLayer()?.setScPercentageValue(v: b)
+       }
     
     
   

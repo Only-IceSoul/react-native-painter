@@ -140,40 +140,105 @@ class ImageLayer: CALayer {
         }
     }
     
-    public func setTranslation(_ x:CGFloat,_ y:CGFloat,_ percent:Bool){
-        if mTransform.mTranslationX != x || mTransform.mTranslationY != y || mTransform.mTranslationIsPercent != percent {
-            mTransform.mTranslationX = x
-            mTransform.mTranslationY = y
-            mTransform.mTranslationIsPercent = percent
-            invalidateTransform()
-        }
-    
-    }
-    
+    //MARK: Transform props
 
-    public func setRotation(_ a:CGFloat,_ x:CGFloat,_ y:CGFloat,_ percent:Bool){
-        if mTransform.mRotation != a || mTransform.mRotationOriginX != x || mTransform.mRotationOriginY != y || mTransform.mRotationIsPercent != percent {
-            mTransform.mRotation = a
-            mTransform.mRotationOriginX = x
-            mTransform.mRotationOriginY = y
-            mTransform.mRotationIsPercent = percent
-            invalidateTransform()
+    public func setTransX(v:CGFloat) {
+            if(mTransform.mTranslationX != v ){
+                mTransform.mTranslationX = v;
+                invalidateTransform();
+            }
         }
-       
-    }
+        public func setTransY(v:CGFloat) {
+            if(mTransform.mTranslationY != v ){
+                mTransform.mTranslationY = v;
+                invalidateTransform();
+            }
+        }
+        public func setTransPercentageValue(v:Bool) {
+            if(mTransform.mTranslationIsPercent != v ){
+                mTransform.mTranslationIsPercent = v;
+                invalidateTransform();
+            }
+        }
+
+        public func setRot(v:CGFloat) {
+            if(mTransform.mRotation != v ){
+                mTransform.mRotation = v;
+                invalidateTransform();
+            }
+        }
+        public func setRotO(v:CGFloat) {
+            if(mTransform.mRotationOriginX != v || mTransform.mRotationOriginY != v ){
+                mTransform.mRotationOriginX = v;
+                mTransform.mRotationOriginY = v;
+                invalidateTransform();
+            }
+        }
+        public func setRotOx(v:CGFloat) {
+            if(mTransform.mRotationOriginX != v ){
+                mTransform.mRotationOriginX = v;
+                invalidateTransform();
+            }
+        }
+        public func setRotOy(v:CGFloat) {
+            if(mTransform.mRotationOriginY != v ){
+                mTransform.mRotationOriginY = v;
+                invalidateTransform();
+            }
+        }
+        public func setRotPercentageValue(v:Bool) {
+            if(mTransform.mRotationIsPercent != v ){
+                mTransform.mRotationIsPercent = v;
+                invalidateTransform();
+            }
+        }
+
+        public func setSc(v:CGFloat){
+            if(mTransform.mScaleX != v || mTransform.mScaleY != v){
+                mTransform.mScaleX = v;
+                mTransform.mScaleY = v;
+                invalidateTransform();
+            }
+        }
+        public func setScX(v:CGFloat) {
+            if(mTransform.mScaleX != v ){
+                mTransform.mScaleX = v;
+                invalidateTransform();
+            }
+        }
+
+        public func setScY(v:CGFloat) {
+            if(mTransform.mScaleY != v ){
+                mTransform.mScaleY = v;
+                invalidateTransform();
+            }
+        }
+        public func setScO(v:CGFloat){
+            if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
+                mTransform.mScaleOriginX = v;
+                mTransform.mScaleOriginY = v;
+                invalidateTransform();
+            }
+        }
+        public func setScOx(v:CGFloat) {
+            if(mTransform.mScaleOriginX != v ){
+                mTransform.mScaleOriginX = v;
+                invalidateTransform();
+            }
+        }
+        public func setScOy(v:CGFloat) {
+            if(mTransform.mScaleOriginY != v ){
+                mTransform.mScaleOriginY = v;
+                invalidateTransform();
+            }
+        }
+        public func setScPercentageValue(v:Bool) {
+            if(mTransform.mScaleIsPercent != v ){
+                mTransform.mScaleIsPercent = v;
+                invalidateTransform();
+            }
+        }
     
-    public func setScale(_ x:CGFloat,_ y:CGFloat,_ ox:CGFloat,_ oy:CGFloat,_ percent:Bool){
-        if  mTransform.mScaleY != x || mTransform.mScaleY != y  || mTransform.mScaleOriginX != ox || mTransform.mScaleOriginY != oy  ||  mTransform.mScaleIsPercent != percent {
-         
-            mTransform.mScaleX = x
-            mTransform.mScaleY = y
-            mTransform.mScaleOriginX = ox
-            mTransform.mScaleOriginY = oy
-            mTransform.mScaleIsPercent = percent
-            invalidateTransform()
-        }
-     
-    }
     
     //MARK: layer methods
     

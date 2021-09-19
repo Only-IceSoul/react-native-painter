@@ -208,49 +208,123 @@ public class MaskGPaintableView: PaintableView {
     }
     
  
-    @objc override func setRotate(_ v:[String:Any]?) {
-        let a = v?["a"] as? CGFloat ?? 0
-        let y = v?["y"] as? CGFloat ?? 0
-        let x = v?["x"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        if mTransform.mRotation != a || mTransform.mRotationOriginX != x || mTransform.mRotationOriginY != y || mTransform.mRotationIsPercent != percent {
-            mTransform.mRotation = a
-            mTransform.mRotationOriginX = x
-            mTransform.mRotationOriginY = y
-            mTransform.mRotationIsPercent = percent
-            invalidateTransform()
+    //MARK: Transform props
+
+    @objc override func setTransX(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mTranslationX != ev ){
+            mTransform.mTranslationX = ev;
+            invalidateTransform();
         }
-    }
+       }
+    @objc override func setTransY(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mTranslationY != ev ){
+            mTransform.mTranslationY = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setTransPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        if(mTransform.mTranslationIsPercent != b ){
+            mTransform.mTranslationIsPercent = b;
+            invalidateTransform();
+        }
+       }
+
+    @objc override func setRot(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mRotation != ev ){
+            mTransform.mRotation = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setRotO(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mRotationOriginX != ev || mTransform.mRotationOriginY != ev ){
+            mTransform.mRotationOriginX = ev;
+            mTransform.mRotationOriginY = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setRotOx(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mRotationOriginX != ev ){
+            mTransform.mRotationOriginX = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setRotOy(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mRotationOriginY != ev ){
+            mTransform.mRotationOriginY = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setRotPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        if(mTransform.mRotationIsPercent != b ){
+            mTransform.mRotationIsPercent = b
+            invalidateTransform();
+        }
+       }
+
+    @objc override func setSc(v:NSNumber?){
+        let ev = CGFloat(truncating: v ?? 1)
+        if(mTransform.mScaleX != ev || mTransform.mScaleY != ev){
+            mTransform.mScaleX = ev;
+            mTransform.mScaleY = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setScX(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 1)
+        if(mTransform.mScaleX != ev ){
+            mTransform.mScaleX = ev;
+            invalidateTransform();
+        }
+       }
+
+    @objc override func setScY(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 1)
+        if(mTransform.mScaleY != ev ){
+            mTransform.mScaleY = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setScO(v:NSNumber?){
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mScaleOriginX != ev || mTransform.mScaleOriginY != ev){
+            mTransform.mScaleOriginX = ev;
+            mTransform.mScaleOriginY = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setScOx(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mScaleOriginX != ev ){
+            mTransform.mScaleOriginX = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setScOy(v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 0)
+        if(mTransform.mScaleOriginY != ev ){
+            mTransform.mScaleOriginY = ev;
+            invalidateTransform();
+        }
+       }
+    @objc override func setScPercentageValue(v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        if(mTransform.mScaleIsPercent != b ){
+            mTransform.mScaleIsPercent = b
+            invalidateTransform();
+        }
+       }
     
-    @objc override func setScale(_ v:[String:Any]?) {
-        let y = v?["y"] as? CGFloat ?? 1
-        let x = v?["x"] as? CGFloat ?? 1
-        let oy = v?["oy"] as? CGFloat ?? 0
-        let ox = v?["ox"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        if  mTransform.mScaleY != x || mTransform.mScaleY != y  || mTransform.mScaleOriginX != ox || mTransform.mScaleOriginY != oy  ||  mTransform.mScaleIsPercent != percent {
-         
-            mTransform.mScaleX = x
-            mTransform.mScaleY = y
-            mTransform.mScaleOriginX = ox
-            mTransform.mScaleOriginY = oy
-            mTransform.mScaleIsPercent = percent
-            invalidateTransform()
-        }
-    }
-    
-    @objc override func setTranslate(_ v:[String:Any]?) {
-        let y = v?["y"] as? CGFloat ?? 0
-        let x = v?["x"] as? CGFloat ?? 0
-        let percent = v?["percentageValue"] as? Bool ?? false
-        if mTransform.mTranslationX != x || mTransform.mTranslationY != y || mTransform.mTranslationIsPercent != percent {
-            mTransform.mTranslationX = x
-            mTransform.mTranslationY = y
-            mTransform.mTranslationIsPercent = percent
-            invalidateTransform()
-        }
-       
-    }
     
     private var mLazyProps = false
     public func invalidateGroupProps(){
