@@ -265,29 +265,25 @@ public class LinearGradientView extends View implements PaintableInterface {
             int checkpoint = canvas.save();
             canvas.concat(mPainter.matrix);
             try{
-                if(mMask.isEmpty()){
-                    canvas.drawRect(mRect,mPainter.paint);
-                }else{
+
+                canvas.drawRect(mRect,mPainter.paint);
+                if(!mMask.isEmpty()){
                     WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
                     if(maskView != null && maskView.get() != null){
-                        canvas.drawRect(mRect,mPainter.paint);
-                        mPainter.paintMask.setXfermode(mPainter.dstIn);
-                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                        maskView.get().render(canvas);
-                        canvas.restore();
-
-                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
+                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 && canvas.isHardwareAccelerated()){
                             mPainter.paintMask.setXfermode(mPainter.dstOut);
-                            int main = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                             canvas.drawColor(Color.BLACK);
                             mPainter.paintMask.setXfermode(mPainter.dstOut);
                             int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                             maskView.get().render(canvas);
                             canvas.restoreToCount(clip);
-                            canvas.restoreToCount(main);
+                        }else{
+                            mPainter.paintMask.setXfermode(mPainter.dstIn);
+                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            maskView.get().render(canvas);
                         }
-                    }else{
-                        canvas.drawRect(mRect,mPainter.paint);
+                        canvas.restore();
                     }
                 }
             } finally {

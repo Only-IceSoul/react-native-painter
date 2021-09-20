@@ -178,34 +178,29 @@ public class TextView extends PaintableView {
             int checkpoint = canvas.save();
             canvas.concat(mPainter.matrix);
             try{
-                if(mProps.getMask().isEmpty()){
-                    if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
-                    if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
-                }else{
-                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
-                    if(maskView != null && maskView.get() != null){
-                        if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
-                        if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
-                        mPainter.paintMask.setXfermode(mPainter.dstIn);
-                        canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                        maskView.get().render(canvas);
-                        canvas.restore();
 
-                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
+                if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
+                if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
+                if(!mProps.mMask.isEmpty()){
+                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.mMask);
+                    if(maskView != null && maskView.get() != null){
+                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 && canvas.isHardwareAccelerated()){
                             mPainter.paintMask.setXfermode(mPainter.dstOut);
-                            int main = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                             canvas.drawColor(Color.BLACK);
                             mPainter.paintMask.setXfermode(mPainter.dstOut);
                             int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                             maskView.get().render(canvas);
                             canvas.restoreToCount(clip);
-                            canvas.restoreToCount(main);
+                        }else{
+                            mPainter.paintMask.setXfermode(mPainter.dstIn);
+                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                            maskView.get().render(canvas);
                         }
-                    }else{
-                        if(fill()) canvas.drawText(text,px,py, mPainter.textPaint);
-                        if(stroke()) canvas.drawText(text,px,py,mPainter.textPaint2);
+                        canvas.restore();
                     }
                 }
+
             } finally {
                 canvas.restoreToCount(checkpoint);
             }

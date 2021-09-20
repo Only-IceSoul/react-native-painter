@@ -329,7 +329,7 @@ public class ImageView extends View implements PaintableInterface {
                 if(!mMask.isEmpty()){
                     WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
                     if(maskView != null && maskView.get() != null){
-                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.M && canvas.isHardwareAccelerated()){
+                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 && canvas.isHardwareAccelerated()){
                             mPainter.paintMask.setXfermode(mPainter.dstOut);
                             canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
                             canvas.drawColor(Color.BLACK);
