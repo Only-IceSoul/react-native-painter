@@ -12,6 +12,7 @@ const TextView = requireNativeComponent("TextView",null);
 const LineView = requireNativeComponent("LineView",null);
 const GViewS = requireNativeComponent("GViewS",null);
 const GView = requireNativeComponent("GView",null);
+const GViewN = requireNativeComponent("GViewNone",null);
 const PathView = requireNativeComponent("PathView",null);
 const EllipseView = requireNativeComponent("EllipseView",null);
 const LinearGradientView = requireNativeComponent("JJPainterLinearGradientView",null);
@@ -34,6 +35,16 @@ export class GS extends React.PureComponent {
         const {style,...others} = this.props
         return Platform.OS === 'android' ?
         <GViewS {...others} style={[{transform: style?.transform }] } />
+        
+         : <GView {...others} style={[{transform:style?.transform},StyleSheet.absoluteFillObject]} />
+        
+    } 
+}
+export class GN extends React.PureComponent {
+    render(){
+        const {style,...others} = this.props
+        return Platform.OS === 'android' ?
+        <GViewN {...others} style={[{transform: style?.transform }] } />
         
          : <GView {...others} style={[{transform:style?.transform},StyleSheet.absoluteFillObject]} />
         
@@ -158,7 +169,9 @@ export class Image extends React.PureComponent {
 
 const PainterSoftware = requireNativeComponent("PainterS",null);
 const PainterHarwdare = requireNativeComponent("Painter",null);
+const PainterNone = requireNativeComponent("PainterN",null);
 export const PainterS = Platform.OS === 'android' ? PainterSoftware : PainterHarwdare
 export const Painter = PainterHarwdare
+export const PainterN = Platform.OS === 'android' ? PainterNone : PainterHarwdare
 export const Color = ExtractColor
 export const ColorWorklet = ExtractColorWorklet

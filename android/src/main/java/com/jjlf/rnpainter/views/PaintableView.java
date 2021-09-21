@@ -21,6 +21,7 @@ import com.jjlf.rnpainter.utils.SVGViewBox;
 import com.jjlf.rnpainter.utils.TransformProps;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class PaintableView extends View implements PaintableInterface {
@@ -226,51 +227,51 @@ public class PaintableView extends View implements PaintableInterface {
     public void setTransX(float v) {
         if(mTransform.mTranslationX != v ){
             mTransform.mTranslationX = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setTransY(float v) {
         if(mTransform.mTranslationY != v ){
             mTransform.mTranslationY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setTransPercentageValue(boolean v) {
         if(mTransform.mTranslationIsPercent != v ){
             mTransform.mTranslationIsPercent = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
     public void setRot(float v) {
         if(mTransform.mRotation != v ){
             mTransform.mRotation = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotO(float v) {
         if(mTransform.mRotationOx != v || mTransform.mRotationOy != v ){
             mTransform.mRotationOx = v;
             mTransform.mRotationOy = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotOx(float v) {
         if(mTransform.mRotationOx != v ){
             mTransform.mRotationOx = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotOy(float v) {
         if(mTransform.mRotationOy != v ){
             mTransform.mRotationOy = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setRotPercentageValue(boolean v) {
         if(mTransform.mRotationIsPercent != v ){
             mTransform.mRotationIsPercent = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
@@ -278,45 +279,45 @@ public class PaintableView extends View implements PaintableInterface {
         if(mTransform.mScaleX != v || mTransform.mScaleY != v){
             mTransform.mScaleX = v;
             mTransform.mScaleY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScX(float v) {
         if(mTransform.mScaleX != v ){
             mTransform.mScaleX = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
     public void setScY(float v) {
         if(mTransform.mScaleY != v ){
             mTransform.mScaleY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScO(float v){
         if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
             mTransform.mScaleOriginX = v;
             mTransform.mScaleOriginY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScOx(float v) {
         if(mTransform.mScaleOriginX != v ){
             mTransform.mScaleOriginX = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScOy(float v) {
         if(mTransform.mScaleOriginY != v ){
             mTransform.mScaleOriginY = v;
-            invalidateTransform();
+            invalidate();
         }
     }
     public void setScPercentageValue(boolean v) {
         if(mTransform.mScaleIsPercent != v ){
             mTransform.mScaleIsPercent = v;
-            invalidateTransform();
+            invalidate();
         }
     }
 
@@ -325,6 +326,7 @@ public class PaintableView extends View implements PaintableInterface {
     @SuppressLint("MissingSuperCall")
     @Override
     public void draw(Canvas canvas) {
+//        Log.e("ICESOUL"," is ha " + canvas.isHardwareAccelerated() +  " type: " + getLayerType() );
         if(mPainter != null) {
             setupPath(mPainter);
             if (!mIgnoreVbTransform && mPainter.viewBox.width() > 0f && mPainter.viewBox.height() > 0f) transformToViewBox(mPainter);
@@ -603,31 +605,29 @@ public class PaintableView extends View implements PaintableInterface {
 
     @Override
     public void invalidate() {
-        if(!mIsMaskChild) {
-            super.invalidate();
-        } else{
-            invalidateMaskListeners();
-        }
-
-    }
-
-    public void invalidateTransform(){
-        if(!mIsMaskChild) {
-            super.invalidate();
-        } else {
+        super.invalidate();
+        if(mIsMaskChild) {
             invalidateMaskListeners();
         }
     }
+    
 
     public void invalidateMaskListeners(){
         if (getParent() instanceof MaskInterface) {
-            for (PaintableInterface c : ((MaskInterface) getParent()).getListeners()) {
-                c.invalidateMaskCallback();
+            ArrayList<PaintableInterface> listener = ((MaskInterface) getParent()).getListeners();
+            if(listener != null){
+                for (PaintableInterface c : listener ) {
+                    c.invalidateMaskCallback();
+                }
             }
         }else if (getParent() instanceof MaskGView) {
-            for (PaintableInterface c : ((MaskInterface) ((MaskGView) getParent()).getParent()).getListeners()) {
-                c.invalidateMaskCallback();
+            ArrayList<PaintableInterface> listener = ((MaskInterface) ((MaskGView) getParent()).getParent()).getListeners();
+            if(listener != null){
+                for (PaintableInterface c : listener) {
+                    c.invalidateMaskCallback();
+                }
             }
+
         }else{
             Log.e("Painter","PaintableView invalidating mask failed ");
         }

@@ -2,7 +2,10 @@ package com.jjlf.rnpainter.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
+import android.os.Build;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,33 +19,63 @@ import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.TransformProps;
 
-import java.util.ArrayList;
+import java.lang.ref.WeakReference;
 import java.util.Objects;
 
-public class MaskGView extends ViewGroup implements PaintableInterface {
+public class GViewNone extends ViewGroup implements PaintableInterface  {
 
 
     CommonProps mProps = new CommonProps();
     TransformProps mTransform = new TransformProps();
-    private final Matrix mMatrix = new Matrix();
+
     private PainterKit mPainter;
 
-    public MaskGView(Context context){
+    public GViewNone(Context context){
         super(context);
         setClipChildren(false);
-        //new
-        setLayerType(View.LAYER_TYPE_HARDWARE,null);
+
     }
 
+    //new
+    public void setMask(String v) {
+        if(!Objects.equals(mProps.mMask, v)) {
+            mProps.mOldMask = mProps.mMask;
+            mProps.mMask = v;
+            invalidateMask();
+        }
+    }
+
+    private boolean mLazySetupMask = false;
+    private void setupMaskListener(){
+        if(! mProps.mOldMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get( mProps.mOldMask);
+            if(m != null && m.get() != null){
+                m.get().removeListener(this);
+            }
+        }
+        if(!mProps.mMask.isEmpty()){
+            WeakReference<MaskInterface> m = mPainter.maskViews.get(mProps.mMask);
+            if(m != null && m.get() != null){
+                m.get().addListener(this);
+            }
+        }
+    }
+
+    public void invalidateMask(){
+        if(mPainter != null){
+            setupMaskListener();
+            invalidateTransform();
+        }else{
+            mLazySetupMask = true;
+        }
+    }
     protected float mTranslationZ = 0f;
     public void setTranslateZ(float v) {
         if(mTranslationZ != v) {
             mTranslationZ = v;
             setTranslationZ(mTranslationZ);
-            invalidateReactTransform();
         }
     }
-
     public void setOpacity(float v, boolean status) {
         mProps.mOpacityStatus = status;
         if(mProps.mOpacity != v) {
@@ -178,51 +211,51 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
     public void setTransX(float v) {
         if(mTransform.mTranslationX != v ){
             mTransform.mTranslationX = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setTransY(float v) {
         if(mTransform.mTranslationY != v ){
             mTransform.mTranslationY = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setTransPercentageValue(boolean v) {
         if(mTransform.mTranslationIsPercent != v ){
             mTransform.mTranslationIsPercent = v;
-            invalidate();
+            invalidateTransform();
         }
     }
 
     public void setRot(float v) {
         if(mTransform.mRotation != v ){
             mTransform.mRotation = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setRotO(float v) {
         if(mTransform.mRotationOx != v || mTransform.mRotationOy != v ){
             mTransform.mRotationOx = v;
             mTransform.mRotationOy = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setRotOx(float v) {
         if(mTransform.mRotationOx != v ){
             mTransform.mRotationOx = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setRotOy(float v) {
         if(mTransform.mRotationOy != v ){
             mTransform.mRotationOy = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setRotPercentageValue(boolean v) {
         if(mTransform.mRotationIsPercent != v ){
             mTransform.mRotationIsPercent = v;
-            invalidate();
+            invalidateTransform();
         }
     }
 
@@ -230,55 +263,51 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
         if(mTransform.mScaleX != v || mTransform.mScaleY != v){
             mTransform.mScaleX = v;
             mTransform.mScaleY = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setScX(float v) {
         if(mTransform.mScaleX != v ){
             mTransform.mScaleX = v;
-            invalidate();
+            invalidateTransform();
         }
     }
 
     public void setScY(float v) {
         if(mTransform.mScaleY != v ){
             mTransform.mScaleY = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setScO(float v){
         if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
             mTransform.mScaleOriginX = v;
             mTransform.mScaleOriginY = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setScOx(float v) {
         if(mTransform.mScaleOriginX != v ){
             mTransform.mScaleOriginX = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setScOy(float v) {
         if(mTransform.mScaleOriginY != v ){
             mTransform.mScaleOriginY = v;
-            invalidate();
+            invalidateTransform();
         }
     }
     public void setScPercentageValue(boolean v) {
         if(mTransform.mScaleIsPercent != v ){
             mTransform.mScaleIsPercent = v;
-            invalidate();
+            invalidateTransform();
         }
     }
 
+
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        setupMatrix(mTransform, mPainter);
-
-        int checkpoint = canvas.save();
-        canvas.concat(mMatrix);
-        try{
             for (int i = 0; i < getChildCount(); i++) {
                 final View child = getChildAt(i);
                 if(child instanceof PaintableInterface){
@@ -287,36 +316,42 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
                     c.setPainterKit(mPainter);
                 }
             }
+        setupMatrix(mTransform, mPainter);
+
+        int checkpoint = canvas.save();
+        canvas.concat(mMatrix);
+        try{
+            canvas.drawColor(Color.TRANSPARENT);
+            canvas.saveLayer(0f,0f,getWidth(),getHeight(),null);
             super.dispatchDraw(canvas);
+            if(!mProps.getMask().isEmpty()) {
+                WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mProps.getMask());
+                if(maskView != null && maskView.get() != null) {
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1) {
+                        mPainter.paintMask.setXfermode(mPainter.dstOut);
+                        canvas.saveLayer(0f, 0f, getWidth(), getHeight(), mPainter.paintMask);
+                        canvas.drawColor(Color.BLACK);
+                        mPainter.paintMask.setXfermode(mPainter.dstOut);
+                        int clip = canvas.saveLayer(0f, 0f, getWidth(), getHeight(), mPainter.paintMask);
+                        maskView.get().render(canvas);
+                        canvas.restoreToCount(clip);
+                    } else {
+                        mPainter.paintMask.setXfermode(mPainter.dstIn);
+                        canvas.saveLayer(0f, 0f, getWidth(), getHeight(), mPainter.paintMask);
+                        maskView.get().render(canvas);
+                    }
+                    canvas.restore();
+                }
+            }
+            canvas.restore();
         } finally {
             canvas.restoreToCount(checkpoint);
         }
+
+
     }
 
-
-    @Override
-    public void invalidate() {
-        super.invalidate();
-        invalidateMaskListeners();
-    }
-
-    public void invalidateReactTransform(){
-        //transform react style invalidate
-        super.invalidate();
-        invalidateMaskListeners();
-    }
-
-    private void invalidateMaskListeners(){
-        if(getParent() instanceof MaskInterface){
-            ArrayList<PaintableInterface>  listener  =  ((MaskInterface)getParent()).getListeners();
-            if(listener != null) {
-                for (PaintableInterface c : listener) {
-                    c.invalidateMaskCallback();
-                }
-            }
-        }
-    }
-
+    private final Matrix mMatrix = new Matrix();
     protected void setupMatrix(TransformProps transform, PainterKit painter) {
         mMatrix.reset();
         if (transform.mRotation != 0f) {
@@ -376,30 +411,49 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
     }
 
     @Override
-    public void onViewAdded(View child) {
-        if(child instanceof MaskInterface || child instanceof PainterView || child instanceof PainterViewHardware
-                || child instanceof GView || child instanceof GViewHardware || child instanceof MaskGView){
-            throw new IllegalArgumentException("MaskG cannot have ViewGroup, G, Painter, Mask, MaskG");
+    public void invalidate() {
+        for (int i = 0; i < getChildCount(); i++) {
+            final View child = getChildAt(i);
+            if (child instanceof PaintableInterface) {
+                PaintableInterface c = (PaintableInterface) child;
+                c.setProps(mProps);
+                c.setPainterKit(mPainter);
+            }
+            child.invalidate();
         }
-        if(child instanceof PaintableInterface){
-            ((PaintableInterface) child).setIsMaskChild(true);
-        }else{
-            throw new IllegalArgumentException("MaskG : foreignObject cannot be child ");
-        }
-        super.onViewAdded(child);
     }
 
+    public void invalidateTransform(){
+        super.invalidate();
+    }
+
+
     @Override
-    public void invalidateMaskCallback() { }
+    public void invalidateMaskCallback() {
+        invalidateTransform();
+    }
     @Override
-    public void setIsMaskChild(boolean v) { }
+    public void setIsMaskChild(boolean v) {
+    }
     @Override
-    public void setProps(CommonProps props) { }
+    public void setProps(CommonProps props) {
+        if(props != null){
+            mProps.set(props);
+        }
+    }
+
 
     @Override
     public void setPainterKit(PainterKit painter) {
         mPainter = painter;
+        if (mLazySetupMask){
+            mLazySetupMask= false;
+            setupMaskListener();
+        }
     }
+
+
+
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
         for (int i = 0; i < getChildCount(); i++) {
@@ -407,4 +461,12 @@ public class MaskGView extends ViewGroup implements PaintableInterface {
         }
     }
 
+    @Override
+    public void onViewAdded(View child) {
+        super.onViewAdded(child);
+        if(child instanceof PainterView || child instanceof PainterViewHardware
+                || child instanceof MaskGView || child instanceof MaskView){
+            throw new IllegalArgumentException("G cannot have MaskG,Painter,Mask.");
+        }
+    }
 }
