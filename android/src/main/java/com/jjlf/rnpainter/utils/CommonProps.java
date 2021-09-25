@@ -6,8 +6,8 @@ import android.graphics.Path;
 
 public class CommonProps {
 
-    public float mOpacity = 1f;
-    public boolean mOpacityStatus = false;
+
+
     public String mMask = "";
     public String mOldMask = "";
 
@@ -42,11 +42,11 @@ public class CommonProps {
     public float mShadowOffsetX = 2f;
     public float mShadowOffsetY = 2f;
     public boolean mShadowOffsetIsPercent = false;
-    public boolean mShadowOffsetStatus = false;
+    public boolean mShadowOffsetIsPercentStatus = false;
+    public boolean mShadowOffsetXStatus = false;
+    public boolean mShadowOffsetYStatus = false;
 
-    public float getOpacity(){
-        return ModUtil.clamp(mOpacity);
-    }
+
     public String getMask(){
         return mMask;
     }
@@ -105,7 +105,6 @@ public class CommonProps {
 
     public void set(CommonProps props){
 
-        if(!mOpacityStatus) mOpacity = props.mOpacity;
 
         if(!mFillColorStatus) mFillColor = props.mFillColor;
         if(!mFillOpacityStatus) mFillOpacity = props.mFillOpacity;
@@ -123,11 +122,11 @@ public class CommonProps {
         if(!mShadowColorStatus) mShadowColor = props.mShadowColor;
         if(!mShadowOpacityStatus) mShadowOpacity = props.mShadowOpacity;
         if(!mShadowRadiusStatus) mShadowRadius = props.mShadowRadius;
-        if(!mShadowOffsetStatus) {
-            mShadowOffsetX = props.mShadowOffsetX;
-            mShadowOffsetY = props.mShadowOffsetY;
-            mShadowOffsetIsPercent = props.mShadowOffsetIsPercent;
-        }
+        if(!mShadowOffsetXStatus)   mShadowOffsetX = props.mShadowOffsetX;
+        if(!mShadowOffsetYStatus)   mShadowOffsetY = props.mShadowOffsetY;
+        if(!mShadowOffsetIsPercentStatus)  mShadowOffsetIsPercent = props.mShadowOffsetIsPercent;
+
+
     }
 
 

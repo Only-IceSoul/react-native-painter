@@ -17,13 +17,13 @@ import com.jjlf.rnpainter.shadownodes.PaintableShadowNode;
 import com.jjlf.rnpainter.shadownodes.PainterShadowNode;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.views.GViewHardware;
-import com.jjlf.rnpainter.views.PaintableView;
+import com.jjlf.rnpainter.views.GViewHardware;
 
 
 public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
 
     @Override
-    public String getName() { return "GView"; }
+    public String getName() { return "GViewH"; }
 
     @Override
     protected GViewHardware createViewInstance(@NonNull ThemedReactContext reactContext) {
@@ -55,10 +55,7 @@ public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
         view.setMask(v == null ? "" : v);
     }
 
-    @ReactProp(name = "opacity")
-    public void setOpacity(GViewHardware view ,Dynamic v) {
-        view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
-    }
+
 
 
     @ReactProp(name = "fill")
@@ -140,15 +137,23 @@ public class GViewManagerHardware extends ViewGroupManager<GViewHardware> {
 
     }
 
+    //shadow
     @ReactProp(name = "shadowOffset")
-    public void setShadowOffset(GViewHardware view , ReadableMap v) {
-        float x = (float) ModUtil.getDouble(v,"x",2.0);
-        float y = (float)ModUtil.getDouble(v,"y",2.0);
-        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
-        view.setShadowOffset(x,y,per,v != null);
-
+    public void setShadowOffset(GViewHardware view , Dynamic v) {
+        view.setShadowOffset(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
     }
-
+    @ReactProp(name = "shadowOffsetX")
+    public void setShadowOffsetX(GViewHardware view , Dynamic v) {
+        view.setShadowOffsetX(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowOffsetY")
+    public void setShadowOffsetY(GViewHardware view , Dynamic v) {
+        view.setShadowOffsetY(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowPercentageValue")
+    public void setShadowPercentageValue(GViewHardware view , Dynamic v) {
+        view.setShadowPercentageValue(ModUtil.getBoolean(v,false),ModUtil.isNotNull(v));
+    }
 
 
     //MARK: Transform

@@ -39,7 +39,7 @@ public class MaskView extends RelativeLayout implements PaintableInterface, Mask
     public MaskView(Context context){
         super(context);
         setClipChildren(false);
-        setLayerType(View.LAYER_TYPE_HARDWARE,null);
+//        setLayerType(View.LAYER_TYPE_HARDWARE,null);
     }
 
     //new

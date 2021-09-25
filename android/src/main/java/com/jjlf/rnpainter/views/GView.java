@@ -15,6 +15,7 @@ import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
+import com.jjlf.rnpainter.utils.SVGViewBox;
 import com.jjlf.rnpainter.utils.TransformProps;
 
 import java.lang.ref.WeakReference;
@@ -76,13 +77,6 @@ public class GView extends ViewGroup implements PaintableInterface  {
         }
     }
 
-    public void setOpacity(float v, boolean status) {
-        mProps.mOpacityStatus = status;
-        if(mProps.mOpacity != v) {
-            mProps.mOpacity = v;
-            invalidate();
-        }
-    }
 
     public void setFill(int v, boolean status) {
         mProps.mFillColorStatus = status;
@@ -180,16 +174,6 @@ public class GView extends ViewGroup implements PaintableInterface  {
         }
     }
 
-    public void setShadowOffset(float x, float y, boolean percent, boolean status) {
-        mProps.mShadowOffsetStatus = status;
-        if(mProps.mShadowOffsetX != x || mProps.mShadowOffsetY != y || mProps.mShadowOffsetIsPercent != percent){
-            mProps.mShadowOffsetX = x;
-            mProps.mShadowOffsetY = y;
-            mProps.mShadowOffsetIsPercent = percent;
-            invalidate();
-        }
-
-    }
 
     public void setShadowOpacity(float v, boolean status) {
         mProps.mShadowOpacityStatus = status;
@@ -203,6 +187,36 @@ public class GView extends ViewGroup implements PaintableInterface  {
         mProps.mShadowRadiusStatus = status;
         if(mProps.mShadowRadius != v){
             mProps.mShadowRadius = v;
+            invalidate();
+        }
+    }
+
+    public void setShadowOffset(float v,boolean status) {
+        mProps.mShadowOffsetXStatus = status;
+        if(mProps.mShadowOffsetX != v || mProps.mShadowOffsetY != v ){
+            mProps.mShadowOffsetX = v;
+            mProps.mShadowOffsetY = v;
+            invalidate();
+        }
+    }
+    public void setShadowOffsetX(float v,boolean status) {
+        mProps.mShadowOffsetXStatus = status;
+        if(mProps.mShadowOffsetX != v){
+            mProps.mShadowOffsetX = v;
+            invalidate();
+        }
+    }
+    public void setShadowOffsetY(float v,boolean status) {
+        mProps.mShadowOffsetYStatus = status;
+        if(mProps.mShadowOffsetY != v ){
+            mProps.mShadowOffsetY = v;
+            invalidate();
+        }
+    }
+    public void setShadowPercentageValue(boolean v,boolean status) {
+        mProps.mShadowOffsetIsPercentStatus = status;
+        if(mProps.mShadowOffsetIsPercent != v ){
+            mProps.mShadowOffsetIsPercent = v;
             invalidate();
         }
     }
@@ -311,6 +325,7 @@ public class GView extends ViewGroup implements PaintableInterface  {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
+
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
             if(child instanceof PaintableInterface){
@@ -319,7 +334,11 @@ public class GView extends ViewGroup implements PaintableInterface  {
                 c.setPainterKit(mPainter);
             }
         }
-        setupMatrix(mTransform, mPainter);
+
+        viewBoxTransform();
+
+        transform();
+
         int checkpoint = canvas.save();
         canvas.concat(mMatrix);
         try{
@@ -340,63 +359,72 @@ public class GView extends ViewGroup implements PaintableInterface  {
         }
 
     }
-
-
+    protected void viewBoxTransform(){
+        if (validateViewBox()){
+            mPainter.rectPath.set(mPainter.viewBoxDensity);
+            SVGViewBox.transform(mPainter.viewBox, mPainter.bounds, mPainter.align, mPainter.aspect, getResources().getDisplayMetrics().density,mPainter.matrix);
+            mPainter.matrix.mapRect(mPainter.rectPath);
+        }else{
+            mPainter.rectPath.set(mPainter.bounds);
+        }
+    }
     private final Matrix mMatrix = new Matrix();
-    protected void setupMatrix(TransformProps transform, PainterKit painter) {
+    protected void transform() {
         mMatrix.reset();
-        if (transform.mRotation != 0f) {
+        if (mTransform.mRotation != 0f) {
             float rotX;
             float rotY;
-            if (transform.mRotationIsPercent) {
-                rotX = (transform.mRotationOx * painter.bounds.width());
-                rotY = (transform.mRotationOy * painter.bounds.height());
-            } else if (painter.isViewBoxEnabled) {
-
-                rotX = ModUtil.viewBoxToWidth(transform.mRotationOx, painter.viewBox, painter.bounds.width());
-                rotY = ModUtil.viewBoxToHeight(transform.mRotationOy, painter.viewBox, painter.bounds.height());
+            if (mTransform.mRotationIsPercent) {
+                rotX = (mTransform.mRotationOx * mPainter.bounds.width());
+                rotY = (mTransform.mRotationOy * mPainter.bounds.height());
+            } else if (validateViewBox()) {
+                rotX =  mPainter.rectPath.left +  ModUtil.viewBoxToWidth(mTransform.mRotationOx, mPainter.viewBox,mPainter.rectPath.width());
+                rotY =  mPainter.rectPath.top + ModUtil.viewBoxToHeight(mTransform.mRotationOy, mPainter.viewBox, mPainter.rectPath.height());
             } else {
-                rotX = toDip(transform.mRotationOx);
-                rotY = toDip(transform.mRotationOy);
+                rotX = toDip(mTransform.mRotationOx);
+                rotY = toDip(mTransform.mRotationOy);
             }
-            mMatrix.postRotate(transform.mRotation,rotX,rotY);
+            mMatrix.postRotate(mTransform.mRotation,rotX,rotY);
         }
 
-        if (transform.mScaleX != 1f || transform.mScaleY != 1f) {
+        if (mTransform.mScaleX != 1f || mTransform.mScaleY != 1f) {
             float oX;
             float oY;
-            if (transform.mScaleIsPercent) {
-                oX = (transform.mScaleOriginX * painter.bounds.width());
-                oY = (transform.mScaleOriginY * painter.bounds.height());
-            } else if (painter.isViewBoxEnabled) {
-                oX = ModUtil.viewBoxToWidth(transform.mScaleOriginX, painter.viewBox, painter.bounds.width());
-                oY = ModUtil.viewBoxToHeight(transform.mScaleOriginY, painter.viewBox, painter.bounds.height());
+            if (mTransform.mScaleIsPercent) {
+                oX = (mTransform.mScaleOriginX * mPainter.bounds.width());
+                oY = (mTransform.mScaleOriginY * mPainter.bounds.height());
+            } else if (validateViewBox()) {
+                oX =  mPainter.rectPath.left +  ModUtil.viewBoxToWidth(mTransform.mScaleOriginX, mPainter.viewBox,mPainter.rectPath.width()) ;
+                oY =  mPainter.rectPath.top +   ModUtil.viewBoxToHeight(mTransform.mScaleOriginY, mPainter.viewBox,mPainter.rectPath.height()) ;
             } else {
-                oX = toDip(transform.mScaleOriginX);
-                oY = toDip(transform.mScaleOriginY);
+                oX = toDip(mTransform.mScaleOriginX);
+                oY = toDip(mTransform.mScaleOriginY);
             }
-            mMatrix.postScale(transform.mScaleX,transform.mScaleY,oX,oY);
 
-
+            mMatrix.postScale(mTransform.mScaleX,mTransform.mScaleY,oX,oY);
         }
 
-        if (transform.mTranslationX != 0f || transform.mTranslationY != 0f) {
+        if (mTransform.mTranslationX != 0f || mTransform.mTranslationY != 0f) {
             float transX;
             float transY;
-            if (transform.mTranslationIsPercent) {
-                transX = (transform.mTranslationX * painter.bounds.width());
-                transY = (transform.mTranslationY * painter.bounds.height());
-            } else if (painter.isViewBoxEnabled) {
-                transX = (transform.mTranslationX / painter.viewBox.width()) * painter.bounds.width();
-                transY = (transform.mTranslationY / painter.viewBox.height()) * painter.bounds.height();
+            if (mTransform.mTranslationIsPercent) {
+                transX = (mTransform.mTranslationX * mPainter.bounds.width());
+                transY = (mTransform.mTranslationY * mPainter.bounds.height());
+            } else if (validateViewBox()) {
+                transX = (mTransform.mTranslationX / mPainter.viewBox.width()) * mPainter.rectPath.width();
+                transY = (mTransform.mTranslationY / mPainter.viewBox.height()) * mPainter.rectPath.height();
             } else {
-                transX = toDip(transform.mTranslationX);
-                transY = toDip(transform.mTranslationY);
+                transX = toDip(mTransform.mTranslationX);
+                transY = toDip(mTransform.mTranslationY);
             }
             mMatrix.postTranslate(transX,transY);
         }
 
     }
+    protected boolean validateViewBox(){
+        return mPainter.viewBox.width() >= 0f && mPainter.viewBox.height() >= 0f;
+    }
+
     protected float toDip(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());
     }
@@ -423,8 +451,10 @@ public class GView extends ViewGroup implements PaintableInterface  {
 
     @Override
     public void invalidateMaskCallback() {
-        invalidate();
+        super.invalidate();
     }
+
+
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {

@@ -24,19 +24,18 @@ public class PainterViewNone extends ReactViewGroup {
     }
 
     public void setViewBox(float[] viewBox){
+        float density = getResources().getDisplayMetrics().density;
         mPainter.viewBox.set(viewBox[0] ,viewBox[1] ,(viewBox[0] + viewBox[2])  ,(viewBox[1] + viewBox[3]));
-    }
-    public void enableViewBox(){
-        mPainter.isViewBoxEnabled = true;
-    }
-    public void disableViewBox(){
-        mPainter.isViewBoxEnabled = false;
+        mPainter.viewBoxDensity.set(viewBox[0] * density ,viewBox[1] * density ,(viewBox[0] + viewBox[2]) * density ,(viewBox[1] + viewBox[3]) * density);
+        invalidateChild();
     }
     public void setAlign(String v){
         mPainter.align = v;
+        invalidateChild();
     }
     public void setAspect(int v){
         mPainter.aspect = v;
+        invalidateChild();
     }
 
     @Override
@@ -77,8 +76,8 @@ public class PainterViewNone extends ReactViewGroup {
         }
     }
 
-    @Override
-    public void invalidate() {
+
+    public void invalidateChild() {
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
             child.invalidate();

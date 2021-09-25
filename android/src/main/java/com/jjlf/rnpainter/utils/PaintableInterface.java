@@ -11,4 +11,5 @@ public interface PaintableInterface {
     void setPainterKit(PainterKit painter);
     void invalidateMaskCallback();
 
+
 }

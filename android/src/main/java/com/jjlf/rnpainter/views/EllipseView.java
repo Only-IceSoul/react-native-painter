@@ -47,7 +47,6 @@ public class EllipseView extends PaintableView {
 
     public EllipseView(Context context){
         super(context);
-        mIgnoreVbTransform = true;
     }
 
     @Override
@@ -64,13 +63,6 @@ public class EllipseView extends PaintableView {
         float cyy = toDip(cy);
         float rxx = toDip(rx);
         float ryy = toDip(ry);
-        if(p.isViewBoxEnabled){
-            cxx = ModUtil.viewBoxToWidth(cx,p.viewBox,p.bounds.width());
-            cyy = ModUtil.viewBoxToHeight(cy,p.viewBox,p.bounds.height());
-
-            rxx = ModUtil.viewBoxToMax(rx,p.viewBox,p.bounds.width(),p.bounds.height());
-            ryy = ModUtil.viewBoxToMax(ry,p.viewBox,p.bounds.width(),p.bounds.height());
-        }
 
         mRect.set((cxx - rxx), (cyy - ryy), (cxx + rxx), (cyy + ryy));
         mPainter.path.addOval(mRect, Path.Direction.CW);

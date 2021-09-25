@@ -18,7 +18,7 @@ public class PainterViewManagerHardware extends ViewGroupManager<PainterViewHard
      static final int VIEW_BOX_NONE = 2;
 
     @Override
-    public String getName() { return "Painter"; }
+    public String getName() { return "PainterH"; }
 
     @Override
     protected PainterViewHardware createViewInstance(@NonNull ThemedReactContext reactContext) {
@@ -43,30 +43,23 @@ public class PainterViewManagerHardware extends ViewGroupManager<PainterViewHard
 
     @ReactProp(name = "align")
     public void setAlign(PainterViewHardware view , String v) {
-        view.setAlign(v != null ? v : "none");
-        view.invalidate();
+        view.setAlign(v != null ? v : "xMidYMid");
     }
     @ReactProp(name = "aspect")
     public void setAspect(PainterViewHardware view ,String v) {
-        view.setAspect(Objects.equals(v, "meet") ? VIEW_BOX_MEET : (Objects.equals(v, "slice") ? VIEW_BOX_SLICE : VIEW_BOX_NONE));
-        view.invalidate();
+        view.setAspect(Objects.equals(v, "none") ? VIEW_BOX_NONE : (Objects.equals(v, "slice") ? VIEW_BOX_SLICE : VIEW_BOX_MEET));
     }
 
     @ReactProp(name = "viewBox")
     public void setViewBox(PainterViewHardware view , ReadableArray viewBox) {
-        float [] v = {0f,0f,0f,0f};
+        float [] v = {0f,0f,-1f,-1f};
         if(viewBox != null) {
             v[0] = (float) viewBox.getDouble(0);
             v[1] = (float) viewBox.getDouble(1);
             v[2] = (float) viewBox.getDouble(2);
             v[3] = (float)viewBox.getDouble(3);
-            view.setViewBox(v);
-            view.enableViewBox();
-        }else{
-            view.disableViewBox();
         }
-
-        view.invalidate();
+        view.setViewBox(v);
     }
 
 }

@@ -18,6 +18,7 @@ import com.jjlf.rnpainter.utils.MaskInterface;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.PaintableInterface;
 import com.jjlf.rnpainter.utils.PainterKit;
+import com.jjlf.rnpainter.utils.SVGViewBox;
 import com.jjlf.rnpainter.utils.TransformProps;
 
 import java.lang.ref.WeakReference;
@@ -45,69 +46,61 @@ public class LinearGradientView extends View implements PaintableInterface {
     protected float endX = 0.5f;
     protected float endY = 1f;
 
-    protected float mOpacity = 1f;
-    protected boolean mOpacityStatus = false;
-
 
     public LinearGradientView(Context context){
         super(context);
         setLayerType(View.LAYER_TYPE_HARDWARE,null);
     }
 
-    public void setOpacity(float op,boolean status){
-        mOpacityStatus = status;
-        if(mOpacity != op){
-            mOpacity = op;
-            setAlpha(mOpacity);
-            if(mIsMaskChild) invalidate();
-        }
-    }
+
+
+
 
     public void setY(float v) {
         if(y != v){
             y = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setX(float v) {
         if(x != v){
             x = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setW(float v) {
         if(w != v){
             w = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setH(float v) {
         if(h != v){
             h = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setStartPoint(float v,float v2) {
         if(startX != v || startY != v2){
             startX = v;
             startY = v2;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setEndPoint(float v,float v2) {
         if(endX != v || endY != v2){
             endX = v;
             endY = v2;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void  setColors(int[] c) {
         mColors = c;
-        invalidate();
+        invalidateWithChildMask();
     }
     public void  setPositions(float[] p) {
         mPositions = p;
-        invalidate();
+        invalidateWithChildMask();
     }
 
 
@@ -138,7 +131,7 @@ public class LinearGradientView extends View implements PaintableInterface {
     public void invalidateMask(){
         if(mPainter != null){
             setupMaskListener();
-            invalidate();
+            invalidateWithChildMask();
         }else{
             mLazySetupMask = true;
         }
@@ -153,56 +146,65 @@ public class LinearGradientView extends View implements PaintableInterface {
         }
     }
 
+    protected float mOpacity = 1f;
+    public void setOpacity(float v) {
+        if(mOpacity != v) {
+            mOpacity = v;
+            setAlpha(mOpacity);
+            invalidateReactTransform();
+        }
+    }
+
     //MARK: Transform props
 
     public void setTransX(float v) {
         if(mTransform.mTranslationX != v ){
             mTransform.mTranslationX = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setTransY(float v) {
         if(mTransform.mTranslationY != v ){
             mTransform.mTranslationY = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setTransPercentageValue(boolean v) {
         if(mTransform.mTranslationIsPercent != v ){
             mTransform.mTranslationIsPercent = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
 
     public void setRot(float v) {
         if(mTransform.mRotation != v ){
             mTransform.mRotation = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setRotO(float v) {
         if(mTransform.mRotationOx != v || mTransform.mRotationOy != v ){
             mTransform.mRotationOx = v;
             mTransform.mRotationOy = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setRotOx(float v) {
         if(mTransform.mRotationOx != v ){
             mTransform.mRotationOx = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setRotOy(float v) {
         if(mTransform.mRotationOy != v ){
             mTransform.mRotationOy = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setRotPercentageValue(boolean v) {
         if(mTransform.mRotationIsPercent != v ){
             mTransform.mRotationIsPercent = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
 
@@ -210,45 +212,45 @@ public class LinearGradientView extends View implements PaintableInterface {
         if(mTransform.mScaleX != v || mTransform.mScaleY != v){
             mTransform.mScaleX = v;
             mTransform.mScaleY = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setScX(float v) {
         if(mTransform.mScaleX != v ){
             mTransform.mScaleX = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
 
     public void setScY(float v) {
         if(mTransform.mScaleY != v ){
             mTransform.mScaleY = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setScO(float v){
         if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
             mTransform.mScaleOriginX = v;
             mTransform.mScaleOriginY = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setScOx(float v) {
         if(mTransform.mScaleOriginX != v ){
             mTransform.mScaleOriginX = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setScOy(float v) {
         if(mTransform.mScaleOriginY != v ){
             mTransform.mScaleOriginY = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
     public void setScPercentageValue(boolean v) {
         if(mTransform.mScaleIsPercent != v ){
             mTransform.mScaleIsPercent = v;
-            invalidate();
+            invalidateWithChildMask();
         }
     }
 
@@ -257,138 +259,145 @@ public class LinearGradientView extends View implements PaintableInterface {
     public void draw(Canvas canvas) {
         if(mPainter != null && w > 0  && h > 0 ) {
 
-            setupRect(mPainter);
-            setupShader(mPainter);
+            setupRect();
 
-            transform(mTransform, mPainter);
+            viewBoxTransform();
 
-            //draw
-            int checkpoint = canvas.save();
-            canvas.concat(mPainter.matrix);
-            try{
+            setupShader();
 
-                canvas.drawRect(mRect,mPainter.paint);
-                if(!mMask.isEmpty()){
-                    WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
-                    if(maskView != null && maskView.get() != null){
-                        if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 && canvas.isHardwareAccelerated()){
-                            mPainter.paintMask.setXfermode(mPainter.dstOut);
-                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                            canvas.drawColor(Color.BLACK);
-                            mPainter.paintMask.setXfermode(mPainter.dstOut);
-                            int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                            maskView.get().render(canvas);
-                            canvas.restoreToCount(clip);
-                        }else{
-                            mPainter.paintMask.setXfermode(mPainter.dstIn);
-                            canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
-                            maskView.get().render(canvas);
-                        }
-                        canvas.restore();
-                    }
-                }
-            } finally {
-                canvas.restoreToCount(checkpoint);
-            }
+            transform();
+
+            drawContent(canvas);
 
 
         }
     }
 
-    protected void setupRect(PainterKit p){
-        float l;
-        float t;
-        float r;
-        float b;
+    protected void drawContent(Canvas canvas) {
+        int checkpoint = canvas.save();
+        canvas.concat(mPainter.matrix);
+        try{
 
-        if(p.isViewBoxEnabled){
-            l = ModUtil.viewBoxToWidth(x, p.viewBox, p.bounds.width());
-            t = ModUtil.viewBoxToHeight(y, p.viewBox, p.bounds.height());
-            r = ModUtil.viewBoxToWidth(x + w, p.viewBox, p.bounds.width());
-            b = ModUtil.viewBoxToHeight(y + h, p.viewBox, p.bounds.height());
-        }else{
-            l = toDip(x);
-            t = toDip(y);
-            r = toDip(x + w);
-            b = toDip(y + h);
+            canvas.drawRect(mRect,mPainter.paint);
+            drawMask(canvas);
+
+        } finally {
+            canvas.restoreToCount(checkpoint);
         }
+    }
+
+    protected void drawMask(Canvas canvas){
+        if(!mMask.isEmpty()){
+            WeakReference<MaskInterface> maskView = mPainter.maskViews.get(mMask);
+            if(maskView != null && maskView.get() != null){
+                if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1){
+                    mPainter.paintMask.setXfermode(mPainter.dstOut);
+                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    canvas.drawColor(Color.BLACK);
+                    mPainter.paintMask.setXfermode(mPainter.dstOut);
+                    int clip = canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    maskView.get().render(canvas);
+                    canvas.restoreToCount(clip);
+                }else{
+                    mPainter.paintMask.setXfermode(mPainter.dstIn);
+                    canvas.saveLayer(0f,0f,getWidth(),getHeight(),mPainter.paintMask);
+                    maskView.get().render(canvas);
+                }
+                canvas.restore();
+            }
+        }
+    }
+
+    protected void setupRect(){
+        float  l = toDip(x);
+        float t = toDip(y);
+        float r = toDip(x + w);
+        float b = toDip(y + h);
         mRect.set(l,t,r,b);
     }
 
-    protected void setupShader(PainterKit p){
-        p.paint.reset();
-        p.paint.setStyle(Paint.Style.FILL);
+    protected void viewBoxTransform(){
+        if (validateViewBox()){
+            mPainter.rectPath.set(mPainter.viewBoxDensity);
+            SVGViewBox.transform(mPainter.viewBox, mPainter.bounds, mPainter.align, mPainter.aspect, getResources().getDisplayMetrics().density,mPainter.matrix);
+            mPainter.matrix.mapRect(mRect);
+            mPainter.matrix.mapRect(mPainter.rectPath);
+        }else{
+            mPainter.rectPath.set(mPainter.bounds);
+        }
+    }
+
+    protected void setupShader(){
+        mPainter.paint.reset();
+        mPainter.paint.setStyle(Paint.Style.FILL);
 
         float x1 = (startX * mRect.width()) + mRect.left;
         float y1 = (startY * mRect.height()) + mRect.top;
         float x2 = (endX * mRect.width()) + mRect.left;
         float y2 = (endY * mRect.height()) + mRect.top;
-        p.paint.setShader(new LinearGradient(x1,y1,x2,y2,mColors,mPositions, Shader.TileMode.CLAMP));
+        mPainter.paint.setShader(new LinearGradient(x1,y1,x2,y2,mColors,mPositions, Shader.TileMode.CLAMP));
     }
 
-    protected void transform(TransformProps transform, PainterKit painter) {
+    protected void transform() {
         mPainter.matrix.reset();
-        if (transform.mRotation != 0f) {
+        if (mTransform.mRotation != 0f) {
             float rotX;
             float rotY;
-            if (transform.mRotationIsPercent) {
-                rotX = (transform.mRotationOx * painter.bounds.width());
-                rotY = (transform.mRotationOy * painter.bounds.height());
-            } else if (painter.isViewBoxEnabled) {
-
-                rotX = ModUtil.viewBoxToWidth(transform.mRotationOx, painter.viewBox, painter.bounds.width());
-                rotY = ModUtil.viewBoxToHeight(transform.mRotationOy, painter.viewBox, painter.bounds.height());
+            if (mTransform.mRotationIsPercent) {
+                rotX = (mTransform.mRotationOx * mPainter.bounds.width());
+                rotY = (mTransform.mRotationOy * mPainter.bounds.height());
+            } else if (validateViewBox()) {
+                rotX =  mPainter.rectPath.left +  ModUtil.viewBoxToWidth(mTransform.mRotationOx, mPainter.viewBox,mPainter.rectPath.width());
+                rotY =  mPainter.rectPath.top + ModUtil.viewBoxToHeight(mTransform.mRotationOy, mPainter.viewBox, mPainter.rectPath.height());
             } else {
-                rotX = toDip(transform.mRotationOx);
-                rotY = toDip(transform.mRotationOy);
+                rotX = toDip(mTransform.mRotationOx);
+                rotY = toDip(mTransform.mRotationOy);
             }
-            mPainter.matrix.postRotate(transform.mRotation,rotX,rotY);
+            mPainter.matrix.postRotate(mTransform.mRotation,rotX,rotY);
         }
 
-        if (transform.mScaleX != 1f || transform.mScaleY != 1f) {
+        if (mTransform.mScaleX != 1f || mTransform.mScaleY != 1f) {
             float oX;
             float oY;
-            if (transform.mScaleIsPercent) {
-                oX = (transform.mScaleOriginX * painter.bounds.width());
-                oY = (transform.mScaleOriginY * painter.bounds.height());
-            } else if (painter.isViewBoxEnabled) {
-                oX = ModUtil.viewBoxToWidth(transform.mScaleOriginX, painter.viewBox, painter.bounds.width());
-                oY = ModUtil.viewBoxToHeight(transform.mScaleOriginY, painter.viewBox, painter.bounds.height());
+            if (mTransform.mScaleIsPercent) {
+                oX = (mTransform.mScaleOriginX * mPainter.bounds.width());
+                oY = (mTransform.mScaleOriginY * mPainter.bounds.height());
+            } else if (validateViewBox()) {
+                oX =  mPainter.rectPath.left +  ModUtil.viewBoxToWidth(mTransform.mScaleOriginX, mPainter.viewBox,mPainter.rectPath.width()) ;
+                oY =  mPainter.rectPath.top +   ModUtil.viewBoxToHeight(mTransform.mScaleOriginY, mPainter.viewBox,mPainter.rectPath.height()) ;
             } else {
-                oX = toDip(transform.mScaleOriginX);
-                oY = toDip(transform.mScaleOriginY);
+                oX = toDip(mTransform.mScaleOriginX);
+                oY = toDip(mTransform.mScaleOriginY);
             }
-            mPainter.matrix.postScale(transform.mScaleX,transform.mScaleY,oX,oY);
 
-
+            mPainter.matrix.postScale(mTransform.mScaleX,mTransform.mScaleY,oX,oY);
         }
 
-        if (transform.mTranslationX != 0f || transform.mTranslationY != 0f) {
+        if (mTransform.mTranslationX != 0f || mTransform.mTranslationY != 0f) {
             float transX;
             float transY;
-            if (transform.mTranslationIsPercent) {
-                transX = (transform.mTranslationX * painter.bounds.width());
-                transY = (transform.mTranslationY * painter.bounds.height());
-            } else if (painter.isViewBoxEnabled) {
-                transX = (transform.mTranslationX / painter.viewBox.width()) * painter.bounds.width();
-                transY = (transform.mTranslationY / painter.viewBox.height()) * painter.bounds.height();
+            if (mTransform.mTranslationIsPercent) {
+                transX = (mTransform.mTranslationX * mPainter.bounds.width());
+                transY = (mTransform.mTranslationY * mPainter.bounds.height());
+            } else if (validateViewBox()) {
+                transX = (mTransform.mTranslationX / mPainter.viewBox.width()) * mPainter.rectPath.width();
+                transY = (mTransform.mTranslationY / mPainter.viewBox.height()) * mPainter.rectPath.height();
             } else {
-                transX = toDip(transform.mTranslationX);
-                transY = toDip(transform.mTranslationY);
+                transX = toDip(mTransform.mTranslationX);
+                transY = toDip(mTransform.mTranslationY);
             }
             mPainter.matrix.postTranslate(transX,transY);
         }
 
     }
 
-    @Override
-    public void invalidate() {
-        super.invalidate();
+
+    public void invalidateWithChildMask(){
+        invalidate();
         if(mIsMaskChild) {
             invalidateMaskListeners();
         }
     }
-
 
     public void invalidateMaskListeners(){
         if (getParent() instanceof MaskInterface) {
@@ -413,14 +422,14 @@ public class LinearGradientView extends View implements PaintableInterface {
     public void invalidateReactTransform(){
         if(mIsMaskChild) {
             //transform react style invalidate
-            super.invalidate();
+            invalidate();
             invalidateMaskListeners();
         }
     }
 
     @Override
     public void setProps(CommonProps props) {
-        if(!mOpacityStatus) mOpacity = props.getOpacity();
+
     }
 
     @Override
@@ -439,8 +448,13 @@ public class LinearGradientView extends View implements PaintableInterface {
 
     @Override
     public void invalidateMaskCallback() {
-        invalidate();
+        invalidateWithChildMask();
     }
+
+    protected boolean validateViewBox(){
+        return mPainter.viewBox.width() >= 0f && mPainter.viewBox.height() >= 0f;
+    }
+
 
     protected float toDip(float value) {
         return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,value,getResources().getDisplayMetrics());

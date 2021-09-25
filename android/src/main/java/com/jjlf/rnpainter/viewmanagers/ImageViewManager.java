@@ -16,7 +16,8 @@ import com.jjlf.rnpainter.shadownodes.PaintableShadowNode;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.SVGViewBox;
 import com.jjlf.rnpainter.views.ImageView;
-import com.jjlf.rnpainter.views.ImageView;
+import com.jjlf.rnpainter.views.PaintableView;
+
 
 import java.util.Objects;
 
@@ -90,9 +91,10 @@ public class ImageViewManager extends SimpleViewManager<ImageView> {
     public void setMask(ImageView view ,String v) {
         view.setMask(v == null ? "" : v);
     }
-    @ReactProp(name = "opacity")
-    public void setOpacity(ImageView view , Dynamic v) {
-        view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+
+    @Override
+    public void setOpacity(@NonNull ImageView view, float opacity) {
+        view.setOpacity(opacity);
     }
 
     @ReactProp(name = "fill")
@@ -114,13 +116,23 @@ public class ImageViewManager extends SimpleViewManager<ImageView> {
         view.setShadowRadius(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
 
     }
-    @ReactProp(name = "shadowOffset")
-    public void setShadowOffset(ImageView view , ReadableMap v) {
-        float x = (float) ModUtil.getDouble(v,"x",2.0);
-        float y = (float)ModUtil.getDouble(v,"y",2.0);
-        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
-        view.setShadowOffset(x,y,per,v != null);
 
+    //shadow
+    @ReactProp(name = "shadowOffset")
+    public void setShadowOffset(ImageView view , Dynamic v) {
+        view.setShadowOffset(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowOffsetX")
+    public void setShadowOffsetX(ImageView view , Dynamic v) {
+        view.setShadowOffsetX(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowOffsetY")
+    public void setShadowOffsetY(ImageView view , Dynamic v) {
+        view.setShadowOffsetY(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowPercentageValue")
+    public void setShadowPercentageValue(ImageView view , Dynamic v) {
+        view.setShadowPercentageValue(ModUtil.getBoolean(v,false),ModUtil.isNotNull(v));
     }
 
     //MARK: Transform

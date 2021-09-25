@@ -80,8 +80,11 @@ add a .swift file
 | strokeEnd | the end | Number | 1 |
 | shadow | set the sahdow color  | Color | 'black' |
 | shadowOpacity | set the shadow opacity [0 - 1]  | Number | 0 |
-| shadowOffset | set the offset | Object | 2 2 false |
 | shadowRadius | the radius | Number | 2 |
+| shadowOffset | set the offset | Number | 2  |
+| shadowOffsetX | set the offset x | Number | 2  |
+| shadowOffsetY | set the offset y| Number | 2  |
+| shadowPercentageValue | offset * size | Bool | false |
 
 
 <br>
@@ -90,7 +93,7 @@ add a .swift file
 
 <br>
 
-The percentageValue property refers to the fact that the values will be multiplied by the size of the view.  
+The percentageValue property refers to the fact that the Origin will be multiplied by the size of the view.  
   
 | Name | type | default |
 | --- | --- | --- |
@@ -108,6 +111,6 @@ The percentageValue property refers to the fact that the values will be multipli
 | scO | Number | 0 |
 | scOx | Number | 0 |
 | scOy | Number | 0 |
-| scPercentageValue | Number | 0 |
+| scPercentageValue | Bool | false |
 
 

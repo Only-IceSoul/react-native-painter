@@ -14,6 +14,7 @@ import com.facebook.react.uimanager.ThemedReactContext;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.jjlf.rnpainter.shadownodes.PaintableShadowNode;
 import com.jjlf.rnpainter.utils.ModUtil;
+import com.jjlf.rnpainter.views.MaskGView;
 import com.jjlf.rnpainter.views.RadialGradientView;
 import com.jjlf.rnpainter.views.RadialGradientView;
 
@@ -103,9 +104,9 @@ public class RadialGradientViewManager extends SimpleViewManager<RadialGradientV
     public void setMask(RadialGradientView view ,String v) {
         view.setMask(v == null ? "" : v);
     }
-    @ReactProp(name = "opacity")
-    public void setOpacity(RadialGradientView view , Dynamic v) {
-        view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+    @Override
+    public void setOpacity(@NonNull RadialGradientView view, float opacity) {
+        view.setOpacity(opacity);
     }
 
     //MARK: Transform

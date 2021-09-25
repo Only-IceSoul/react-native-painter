@@ -34,7 +34,7 @@ public class ModUtil {
     }
 
     public static float viewBoxToMax(float value,RectF viewBox,float w, float h){
-        float size = viewBox.width() > viewBox.height() ? w : h;
+        float size = Math.max(w ,h);
         return ( value / Math.max(viewBox.width(), viewBox.height() ) ) * size;
     }
     public static boolean isNull(Dynamic d){
@@ -46,6 +46,12 @@ public class ModUtil {
     public static float getFloat(Dynamic d, float optional){
         if(isNotNull(d)){
             return (float) d.asDouble();
+        }
+        return optional;
+    }
+    public static boolean getBoolean(Dynamic d, boolean optional){
+        if(isNotNull(d)){
+            return  d.asBoolean();
         }
         return optional;
     }

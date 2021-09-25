@@ -47,9 +47,7 @@ public class LineView extends PaintableView {
 
     public LineView(Context context){
         super(context);
-        mIgnoreVbTransform = true;
         mIgnoreFill = true;
-        mIgnoreShadowFill = true;
     }
 
     @Override
@@ -62,19 +60,8 @@ public class LineView extends PaintableView {
     @Override
     protected void setupPath(PainterKit p) {
         p.path.reset();
-        if(p.isViewBoxEnabled){
-
-            p.path.moveTo( ModUtil.viewBoxToWidth(x1,p.viewBox,p.bounds.width()),
-                    ModUtil.viewBoxToHeight(y1,p.viewBox,p.bounds.height())
-            );
-            p.path.lineTo(ModUtil.viewBoxToWidth(x2,p.viewBox,p.bounds.width()),
-                    ModUtil.viewBoxToHeight(y2,p.viewBox,p.bounds.height())
-            );
-        }else{
-            p.path.moveTo(toDip(x1),toDip(y1));
-            p.path.lineTo(toDip(x2),toDip(y2));
-        }
-
+        p.path.moveTo(toDip(x1),toDip(y1));
+        p.path.lineTo(toDip(x2),toDip(y2));
     }
 
 }

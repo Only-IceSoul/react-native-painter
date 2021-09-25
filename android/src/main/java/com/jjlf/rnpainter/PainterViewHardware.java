@@ -6,6 +6,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import com.facebook.react.views.view.ReactViewGroup;
 import com.jjlf.rnpainter.utils.MaskInterface;
@@ -27,23 +29,22 @@ public class PainterViewHardware extends ReactViewGroup {
         super(context);
         setClipChildren(false);
         setLayerType(LAYER_TYPE_HARDWARE,null);
-
     }
 
     public void setViewBox(float[] viewBox){
+        float density = getResources().getDisplayMetrics().density;
         mPainter.viewBox.set(viewBox[0] ,viewBox[1] ,(viewBox[0] + viewBox[2])  ,(viewBox[1] + viewBox[3]));
+        mPainter.viewBoxDensity.set(viewBox[0] * density ,viewBox[1] * density ,(viewBox[0] + viewBox[2]) * density ,(viewBox[1] + viewBox[3]) * density);
+        invalidateChild();
     }
-    public void enableViewBox(){
-        mPainter.isViewBoxEnabled = true;
-    }
-    public void disableViewBox(){
-        mPainter.isViewBoxEnabled = false;
-    }
+
     public void setAlign(String v){
         mPainter.align = v;
+        invalidateChild();
     }
     public void setAspect(int v){
         mPainter.aspect = v;
+        invalidateChild();
     }
 
     @Override
@@ -59,6 +60,7 @@ public class PainterViewHardware extends ReactViewGroup {
             getChildAt(i).layout(0, 0, getWidth(), getHeight());
         }
     }
+
 
     //new
     @Override
@@ -77,8 +79,8 @@ public class PainterViewHardware extends ReactViewGroup {
         }
     }
 
-    @Override
-    public void invalidate() {
+
+    public void invalidateChild() {
         for (int i = 0; i < getChildCount(); i++) {
             final View child = getChildAt(i);
             child.invalidate();

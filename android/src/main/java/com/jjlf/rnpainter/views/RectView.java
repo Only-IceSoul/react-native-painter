@@ -74,7 +74,6 @@ public class RectView extends PaintableView {
     }
     public RectView(Context context){
         super(context);
-        mIgnoreVbTransform = true;
     }
 
     @Override
@@ -87,35 +86,16 @@ public class RectView extends PaintableView {
     @Override
     protected void setupPath(PainterKit p) {
         p.path.reset();
-        float l;
-        float t;
-        float r;
-        float b;
-        float rrtl;
-        float rrtr;
-        float rrbl;
-        float rrbr;
-        if(p.isViewBoxEnabled){
 
-            l = ModUtil.viewBoxToWidth(x, p.viewBox, p.bounds.width());
-            t = ModUtil.viewBoxToHeight(y, p.viewBox, p.bounds.height());
-            r = ModUtil.viewBoxToWidth(x + w, p.viewBox, p.bounds.width());
-            b = ModUtil.viewBoxToHeight(y + h, p.viewBox, p.bounds.height());
-            rrtl = ModUtil.viewBoxToMax(rtl, p.viewBox, p.bounds.width(), p.bounds.height());
-            rrtr = ModUtil.viewBoxToMax(rtr, p.viewBox, p.bounds.width(), p.bounds.height());
-            rrbl = ModUtil.viewBoxToMax(rbl, p.viewBox, p.bounds.width(), p.bounds.height());
-            rrbr = ModUtil.viewBoxToMax(rbr, p.viewBox, p.bounds.width(), p.bounds.height());
-        }else{
-            l = toDip(x);
-            t = toDip(y);
-            r = toDip(x + w);
-            b = toDip(y + h);
-            rrtl = toDip(rtl);
-            rrtr = toDip(rtr);
-            rrbl = toDip(rbl);
-            rrbr = toDip(rtr);
+        float  l = toDip(x);
+        float  t = toDip(y);
+        float  r = toDip(x + w);
+        float  b = toDip(y + h);
+        float  rrtl = toDip(rtl);
+        float  rrtr = toDip(rtr);
+        float  rrbl = toDip(rbl);
+        float  rrbr = toDip(rtr);
 
-        }
         mRect.set(l,t,r,b);
         mRadius[0] = rrtl;
         mRadius[1] = rrtl;

@@ -40,7 +40,6 @@ public class CircleView extends PaintableView {
 
     public CircleView(Context context) {
         super(context);
-        mIgnoreVbTransform = true;
     }
 
     @Override
@@ -51,18 +50,7 @@ public class CircleView extends PaintableView {
     @Override
     protected void setupPath(PainterKit p) {
         p.path.reset();
-
-        if (p.isViewBoxEnabled) {
-
-            p.path.addCircle(ModUtil.viewBoxToWidth(cx, p.viewBox, p.bounds.width()),
-                    ModUtil.viewBoxToHeight(cy, p.viewBox, p.bounds.height()),
-                    ModUtil.viewBoxToMax(r,p.viewBox,p.bounds.width(),p.bounds.height())
-                    , Path.Direction.CW);
-
-        } else {
-            p.path.addCircle(toDip(cx), toDip(cy),toDip(r), Path.Direction.CW);
-        }
-
+        p.path.addCircle(toDip(cx), toDip(cy),toDip(r), Path.Direction.CW);
     }
 
 }

@@ -14,6 +14,8 @@ import com.facebook.react.uimanager.ViewGroupManager;
 import com.facebook.react.uimanager.annotations.ReactProp;
 import com.jjlf.rnpainter.shadownodes.PaintableShadowNode;
 import com.jjlf.rnpainter.utils.ModUtil;
+import com.jjlf.rnpainter.views.GView;
+import com.jjlf.rnpainter.views.LinearGradientView;
 import com.jjlf.rnpainter.views.MaskGView;
 
 public class MaskGViewManager extends ViewGroupManager<MaskGView> {
@@ -52,9 +54,9 @@ public class MaskGViewManager extends ViewGroupManager<MaskGView> {
 
     }
 
-    @ReactProp(name = "opacity")
-    public void setOpacity(MaskGView view , Dynamic v) {
-        view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+    @Override
+    public void setOpacity(@NonNull MaskGView view, float opacity) {
+        view.setOpacity(opacity);
     }
 
 
@@ -138,11 +140,20 @@ public class MaskGViewManager extends ViewGroupManager<MaskGView> {
     }
 
     @ReactProp(name = "shadowOffset")
-    public void setShadowOffset(MaskGView view , ReadableMap v) {
-        float x = (float) ModUtil.getDouble(v,"x",2.0);
-        float y = (float)ModUtil.getDouble(v,"y",2.0);
-        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
-        view.setShadowOffset(x,y,per,v != null);
+    public void setShadowOffset(MaskGView view , Dynamic v) {
+        view.setShadowOffset(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowOffsetX")
+    public void setShadowOffsetX(MaskGView view , Dynamic v) {
+        view.setShadowOffsetX(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowOffsetY")
+    public void setShadowOffsetY(MaskGView view , Dynamic v) {
+        view.setShadowOffsetY(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowPercentageValue")
+    public void setShadowPercentageValue(MaskGView view , Dynamic v) {
+        view.setShadowPercentageValue(ModUtil.getBoolean(v,false),ModUtil.isNotNull(v));
     }
 
 

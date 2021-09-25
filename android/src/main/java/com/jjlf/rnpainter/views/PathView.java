@@ -41,8 +41,6 @@ public class PathView extends PaintableView {
             SVGPathParser.mScale = getResources().getDisplayMetrics().density;
             final Path np = SVGPathParser.parse(mPath);
             p.path.set(np);
-            p.path.setFillType(mProps.getFillRule());
-
         }catch(Error ignored) {
 
         }

@@ -51,9 +51,10 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
     public void setMask(PaintableView view ,String v) {
         view.setMask(v == null ? "" : v);
     }
-    @ReactProp(name = "opacity")
-    public void setOpacity(PaintableView view ,Dynamic v) {
-        view.setOpacity(ModUtil.getFloat(v,1f), ModUtil.isNotNull(v));
+
+    @Override
+    public void setOpacity(@NonNull PaintableView view, float opacity) {
+        view.setOpacity(opacity);
     }
 
     @ReactProp(name = "fill")
@@ -133,13 +134,22 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
 
     }
 
+    //shadow
     @ReactProp(name = "shadowOffset")
-    public void setShadowOffset(PaintableView view , ReadableMap v) {
-        float x = (float) ModUtil.getDouble(v,"x",2.0);
-        float y = (float)ModUtil.getDouble(v,"y",2.0);
-        boolean per = ModUtil.getBoolean(v,"percentageValue",false);
-        view.setShadowOffset(x,y,per,v != null);
-
+    public void setShadowOffset(PaintableView view , Dynamic v) {
+        view.setShadowOffset(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowOffsetX")
+    public void setShadowOffsetX(PaintableView view , Dynamic v) {
+        view.setShadowOffsetX(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowOffsetY")
+    public void setShadowOffsetY(PaintableView view , Dynamic v) {
+        view.setShadowOffsetY(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
+    }
+    @ReactProp(name = "shadowPercentageValue")
+    public void setShadowPercentageValue(PaintableView view , Dynamic v) {
+        view.setShadowPercentageValue(ModUtil.getBoolean(v,false),ModUtil.isNotNull(v));
     }
 
 

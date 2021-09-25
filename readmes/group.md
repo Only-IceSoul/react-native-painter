@@ -2,10 +2,14 @@
 The G element is a container used to group other elements.  
 Attributes are inherited by its children.
 
-GS: Android Software Layer , Devices < api 28 supporting shadows
+Android:  
+GS: (Software < api 28) - (None >= api 28) ,  supporting shadows  
+GH: Hardware
+
+
 
 ```JS
-  import { G ,GS } from 'react-native-painter'
+  import { G ,GS, GH } from 'react-native-painter'
     <Painter style={styles.Painter} 
     >
         <G >
