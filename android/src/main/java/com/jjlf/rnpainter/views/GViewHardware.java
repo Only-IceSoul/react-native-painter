@@ -188,6 +188,7 @@ public class GViewHardware extends ViewGroup implements PaintableInterface  {
 
     public void setShadowOffset(float v,boolean status) {
         mProps.mShadowOffsetXStatus = status;
+        mProps.mShadowOffsetYStatus = status;
         if(mProps.mShadowOffsetX != v || mProps.mShadowOffsetY != v ){
             mProps.mShadowOffsetX = v;
             mProps.mShadowOffsetY = v;

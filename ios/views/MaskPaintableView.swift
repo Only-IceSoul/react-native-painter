@@ -54,7 +54,7 @@ class MaskPaintableView: UIView {
     }
     
     private var mLazyPainter = false
-    public func invalidatePainterKit(){
+     func invalidatePainterKit(){
         
         if reactSubviews() == nil {
             mLazyPainter = true
@@ -69,7 +69,7 @@ class MaskPaintableView: UIView {
       
     }
     
-    public override func layoutSubviews() {
+     override func layoutSubviews() {
         super.layoutSubviews()
         if(mLazyPainter &&  self.reactSubviews() != nil){
             mLazyPainter = false

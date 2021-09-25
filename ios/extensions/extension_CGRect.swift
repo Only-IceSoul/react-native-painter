@@ -36,8 +36,10 @@ extension CGRect {
     
     
     mutating func set(rect: CGRect) {
-        self.origin = rect.origin
-        self.size = rect.size
+        self.origin.x = rect.origin.x
+        self.origin.y = rect.origin.y
+        self.size.width = rect.size.width
+        self.size.height = rect.size.height
     }
     mutating func set(left: CGFloat,top:CGFloat,right:CGFloat,bottom:CGFloat) {
         self.origin.x = left

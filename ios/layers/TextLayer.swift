@@ -7,14 +7,18 @@
 
 import Foundation
 import UIKit
-public class TextLayer: CALayer  {
+ class TextLayer: CALayer  {
    
     
     var mLayer = CATextLayer()
-    var mPainterKit : PainterKit!
     var mProps = CommonProps()
     var mTransform = TransformProps()
-    var mRect = CGRect()
+    var mBounds = CGRect()
+    var mRectPath = CGRect()
+    var mRectVb = CGRect(x: 0, y: 0, width: -1, height: -1)
+    var mAlign = "xMidYMid"
+    var mAspect = SVGViewBox.AspectRatio.meet
+    
     var mTextAttrs = [NSAttributedString.Key : Any]()
    
     var mText = NSMutableAttributedString(string: "")
@@ -29,12 +33,30 @@ public class TextLayer: CALayer  {
     var mBoundsText = CGSize()
     var mHorizontalOffset :CGFloat = 0
     
-    public override init() {
+     override init() {
         super.init()
         addSublayer(mLayer)
         mLayer.anchorPoint = CGPoint(x: 0, y: 1)
     }
     
+    //MARK: Paintable
+    
+    func setPainterKit(_ p: PainterKit){
+        mRectVb.set(rect: p.mViewBox)
+        mAspect = p.mAspect
+        mAlign = p.mAlign
+        invalidate()
+    }
+    
+    func setProps(_ p:CommonProps){
+        mProps.set(p)
+        invalidate()
+    }
+    
+    
+
+
+    //MARK: set and get
     
      func setText(_ v:String){
         mText.mutableString.setString(v)
@@ -43,35 +65,35 @@ public class TextLayer: CALayer  {
      func setBaseline(_ v:String){
         if mBaseline != v{
             mBaseline = v
-            invalidateTextPosition()
+            invalidatePosition()
         }
 
     }
      func setVerticalOffset(_ v:CGFloat){
         if mVerticalOffset != v{
             mVerticalOffset = v
-            invalidateTextPosition()
+            invalidatePosition()
         }
 
     }
      func setX(_ v:CGFloat){
         if mX != v{
             mX = v
-            invalidateTextPosition()
+            invalidatePosition()
         }
 
     }
      func setY(_ v:CGFloat){
         if mY != v{
             mY = v
-            invalidateTextPosition()
+            invalidatePosition()
         }
 
     }
      func setHorizontalOffset(_ v:CGFloat){
         if mHorizontalOffset != v{
             mHorizontalOffset = v
-            invalidateTextPosition()
+            invalidatePosition()
         }
 
     }
@@ -79,7 +101,7 @@ public class TextLayer: CALayer  {
         if mFont != v{
             mFont = v
             invalidateText()
-            invalidateTextPosition(false)
+            invalidatePosition(false)
         }
 
     }
@@ -87,7 +109,7 @@ public class TextLayer: CALayer  {
         if mFontStyle != v{
             mFontStyle = v
             invalidateText()
-            invalidateTextPosition(false)
+            invalidatePosition(false)
         }
 
     }
@@ -95,40 +117,16 @@ public class TextLayer: CALayer  {
         if mFontSize != v{
             mFontSize = v
             invalidateText()
-            invalidateTextPosition(false)
+            invalidatePosition(false)
         }
 
     }
     
-        
-    //MARK: Paintable
-    
-    func setPainterKit(_ p: PainterKit){
-        mPainterKit = p
-        invalidateSelf()
-    }
-    
-    func setProps(_ p:CommonProps){
-        mProps.set(p)
-        invalidateText()
-        invalidateShadow()
-        invalidateOpacity()
-        invalidateTextPosition(false)
-    }
-    
-    //MARK: set and get
+ 
+  
+
     @discardableResult
-    public func setOpacity(_ v:Float,_ status:Bool) -> TextLayer{
-        mProps.opacityStatus = status
-        if mProps.opacity != v{
-            mProps.opacity = v
-            invalidateOpacity()
-        }
-       return self
-    }
-    
-    @discardableResult
-    public func setFill(_ v:Int,_ status:Bool) -> TextLayer{
+     func setFill(_ v:Int,_ status:Bool) -> TextLayer{
         mProps.fillColorStatus = status
         if mProps.fillColor != v{
             mProps.fillColor = v
@@ -138,12 +136,12 @@ public class TextLayer: CALayer  {
    }
     
     @discardableResult
-    public func setFillRule(_ v:String,_ status:Bool) -> TextLayer{
+     func setFillRule(_ v:String,_ status:Bool) -> TextLayer{
        return self
     }
     
     @discardableResult
-    public func setFillOpacity(_ v:CGFloat,_ status:Bool) -> TextLayer{
+     func setFillOpacity(_ v:CGFloat,_ status:Bool) -> TextLayer{
         mProps.fillOpacityStatus = status
         if mProps.fillOpacity != v{
             mProps.fillOpacity = v
@@ -153,7 +151,7 @@ public class TextLayer: CALayer  {
     }
     
     @discardableResult
-    public func setStroke(_ v:Int,_ status:Bool) -> TextLayer{
+     func setStroke(_ v:Int,_ status:Bool) -> TextLayer{
         mProps.strokeColorStatus = status
         if mProps.strokeColor != v{
             mProps.strokeColor = v
@@ -163,7 +161,7 @@ public class TextLayer: CALayer  {
     }
     
     @discardableResult
-    public func setStrokeOpacity(_ v:CGFloat,_ status:Bool) -> TextLayer{
+     func setStrokeOpacity(_ v:CGFloat,_ status:Bool) -> TextLayer{
         mProps.strokeOpacityStatus = status
         if mProps.strokeOpacity != v{
             mProps.strokeOpacity = v
@@ -173,7 +171,7 @@ public class TextLayer: CALayer  {
     }
     
     @discardableResult
-    public func setStrokeWidth(_ v:CGFloat,_ status:Bool) -> TextLayer{
+     func setStrokeWidth(_ v:CGFloat,_ status:Bool) -> TextLayer{
         mProps.strokeWidthStatus = status
         if mProps.strokeWidth != v{
             mProps.strokeWidth = v
@@ -183,32 +181,32 @@ public class TextLayer: CALayer  {
     }
     
     @discardableResult
-    public func setStrokeCap(_ v:String) -> TextLayer{
+     func setStrokeCap(_ v:String) -> TextLayer{
        return self
     }
     
     @discardableResult
-    public func setStrokeJoin(_ v:String) -> TextLayer{
+     func setStrokeJoin(_ v:String) -> TextLayer{
        return self
     }
     @discardableResult
-    public func setStrokeMiter(_ v:CGFloat,_ status:Bool) -> TextLayer{
-       return self
-    }
-    
-    @discardableResult
-    public func setStrokeStart(_ v:CGFloat,_ status:Bool) -> TextLayer{
+     func setStrokeMiter(_ v:CGFloat,_ status:Bool) -> TextLayer{
        return self
     }
     
     @discardableResult
-    public func setStrokeEnd(_ v:CGFloat,_ status:Bool) -> TextLayer{
+     func setStrokeStart(_ v:CGFloat,_ status:Bool) -> TextLayer{
+       return self
+    }
+    
+    @discardableResult
+     func setStrokeEnd(_ v:CGFloat,_ status:Bool) -> TextLayer{
        return self
     }
     
     
     @discardableResult
-    public func setShadow(_ v:Int,_ status:Bool) -> TextLayer{
+     func setShadow(_ v:Int,_ status:Bool) -> TextLayer{
         mProps.shadowColorStatus = status
         if mProps.shadowColor != v{
             mProps.shadowColor = v
@@ -217,20 +215,9 @@ public class TextLayer: CALayer  {
        return self
     }
     
-    @discardableResult
-    public func setShadowOffset(_ x:CGFloat,_ y:CGFloat,_ percent:Bool,_ status:Bool) -> TextLayer{
-        mProps.shadowOffsetStatus = status
-        if mProps.shadowOffsetX != x || mProps.shadowOffsetY != y || mProps.shadowOffsetIsPercent != percent {
-            mProps.shadowOffsetX = x
-            mProps.shadowOffsetY = y
-            mProps.shadowOffsetIsPercent = percent
-            invalidateShadow()
-        }
-       return self
-    }
     
     @discardableResult
-    public func setShadowOpacity(_ v:Float,_ status:Bool) -> TextLayer{
+     func setShadowOpacity(_ v:Float,_ status:Bool) -> TextLayer{
         mProps.shadowOpacityStatus = status
         if mProps.shadowOpacity != v{
             mProps.shadowOpacity = v
@@ -240,7 +227,7 @@ public class TextLayer: CALayer  {
     }
     
     @discardableResult
-    public func setShadowRadius(_ v:CGFloat,_ status:Bool) -> TextLayer{
+     func setShadowRadius(_ v:CGFloat,_ status:Bool) -> TextLayer{
         mProps.shadowRadiusStatus = status
         if mProps.shadowRadius != v{
             mProps.shadowRadius = v
@@ -249,101 +236,138 @@ public class TextLayer: CALayer  {
        return self
     }
     
-    
+    @discardableResult
+     func setShadowOffset(_ v:CGFloat,_ status:Bool) -> TextLayer{
+        mProps.shadowOffsetXStatus = status
+        mProps.shadowOffsetYStatus = status
+        if mProps.shadowOffsetX != v || mProps.shadowOffsetY != v  {
+            mProps.shadowOffsetX = v
+            mProps.shadowOffsetY = v
+            invalidateShadow()
+        }
+       return self
+    }
+    @discardableResult
+     func setShadowOffsetX(_ v:CGFloat,_ status:Bool) -> TextLayer{
+        mProps.shadowOffsetXStatus = status
+        if mProps.shadowOffsetX != v {
+            mProps.shadowOffsetX = v
+            invalidateShadow()
+        }
+       return self
+    }
+    @discardableResult
+     func setShadowOffsetY(_ v:CGFloat,_ status:Bool) -> TextLayer{
+        mProps.shadowOffsetYStatus = status
+        if mProps.shadowOffsetY != v  {
+            mProps.shadowOffsetY = v
+            invalidateShadow()
+        }
+       return self
+    }
+    @discardableResult
+     func setShadowPercentageValue(_ v:Bool,_ status:Bool) -> TextLayer{
+        mProps.shadowOffsetIsPerecentStatus = status
+        if mProps.shadowOffsetIsPercent != v  {
+            mProps.shadowOffsetIsPercent = v
+            invalidateShadow()
+        }
+       return self
+    }
     
     //MARK: Transform props
 
-    public func setTransX(v:CGFloat) {
+     func setTransX(v:CGFloat) {
             if(mTransform.mTranslationX != v ){
                 mTransform.mTranslationX = v;
                 invalidateTransform();
             }
         }
-        public func setTransY(v:CGFloat) {
+         func setTransY(v:CGFloat) {
             if(mTransform.mTranslationY != v ){
                 mTransform.mTranslationY = v;
                 invalidateTransform();
             }
         }
-        public func setTransPercentageValue(v:Bool) {
+         func setTransPercentageValue(v:Bool) {
             if(mTransform.mTranslationIsPercent != v ){
                 mTransform.mTranslationIsPercent = v;
                 invalidateTransform();
             }
         }
 
-        public func setRot(v:CGFloat) {
+         func setRot(v:CGFloat) {
             if(mTransform.mRotation != v ){
                 mTransform.mRotation = v;
                 invalidateTransform();
             }
         }
-        public func setRotO(v:CGFloat) {
+         func setRotO(v:CGFloat) {
             if(mTransform.mRotationOriginX != v || mTransform.mRotationOriginY != v ){
                 mTransform.mRotationOriginX = v;
                 mTransform.mRotationOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setRotOx(v:CGFloat) {
+         func setRotOx(v:CGFloat) {
             if(mTransform.mRotationOriginX != v ){
                 mTransform.mRotationOriginX = v;
                 invalidateTransform();
             }
         }
-        public func setRotOy(v:CGFloat) {
+         func setRotOy(v:CGFloat) {
             if(mTransform.mRotationOriginY != v ){
                 mTransform.mRotationOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setRotPercentageValue(v:Bool) {
+         func setRotPercentageValue(v:Bool) {
             if(mTransform.mRotationIsPercent != v ){
                 mTransform.mRotationIsPercent = v;
                 invalidateTransform();
             }
         }
 
-        public func setSc(v:CGFloat){
+         func setSc(v:CGFloat){
             if(mTransform.mScaleX != v || mTransform.mScaleY != v){
                 mTransform.mScaleX = v;
                 mTransform.mScaleY = v;
                 invalidateTransform();
             }
         }
-        public func setScX(v:CGFloat) {
+         func setScX(v:CGFloat) {
             if(mTransform.mScaleX != v ){
                 mTransform.mScaleX = v;
                 invalidateTransform();
             }
         }
 
-        public func setScY(v:CGFloat) {
+         func setScY(v:CGFloat) {
             if(mTransform.mScaleY != v ){
                 mTransform.mScaleY = v;
                 invalidateTransform();
             }
         }
-        public func setScO(v:CGFloat){
+         func setScO(v:CGFloat){
             if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
                 mTransform.mScaleOriginX = v;
                 mTransform.mScaleOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setScOx(v:CGFloat) {
+         func setScOx(v:CGFloat) {
             if(mTransform.mScaleOriginX != v ){
                 mTransform.mScaleOriginX = v;
                 invalidateTransform();
             }
         }
-        public func setScOy(v:CGFloat) {
+         func setScOy(v:CGFloat) {
             if(mTransform.mScaleOriginY != v ){
                 mTransform.mScaleOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setScPercentageValue(v:Bool) {
+         func setScPercentageValue(v:Bool) {
             if(mTransform.mScaleIsPercent != v ){
                 mTransform.mScaleIsPercent = v;
                 invalidateTransform();
@@ -354,25 +378,27 @@ public class TextLayer: CALayer  {
     
     //MARK: layer methods
     
-    public func onBoundsChange(_ frame: CGRect){
-        mRect.set(rect: frame)
-        super.frame = mRect
+     func onBoundsChange(_ frame: CGRect){
+        mBounds.set(rect: frame)
+        super.frame = mBounds
         super.position = CGPoint(x: 0, y: 0)
         super.anchorPoint = CGPoint(x: 0, y: 0)
-        invalidateSelf()
+        invalidate()
     }
     
-    public func invalidateSelf(){
+     func invalidate(){
+        
+        viewBoxTransform()
+        
         invalidateText()
+        invalidatePosition(false)
         invalidateShadow()
-        invalidateOpacity()
-        invalidateTextPosition(false)
         invalidateTransform()
     }
     
-    public func setupFont(){
+     func setupFont(){
         
-        let fs = mPainterKit.mIsViewBoxEnabled ? mFontSize.asViewBoxToMax(mPainterKit.mViewBox, mRect.width, mRect.height) : mFontSize
+        let fs = validateViewBox() ? mFontSize.asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mFontSize
         
         if mFont == "default"{
             if mFontStyle == "bold"{
@@ -388,15 +414,16 @@ public class TextLayer: CALayer  {
         
     }
     
-    public func invalidateTextPosition(_ f:Bool = true){
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
+     func invalidatePosition(_ f:Bool = true){
+        if !isLayout() { return  }
+        
         if f { setupFont() }
+        
         var x = mX
         var y = mY
-        if mPainterKit.mIsViewBoxEnabled{
-            
-            x = mX.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-            y = mY.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
+        if validateViewBox() {
+            x = mRectPath.left +  mX.asViewBoxToWidth(mRectVb, mRectPath.width)
+            y = mRectPath.top + mY.asViewBoxToHeight(mRectVb, mRectPath.height)
         }
         mText.sizeOneLine(cgSize: &mBoundsText)
      
@@ -429,33 +456,29 @@ public class TextLayer: CALayer  {
         if mHorizontalOffset != 0{
             x += mHorizontalOffset * mBoundsText.width
         }
-     
-        mLayer.frame = CGRect(x: 0, y: 0, width: mBoundsText.width, height: mBoundsText.height)
-            disableAnimation()
-        mLayer.position = CGPoint(x: x , y: y)
-            commit()
-        }
-    }
-    
-    public func invalidateOpacity(){
         disableAnimation()
-        super.opacity = mProps.getOpacity()
+        mLayer.frame = CGRect(x: 0, y: 0, width: mBoundsText.width, height: mBoundsText.height)
+        mLayer.position = CGPoint(x: x , y: y)
         commit()
+        
     }
     
-    public func invalidateText(){
+ 
+     func invalidateText(){
    
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
+        if !isLayout() { return }
             
             setupFont()
+        
             mTextAttrs[.font ] = mUIFont
    
             let fillColor = UIColor.parseInt(argb: mProps.getFillColor(), opacity: mProps.getFillOpacity())
             mTextAttrs[.foregroundColor ] = fillColor
+        
             var strokeWidth:CGFloat = mProps.getStrokeWidth()
-            if mPainterKit.mIsViewBoxEnabled {
-                let size = mPainterKit.mViewBox.width > mPainterKit.mViewBox.height ? mRect.width : mRect.height
-                strokeWidth = (mProps.getStrokeWidth() / max(mPainterKit.mViewBox.width,mPainterKit.mViewBox.height)) * size
+            if validateViewBox() {
+                let size = max(mRectPath.width,mRectPath.height)
+                strokeWidth = ( mProps.getStrokeWidth() / max(mRectVb.size.width,mRectVb.size.height) ) * size
             }
             mTextAttrs[.strokeWidth ] = -strokeWidth
             
@@ -467,88 +490,37 @@ public class TextLayer: CALayer  {
             disableAnimation()
             mLayer.string = mText
             commit()
-        }
+        
     }
     
   
 
-    public func invalidateTransform(){
-        
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
-            var matrix = CATransform3DIdentity
-          
-            
-            if mTransform.mTranslationX != 0 || mTransform.mTranslationY != 0{
-                var transX = mTransform.mTranslationX
-                var transY = mTransform.mTranslationY
-                if mTransform.mTranslationIsPercent{
-                    transX = mTransform.mTranslationX * mRect.width
-                    transY = mTransform.mTranslationY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled {
-                    transX = (mTransform.mTranslationX / mPainterKit.mViewBox.width) * mRect.width
-                    transY = (mTransform.mTranslationY / mPainterKit.mViewBox.height) * mRect.height
-                }
-                
-                matrix = CATransform3DTranslate(matrix, transX, transY, 0)
-            }
-            
-            if mTransform.mRotation != 0{
-                var rotX = mTransform.mRotationOriginX
-                var rotY = mTransform.mRotationOriginY
-                if mTransform.mRotationIsPercent{
-                    rotX = mTransform.mRotationOriginX * mRect.width
-                    rotY = mTransform.mRotationOriginY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled {
-                   
-                    rotX = mTransform.mRotationOriginX.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-                    rotY = mTransform.mRotationOriginY.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
-                }
-                matrix = CATransform3DTranslate(matrix, rotX, rotY, 0)
-                matrix = CATransform3DRotate(matrix, mTransform.mRotation.toRadians(), 0, 0, 1)
-                matrix = CATransform3DTranslate(matrix, -rotX, -rotY, 0)
-            }
-            
-            if mTransform.mScaleX != 1 || mTransform.mScaleY != 1{
-                var ox = mTransform.mScaleOriginX
-                var oy = mTransform.mScaleOriginY
-                if mTransform.mScaleIsPercent {
-                    ox = mTransform.mScaleOriginX * mRect.width
-                    oy = mTransform.mScaleOriginY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled{
-                    ox = mTransform.mScaleOriginX.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-                    oy = mTransform.mScaleOriginY.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
-                }
-                matrix = CATransform3DTranslate(matrix, ox, oy, 0)
-                matrix = CATransform3DScale(matrix, mTransform.mScaleX, mTransform.mScaleY, 1)
-                matrix = CATransform3DTranslate(matrix, -ox, -oy, 0)
-            }
-
-            disableAnimation()
-            super.transform = matrix
-            commit()
-        }
-    }
-    
  
    
     private func invalidateShadow(){
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
+     
+        if !isLayout() { return }
+        
         let c = UIColor.parseInt(argb: mProps.getShadowColor())
+        
+        
         var offset = CGSize(width: 0, height: 0)
         if mProps.getShadowOffsetIsPercent(){
-            offset.width = mProps.getShadowOffsetX() * mRect.width
-            offset.height = mProps.getShadowOffsetY() * mRect.height
-        }else if mPainterKit.mIsViewBoxEnabled {
-            offset.width = (mProps.getShadowOffsetX() / mPainterKit.mViewBox.width) * mRect.width
-            offset.height = (mProps.getShadowOffsetY() / mPainterKit.mViewBox.height) * mRect.height
+            offset.width = mProps.getShadowOffsetX() * mRectPath.width
+            offset.height = mProps.getShadowOffsetY() * mRectPath.height
+        }else if validateViewBox() {
+            offset.width = (mProps.getShadowOffsetX() / mRectVb.size.width) * mRectPath.width
+            offset.height = (mProps.getShadowOffsetY() / mRectVb.size.height) * mRectPath.height
         }else{
             offset.width = mProps.getShadowOffsetX()
             offset.height = mProps.getShadowOffsetY()
         }
+        
+        
         var radius = mProps.getShadowRadius()
-        if mPainterKit.mIsViewBoxEnabled {
-            let size = mPainterKit.mViewBox.width > mPainterKit.mViewBox.height ? mRect.width : mRect.height
-            radius = (mProps.getShadowRadius() / max(mPainterKit.mViewBox.width,mPainterKit.mViewBox.height)) * size
+        if validateViewBox() {
+            let size = max(mRectPath.width,mRectPath.height)
+            radius = (mProps.getShadowRadius() / max(mRectVb.size.width,mRectVb.size.height)) * size
         }
         disableAnimation()
         mLayer.shadowColor = c.cgColor
@@ -556,9 +528,86 @@ public class TextLayer: CALayer  {
         mLayer.shadowRadius = radius
         mLayer.shadowOpacity = mProps.getShadowOpacity()
         commit()
-        }
     }
  
+    
+    func invalidateTransform(){
+    
+        if !isLayout() {  return }
+      
+           var matrix = CATransform3DIdentity
+         
+           
+           if mTransform.mTranslationX != 0 || mTransform.mTranslationY != 0{
+               var transX = mTransform.mTranslationX
+               var transY = mTransform.mTranslationY
+               if mTransform.mTranslationIsPercent{
+                   transX = mTransform.mTranslationX * mRectPath.width
+                   transY = mTransform.mTranslationY * mRectPath.height
+               }else if validateViewBox() {
+                   transX = (mTransform.mTranslationX / mRectVb.size.width) * mRectPath.width
+                   transY = (mTransform.mTranslationY / mRectVb.size.height) * mRectPath.height
+               }
+               
+               matrix = CATransform3DTranslate(matrix, transX, transY, 0)
+           }
+           
+           if mTransform.mRotation != 0{
+               var rotX = mTransform.mRotationOriginX
+               var rotY = mTransform.mRotationOriginY
+               if mTransform.mRotationIsPercent{
+                   rotX = mTransform.mRotationOriginX * mRectPath.width
+                   rotY = mTransform.mRotationOriginY * mRectPath.height
+               }else if validateViewBox(){
+                  
+                   rotX = mRectPath.left + mTransform.mRotationOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                   rotY = mRectPath.top + mTransform.mRotationOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
+               }
+               matrix = CATransform3DTranslate(matrix, rotX, rotY, 0)
+               matrix = CATransform3DRotate(matrix, mTransform.mRotation.toRadians(), 0, 0, 1)
+               matrix = CATransform3DTranslate(matrix, -rotX, -rotY, 0)
+           }
+      
+           if mTransform.mScaleX != 1 || mTransform.mScaleY != 1{
+           
+               var ox = mTransform.mScaleOriginX
+               var oy = mTransform.mScaleOriginY
+               if mTransform.mScaleIsPercent {
+                   ox = mTransform.mScaleOriginX * mRectPath.width
+                   oy = mTransform.mScaleOriginY * mRectPath.height
+               }else if validateViewBox() {
+                   ox = mRectPath.left + mTransform.mScaleOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                   oy = mRectPath.top +  mTransform.mScaleOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
+               }
+               matrix = CATransform3DTranslate(matrix, ox, oy, 0)
+               matrix = CATransform3DScale(matrix, mTransform.mScaleX, mTransform.mScaleY, 1)
+               matrix = CATransform3DTranslate(matrix, -ox, -oy, 0)
+           }
+
+           disableAnimation()
+           super.transform = matrix
+           commit()
+       
+   }
+    
+    func viewBoxTransform(){
+         if validateViewBox() {
+            mRectPath.set(rect: mRectVb)
+            let trans = SVGViewBox.transform(vbRect: mRectVb, eRect: mBounds, align: mAlign, meetOrSlice: mAspect )
+            mRectPath = mRectPath.applying(trans)
+         }else{
+            mRectPath.set(rect: mBounds)
+         }
+    }
+    
+    private func validateViewBox() -> Bool {
+        return mRectVb.size.width >= 0 && mRectVb.size.height >= 0
+    }
+
+    
+    private func isLayout() -> Bool {
+        return mBounds.width > 0 && mBounds.height > 0
+    }
     
      func disableAnimation(){
         CATransaction.begin()
@@ -571,11 +620,11 @@ public class TextLayer: CALayer  {
     
 
    
-    public override init(layer: Any) {
+     override init(layer: Any) {
         super.init(layer: layer)
 
     }
-    public required init?(coder: NSCoder) {
+     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
  

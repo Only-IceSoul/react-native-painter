@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public class PathLayer : Paintable{
+ class PathLayer : Paintable{
     
     private var d:String = ""
    
@@ -19,25 +19,25 @@ public class PathLayer : Paintable{
     
     
     
-    public func setD(_ v:String){
+     func setD(_ v:String){
         if d != v{
             d = v
-            invalidatePath()
+            invalidate()
         }
     
     }
    
-    public override func setupPath() {
+     override func setupPath() {
         mPath.removeAllPoints()
        
-            do{
-                   mPath = try SVGPathParser.parse(d: d)
-              
-            }catch{
-                   print("Exception: ",error)
-            }
+        do{
+               mPath = try SVGPathParser.parse(d: d)
+          
+        }catch{
+               print("Exception: ",error)
+        }
     }
-    public required init?(coder: NSCoder) {
+     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

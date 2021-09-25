@@ -12,12 +12,13 @@ class LinearGradientLayer: CALayer {
     
     
     var mLayer = CAGradientLayer()
-    var mPainterKit : PainterKit!
     var mTransform = TransformProps()
-    var mRect = CGRect()
     
-    var mOpacityStatus = false
-    var mOpacity:Float = 1
+    var mBounds = CGRect()
+    var mRectPath = CGRect()
+    var mRectVb = CGRect(x: 0, y: 0, width: -1, height: -1)
+    var mAlign = "xMidYMid"
+    var mAspect = SVGViewBox.AspectRatio.meet
     
     private var x:CGFloat = 0
     private var y:CGFloat = 0
@@ -30,7 +31,7 @@ class LinearGradientLayer: CALayer {
     private var mColors : [CGColor] = [CGColor]()
     private var mPositions : [NSNumber]?
     
-    public override init() {
+     override init() {
         super.init()
         addSublayer(mLayer)
         mColors.append(UIColor.white.cgColor)
@@ -42,58 +43,49 @@ class LinearGradientLayer: CALayer {
     }
     
     func setPainterKit(_ p: PainterKit){
-        mPainterKit = p
-        invalidateSelf()
+        mRectVb.set(rect: p.mViewBox)
+        mAspect = p.mAspect
+        mAlign = p.mAlign
+        invalidate()
     }
     
-    func setProps(_ p:CommonProps){
-        if !mOpacityStatus { mOpacity = p.getOpacity() }
-        invalidateOpacity()
-        
-    }
-    public func setOpacity(_ v:Float,_ status:Bool){
-        mOpacityStatus = status
-        if mOpacity != v{
-            mOpacity = v
-            invalidateOpacity()
-        }
-      
-    }
+    func setProps(_ p:CommonProps){}
+    
     
     //MARK : PROPS
-    public func setX(_ v:CGFloat){
+     func setX(_ v:CGFloat){
         if x != v{
             x = v
-            invalidateGradientPosition()
+            invalidateRect()
         }
     
     }
-    public func setY(_ v:CGFloat){
+     func setY(_ v:CGFloat){
         if y != v{
             y = v
-            invalidateGradientPosition()
+            invalidateRect()
         }
     }
-    public func setW(_ v:CGFloat){
+     func setW(_ v:CGFloat){
         if w != v{
             w = v
-            invalidateGradientPosition()
+            invalidateRect()
         }
     }
-    public func setH(_ v:CGFloat){
+     func setH(_ v:CGFloat){
         if h != v{
             h = v
-            invalidateGradientPosition()
+            invalidateRect()
         }
     }
-    public func setStartPoint(_ v:CGFloat,_ v2:CGFloat){
+     func setStartPoint(_ v:CGFloat,_ v2:CGFloat){
         if startX != v || startY != v2{
             startX = v
             startY = v2
             invalidateProps()
         }
     }
-    public func setEndPoint(_ v:CGFloat,_ v2:CGFloat){
+     func setEndPoint(_ v:CGFloat,_ v2:CGFloat){
         if endX != v || endY != v2{
             endX = v
             endY = v2
@@ -101,111 +93,111 @@ class LinearGradientLayer: CALayer {
         }
     }
     
-    public func setColors(_ colors: [CGColor]){
+     func setColors(_ colors: [CGColor]){
       
         mColors = colors
         invalidateProps()
         
     }
     
-    public func setPositions(_ pos:[NSNumber]?){
+     func setPositions(_ pos:[NSNumber]?){
         mPositions = pos
         invalidateProps()
     }
     
     //MARK: Transform props
 
-    public func setTransX(v:CGFloat) {
+     func setTransX(v:CGFloat) {
             if(mTransform.mTranslationX != v ){
                 mTransform.mTranslationX = v;
                 invalidateTransform();
             }
         }
-        public func setTransY(v:CGFloat) {
+         func setTransY(v:CGFloat) {
             if(mTransform.mTranslationY != v ){
                 mTransform.mTranslationY = v;
                 invalidateTransform();
             }
         }
-        public func setTransPercentageValue(v:Bool) {
+         func setTransPercentageValue(v:Bool) {
             if(mTransform.mTranslationIsPercent != v ){
                 mTransform.mTranslationIsPercent = v;
                 invalidateTransform();
             }
         }
 
-        public func setRot(v:CGFloat) {
+         func setRot(v:CGFloat) {
             if(mTransform.mRotation != v ){
                 mTransform.mRotation = v;
                 invalidateTransform();
             }
         }
-        public func setRotO(v:CGFloat) {
+         func setRotO(v:CGFloat) {
             if(mTransform.mRotationOriginX != v || mTransform.mRotationOriginY != v ){
                 mTransform.mRotationOriginX = v;
                 mTransform.mRotationOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setRotOx(v:CGFloat) {
+         func setRotOx(v:CGFloat) {
             if(mTransform.mRotationOriginX != v ){
                 mTransform.mRotationOriginX = v;
                 invalidateTransform();
             }
         }
-        public func setRotOy(v:CGFloat) {
+         func setRotOy(v:CGFloat) {
             if(mTransform.mRotationOriginY != v ){
                 mTransform.mRotationOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setRotPercentageValue(v:Bool) {
+         func setRotPercentageValue(v:Bool) {
             if(mTransform.mRotationIsPercent != v ){
                 mTransform.mRotationIsPercent = v;
                 invalidateTransform();
             }
         }
 
-        public func setSc(v:CGFloat){
+         func setSc(v:CGFloat){
             if(mTransform.mScaleX != v || mTransform.mScaleY != v){
                 mTransform.mScaleX = v;
                 mTransform.mScaleY = v;
                 invalidateTransform();
             }
         }
-        public func setScX(v:CGFloat) {
+         func setScX(v:CGFloat) {
             if(mTransform.mScaleX != v ){
                 mTransform.mScaleX = v;
                 invalidateTransform();
             }
         }
 
-        public func setScY(v:CGFloat) {
+         func setScY(v:CGFloat) {
             if(mTransform.mScaleY != v ){
                 mTransform.mScaleY = v;
                 invalidateTransform();
             }
         }
-        public func setScO(v:CGFloat){
+         func setScO(v:CGFloat){
             if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
                 mTransform.mScaleOriginX = v;
                 mTransform.mScaleOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setScOx(v:CGFloat) {
+         func setScOx(v:CGFloat) {
             if(mTransform.mScaleOriginX != v ){
                 mTransform.mScaleOriginX = v;
                 invalidateTransform();
             }
         }
-        public func setScOy(v:CGFloat) {
+         func setScOy(v:CGFloat) {
             if(mTransform.mScaleOriginY != v ){
                 mTransform.mScaleOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setScPercentageValue(v:Bool) {
+         func setScPercentageValue(v:Bool) {
             if(mTransform.mScaleIsPercent != v ){
                 mTransform.mScaleIsPercent = v;
                 invalidateTransform();
@@ -215,22 +207,23 @@ class LinearGradientLayer: CALayer {
     
     //MARK: layer methods
     
-    public func onBoundsChange(_ frame: CGRect){
-        mRect.set(rect: frame)
-        super.frame = mRect
+     func onBoundsChange(_ frame: CGRect){
+        mBounds.set(rect: frame)
+        super.frame = mBounds
         super.position = CGPoint(x: 0, y: 0)
         super.anchorPoint = CGPoint(x: 0, y: 0)
-        invalidateSelf()
+        invalidate()
     }
     
-    public func invalidateSelf(){
-        invalidateOpacity()
-        invalidateGradientPosition()
+     func invalidate(){
+        viewBoxTransform()
+        
         invalidateProps()
+        invalidateRect()
         invalidateTransform()
     }
     
-    public func invalidateProps(){
+     func invalidateProps(){
         disableAnimation()
         mLayer.startPoint = CGPoint(x: startX, y: startY)
         mLayer.endPoint = CGPoint(x: endX, y: endY)
@@ -239,94 +232,108 @@ class LinearGradientLayer: CALayer {
         commit()
     }
     
-    public func invalidateGradientPosition(){
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
+     func invalidateRect(){
+        if !isLayout() {  return }
+        
+        
         var xx = x
         var yy = y
         var ww = w
         var hh = h
         
-        if mPainterKit.mIsViewBoxEnabled{
+        if validateViewBox(){
             
-            xx = x.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-            yy = y.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
-            ww = w.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-            hh = h.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
+            xx = mRectPath.left + x.asViewBoxToWidth(mRectVb, mRectPath.width)
+            yy = mRectPath.top +  y.asViewBoxToHeight(mRectVb, mRectPath.height)
+            ww = w.asViewBoxToWidth(mRectVb, mRectPath.width)
+            hh = h.asViewBoxToHeight(mRectVb, mRectPath.height)
         }
         
-        
-        mLayer.frame = CGRect(x: 0, y: 0, width:ww, height: hh)
         disableAnimation()
+        mLayer.frame = CGRect(x: 0, y: 0, width:ww, height: hh)
+
         mLayer.position = CGPoint(x: xx , y: yy)
         commit()
-        }
-    }
-    
-    public func invalidateTransform(){
         
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
-            var matrix = CATransform3DIdentity
-          
-            
-            if mTransform.mTranslationX != 0 || mTransform.mTranslationY != 0{
-                var transX = mTransform.mTranslationX
-                var transY = mTransform.mTranslationY
-                if mTransform.mTranslationIsPercent{
-                    transX = mTransform.mTranslationX * mRect.width
-                    transY = mTransform.mTranslationY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled {
-                    transX = (mTransform.mTranslationX / mPainterKit.mViewBox.width) * mRect.width
-                    transY = (mTransform.mTranslationY / mPainterKit.mViewBox.height) * mRect.height
-                }
-                
-                matrix = CATransform3DTranslate(matrix, transX, transY, 0)
-            }
-            
-            if mTransform.mRotation != 0{
-                var rotX = mTransform.mRotationOriginX
-                var rotY = mTransform.mRotationOriginY
-                if mTransform.mRotationIsPercent{
-                    rotX = mTransform.mRotationOriginX * mRect.width
-                    rotY = mTransform.mRotationOriginY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled {
-                   
-                    rotX = mTransform.mRotationOriginX.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-                    rotY = mTransform.mRotationOriginY.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
-                }
-                matrix = CATransform3DTranslate(matrix, rotX, rotY, 0)
-                matrix = CATransform3DRotate(matrix, mTransform.mRotation.toRadians(), 0, 0, 1)
-                matrix = CATransform3DTranslate(matrix, -rotX, -rotY, 0)
-            }
-            
-            if mTransform.mScaleX != 1 || mTransform.mScaleY != 1{
-                var ox = mTransform.mScaleOriginX
-                var oy = mTransform.mScaleOriginY
-                if mTransform.mScaleIsPercent {
-                    ox = mTransform.mScaleOriginX * mRect.width
-                    oy = mTransform.mScaleOriginY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled{
-                    ox = mTransform.mScaleOriginX.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-                    oy = mTransform.mScaleOriginY.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
-                }
-                matrix = CATransform3DTranslate(matrix, ox, oy, 0)
-                matrix = CATransform3DScale(matrix, mTransform.mScaleX, mTransform.mScaleY, 1)
-                matrix = CATransform3DTranslate(matrix, -ox, -oy, 0)
-            }
+    }
+    
+    func invalidateTransform(){
+    
+        if !isLayout() {  return }
+      
+           var matrix = CATransform3DIdentity
+         
+           
+           if mTransform.mTranslationX != 0 || mTransform.mTranslationY != 0{
+               var transX = mTransform.mTranslationX
+               var transY = mTransform.mTranslationY
+               if mTransform.mTranslationIsPercent{
+                   transX = mTransform.mTranslationX * mRectPath.width
+                   transY = mTransform.mTranslationY * mRectPath.height
+               }else if validateViewBox() {
+                   transX = (mTransform.mTranslationX / mRectVb.size.width) * mRectPath.width
+                   transY = (mTransform.mTranslationY / mRectVb.size.height) * mRectPath.height
+               }
+               
+               matrix = CATransform3DTranslate(matrix, transX, transY, 0)
+           }
+           
+           if mTransform.mRotation != 0{
+               var rotX = mTransform.mRotationOriginX
+               var rotY = mTransform.mRotationOriginY
+               if mTransform.mRotationIsPercent{
+                   rotX = mTransform.mRotationOriginX * mRectPath.width
+                   rotY = mTransform.mRotationOriginY * mRectPath.height
+               }else if validateViewBox(){
+                  
+                   rotX = mRectPath.left + mTransform.mRotationOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                   rotY = mRectPath.top + mTransform.mRotationOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
+               }
+               matrix = CATransform3DTranslate(matrix, rotX, rotY, 0)
+               matrix = CATransform3DRotate(matrix, mTransform.mRotation.toRadians(), 0, 0, 1)
+               matrix = CATransform3DTranslate(matrix, -rotX, -rotY, 0)
+           }
+      
+           if mTransform.mScaleX != 1 || mTransform.mScaleY != 1{
+           
+               var ox = mTransform.mScaleOriginX
+               var oy = mTransform.mScaleOriginY
+               if mTransform.mScaleIsPercent {
+                   ox = mTransform.mScaleOriginX * mRectPath.width
+                   oy = mTransform.mScaleOriginY * mRectPath.height
+               }else if validateViewBox() {
+                   ox = mRectPath.left + mTransform.mScaleOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                   oy = mRectPath.top +  mTransform.mScaleOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
+               }
+               matrix = CATransform3DTranslate(matrix, ox, oy, 0)
+               matrix = CATransform3DScale(matrix, mTransform.mScaleX, mTransform.mScaleY, 1)
+               matrix = CATransform3DTranslate(matrix, -ox, -oy, 0)
+           }
 
-            disableAnimation()
-            super.transform = matrix
-            commit()
-        }
+           disableAnimation()
+           super.transform = matrix
+           commit()
+       
+   }
+    
+    func viewBoxTransform(){
+         if validateViewBox() {
+            mRectPath.set(rect: mRectVb)
+            let trans = SVGViewBox.transform(vbRect: mRectVb, eRect: mBounds, align: mAlign, meetOrSlice: mAspect )
+            mRectPath = mRectPath.applying(trans)
+         }else{
+            mRectPath.set(rect: mBounds)
+         }
     }
     
-    
-    
-    public func invalidateOpacity(){
-        disableAnimation()
-        super.opacity = mOpacity
-        commit()
+    private func validateViewBox() -> Bool {
+        return mRectVb.size.width >= 0 && mRectVb.size.height >= 0
     }
+
     
+    private func isLayout() -> Bool {
+        return mBounds.width > 0 && mBounds.height > 0
+    }
     
      func disableAnimation(){
         CATransaction.begin()

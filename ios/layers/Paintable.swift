@@ -1,27 +1,33 @@
 //
-//  Drawable.swift
+//  Paintable.swift
 //  react-native-painter
 //
 //  Created by Juan J LF on 8/29/21.
 //
 
 import UIKit
-public class Paintable: CAShapeLayer  {
-   
-    var namePaint = "none"
+ class Paintable: CAShapeLayer  {
     
-    var mPainterKit : PainterKit!
+ 
+    
+    //MARK: Var
     var mProps = CommonProps()
     var mTransform = TransformProps()
-    var mIgnoreVbTransform = false
-    var mIgnoreFill = false
-    var mIgnoreStroke = false
+    
 
-    var mRect = CGRect()
+    var mBounds = CGRect()
+    var mRectPath = CGRect()
+    var mRectVb = CGRect(x: 0, y: 0, width: -1, height: -1)
+    
     var mPath  = UIBezierPath()
+    
+    var mAlign = "xMidYMid"
+    var mAspect = SVGViewBox.AspectRatio.meet
+    
+    var mIgnoreFill = false
    
     
-    public override init() {
+     override init() {
         super.init()
         super.fillColor = UIColor.clear.cgColor
         super.shadowOffset = .init(width: 0, height: 0)
@@ -33,33 +39,25 @@ public class Paintable: CAShapeLayer  {
     }
         
     //MARK: Protocol
-    
+
     func setPainterKit(_ p: PainterKit){
-        mPainterKit = p
-        invalidateCommonProps()
-        invalidatePath()
-        invalidateTransform()
+    
+        mRectVb.set(rect: p.mViewBox)
+        mAspect = p.mAspect
+        mAlign = p.mAlign
+        invalidate()
     }
     
     func setProps(_ p:CommonProps){
         mProps.set(p)
-        invalidateCommonProps()
-        invalidatePath()
+        invalidate()
     }
     
-    //MARK: set and get
-    @discardableResult
-    public func setOpacity(_ v:Float,_ status:Bool) -> Paintable{
-        mProps.opacityStatus = status
-        if mProps.opacity != v{
-            mProps.opacity = v
-            invalidateCommonProps()
-        }
-       return self
-    }
+    //MARK: Common Props
+    
     
     @discardableResult
-    public func setFill(_ v:Int,_ status:Bool) -> Paintable{
+     func setFill(_ v:Int,_ status:Bool) -> Paintable{
         mProps.fillColorStatus = status
         if mProps.fillColor != v{
             mProps.fillColor = v
@@ -69,18 +67,17 @@ public class Paintable: CAShapeLayer  {
    }
     
     @discardableResult
-    public func setFillRule(_ v:String,_ status:Bool) -> Paintable{
+     func setFillRule(_ v:String,_ status:Bool) -> Paintable{
         mProps.fillRuleStatus = status
         if mProps.fillRule != v{
             mProps.fillRule = v
-            invalidateCommonProps()
-            invalidatePath()
+            invalidate()
         }
        return self
     }
     
     @discardableResult
-    public func setFillOpacity(_ v:CGFloat,_ status:Bool) -> Paintable{
+     func setFillOpacity(_ v:CGFloat,_ status:Bool) -> Paintable{
         mProps.fillOpacityStatus = status
         if mProps.fillOpacity != v{
             mProps.fillOpacity = v
@@ -90,7 +87,7 @@ public class Paintable: CAShapeLayer  {
     }
     
     @discardableResult
-    public func setStroke(_ v:Int,_ status:Bool) -> Paintable{
+     func setStroke(_ v:Int,_ status:Bool) -> Paintable{
         mProps.strokeColorStatus = status
         if mProps.strokeColor != v{
             mProps.strokeColor = v
@@ -100,7 +97,7 @@ public class Paintable: CAShapeLayer  {
     }
     
     @discardableResult
-    public func setStrokeOpacity(_ v:CGFloat,_ status:Bool) -> Paintable{
+     func setStrokeOpacity(_ v:CGFloat,_ status:Bool) -> Paintable{
         mProps.strokeOpacityStatus = status
         if mProps.strokeOpacity != v{
             mProps.strokeOpacity = v
@@ -110,48 +107,48 @@ public class Paintable: CAShapeLayer  {
     }
     
     @discardableResult
-    public func setStrokeWidth(_ v:CGFloat,_ status:Bool) -> Paintable{
+     func setStrokeWidth(_ v:CGFloat,_ status:Bool) -> Paintable{
         mProps.strokeWidthStatus = status
         if mProps.strokeWidth != v{
             mProps.strokeWidth = v
+            invalidateShadowPath()
             invalidateCommonProps()
-            invalidatePath()
         }
        return self
     }
     
     @discardableResult
-    public func setStrokeCap(_ v:String) -> Paintable{
+     func setStrokeCap(_ v:String) -> Paintable{
         if mProps.strokeCap != v{
             mProps.strokeCap = v
+            invalidateShadowPath()
             invalidateCommonProps()
-            invalidatePath()
         }
        return self
     }
     
     @discardableResult
-    public func setStrokeJoin(_ v:String) -> Paintable{
+     func setStrokeJoin(_ v:String) -> Paintable{
         if mProps.strokeJoin != v{
             mProps.strokeJoin = v
+            invalidateShadowPath()
             invalidateCommonProps()
-            invalidatePath()
         }
        return self
     }
     @discardableResult
-    public func setStrokeMiter(_ v:CGFloat,_ status:Bool) -> Paintable{
+     func setStrokeMiter(_ v:CGFloat,_ status:Bool) -> Paintable{
         mProps.strokeMiterStatus = status
         if mProps.strokeMiter != v{
             mProps.strokeMiter = v
+            invalidateShadowPath()
             invalidateCommonProps()
-            invalidatePath()
         }
        return self
     }
     
     @discardableResult
-    public func setStrokeStart(_ v:CGFloat,_ status:Bool) -> Paintable{
+     func setStrokeStart(_ v:CGFloat,_ status:Bool) -> Paintable{
         mProps.strokeStartStatus = status
         if mProps.strokeStart != v{
             mProps.strokeStart = v
@@ -161,7 +158,7 @@ public class Paintable: CAShapeLayer  {
     }
     
     @discardableResult
-    public func setStrokeEnd(_ v:CGFloat,_ status:Bool) -> Paintable{
+     func setStrokeEnd(_ v:CGFloat,_ status:Bool) -> Paintable{
         mProps.strokeEndStatus = status
         if mProps.strokeEnd != v{
             mProps.strokeEnd = v
@@ -172,7 +169,7 @@ public class Paintable: CAShapeLayer  {
     
     
     @discardableResult
-    public func setShadow(_ v:Int,_ status:Bool) -> Paintable{
+     func setShadow(_ v:Int,_ status:Bool) -> Paintable{
         mProps.shadowColorStatus = status
         if mProps.shadowColor != v{
             mProps.shadowColor = v
@@ -182,19 +179,7 @@ public class Paintable: CAShapeLayer  {
     }
     
     @discardableResult
-    public func setShadowOffset(_ x:CGFloat,_ y:CGFloat,_ percent:Bool,_ status:Bool) -> Paintable{
-        mProps.shadowOffsetStatus = status
-        if mProps.shadowOffsetX != x || mProps.shadowOffsetY != y || mProps.shadowOffsetIsPercent != percent {
-            mProps.shadowOffsetX = x
-            mProps.shadowOffsetY = y
-            mProps.shadowOffsetIsPercent = percent
-            invalidateCommonProps()
-        }
-       return self
-    }
-    
-    @discardableResult
-    public func setShadowOpacity(_ v:Float,_ status:Bool) -> Paintable{
+     func setShadowOpacity(_ v:Float,_ status:Bool) -> Paintable{
         mProps.shadowOpacityStatus = status
         if mProps.shadowOpacity != v{
             mProps.shadowOpacity = v
@@ -204,7 +189,7 @@ public class Paintable: CAShapeLayer  {
     }
     
     @discardableResult
-    public func setShadowRadius(_ v:CGFloat,_ status:Bool) -> Paintable{
+     func setShadowRadius(_ v:CGFloat,_ status:Bool) -> Paintable{
         mProps.shadowRadiusStatus = status
         if mProps.shadowRadius != v{
             mProps.shadowRadius = v
@@ -213,101 +198,138 @@ public class Paintable: CAShapeLayer  {
        return self
     }
     
-    
+    @discardableResult
+     func setShadowOffset(_ v:CGFloat,_ status:Bool) -> Paintable{
+        mProps.shadowOffsetXStatus = status
+        mProps.shadowOffsetYStatus = status
+        if mProps.shadowOffsetX != v || mProps.shadowOffsetY != v  {
+            mProps.shadowOffsetX = v
+            mProps.shadowOffsetY = v
+            invalidateCommonProps()
+        }
+       return self
+    }
+    @discardableResult
+     func setShadowOffsetX(_ v:CGFloat,_ status:Bool) -> Paintable{
+        mProps.shadowOffsetXStatus = status
+        if mProps.shadowOffsetX != v {
+            mProps.shadowOffsetX = v
+            invalidateCommonProps()
+        }
+       return self
+    }
+    @discardableResult
+     func setShadowOffsetY(_ v:CGFloat,_ status:Bool) -> Paintable{
+        mProps.shadowOffsetYStatus = status
+        if mProps.shadowOffsetY != v  {
+            mProps.shadowOffsetY = v
+            invalidateCommonProps()
+        }
+       return self
+    }
+    @discardableResult
+     func setShadowPercentageValue(_ v:Bool,_ status:Bool) -> Paintable{
+        mProps.shadowOffsetIsPerecentStatus = status
+        if mProps.shadowOffsetIsPercent != v  {
+            mProps.shadowOffsetIsPercent = v
+            invalidateCommonProps()
+        }
+       return self
+    }
     
     //MARK: Transform props
-
-    public func setTransX(v:CGFloat) {
+    
+     func setTransX(v:CGFloat) {
             if(mTransform.mTranslationX != v ){
                 mTransform.mTranslationX = v;
                 invalidateTransform();
             }
         }
-        public func setTransY(v:CGFloat) {
+         func setTransY(v:CGFloat) {
             if(mTransform.mTranslationY != v ){
                 mTransform.mTranslationY = v;
                 invalidateTransform();
             }
         }
-        public func setTransPercentageValue(v:Bool) {
+         func setTransPercentageValue(v:Bool) {
             if(mTransform.mTranslationIsPercent != v ){
                 mTransform.mTranslationIsPercent = v;
                 invalidateTransform();
             }
         }
 
-        public func setRot(v:CGFloat) {
+         func setRot(v:CGFloat) {
             if(mTransform.mRotation != v ){
                 mTransform.mRotation = v;
                 invalidateTransform();
             }
         }
-        public func setRotO(v:CGFloat) {
+         func setRotO(v:CGFloat) {
             if(mTransform.mRotationOriginX != v || mTransform.mRotationOriginY != v ){
                 mTransform.mRotationOriginX = v;
                 mTransform.mRotationOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setRotOx(v:CGFloat) {
+         func setRotOx(v:CGFloat) {
             if(mTransform.mRotationOriginX != v ){
                 mTransform.mRotationOriginX = v;
                 invalidateTransform();
             }
         }
-        public func setRotOy(v:CGFloat) {
+         func setRotOy(v:CGFloat) {
             if(mTransform.mRotationOriginY != v ){
                 mTransform.mRotationOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setRotPercentageValue(v:Bool) {
+         func setRotPercentageValue(v:Bool) {
             if(mTransform.mRotationIsPercent != v ){
                 mTransform.mRotationIsPercent = v;
                 invalidateTransform();
             }
         }
 
-        public func setSc(v:CGFloat){
+         func setSc(v:CGFloat){
             if(mTransform.mScaleX != v || mTransform.mScaleY != v){
                 mTransform.mScaleX = v;
                 mTransform.mScaleY = v;
                 invalidateTransform();
             }
         }
-        public func setScX(v:CGFloat) {
+         func setScX(v:CGFloat) {
             if(mTransform.mScaleX != v ){
                 mTransform.mScaleX = v;
                 invalidateTransform();
             }
         }
 
-        public func setScY(v:CGFloat) {
+         func setScY(v:CGFloat) {
             if(mTransform.mScaleY != v ){
                 mTransform.mScaleY = v;
                 invalidateTransform();
             }
         }
-        public func setScO(v:CGFloat){
+         func setScO(v:CGFloat){
             if(mTransform.mScaleOriginX != v || mTransform.mScaleOriginY != v){
                 mTransform.mScaleOriginX = v;
                 mTransform.mScaleOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setScOx(v:CGFloat) {
+         func setScOx(v:CGFloat) {
             if(mTransform.mScaleOriginX != v ){
                 mTransform.mScaleOriginX = v;
                 invalidateTransform();
             }
         }
-        public func setScOy(v:CGFloat) {
+         func setScOy(v:CGFloat) {
             if(mTransform.mScaleOriginY != v ){
                 mTransform.mScaleOriginY = v;
                 invalidateTransform();
             }
         }
-        public func setScPercentageValue(v:Bool) {
+         func setScPercentageValue(v:Bool) {
             if(mTransform.mScaleIsPercent != v ){
                 mTransform.mScaleIsPercent = v;
                 invalidateTransform();
@@ -316,75 +338,71 @@ public class Paintable: CAShapeLayer  {
     
     //MARK: layer methods
     
-    public func onBoundsChange(_ frame: CGRect){
-        mRect.set(rect: frame)
-        super.frame = mRect
+     func onBoundsChange(_ frame: CGRect){
+        mBounds.set(rect: frame)
+        super.frame = mBounds
         super.position = CGPoint(x: 0, y: 0)
         super.anchorPoint = CGPoint(x: 0, y: 0)
         
-        invalidateCommonProps()
-        invalidatePath()
-        invalidateTransform()
+        invalidate()
+        
     }
     
-    
- 
-    
-  
-    
+
     open func setupPath(){
         
-          
-         
-        
+    
         
     }
     
     
     
   
-   public func invalidatePath(){
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
+    func invalidate(){
+        if(mBounds.width > 0 && mBounds.height > 0){
+            
             setupPath()
-            if !mIgnoreVbTransform{ transformPathToViewbox() }
+            
+            viewBoxTransform()
             
             mPath.usesEvenOddFillRule = mProps.getFillRule()
+            
             super.path = mPath.cgPath
-            var sw:CGFloat = mProps.getStrokeWidth()
-            if mPainterKit.mIsViewBoxEnabled {
-                let size = mPainterKit.mViewBox.width > mPainterKit.mViewBox.height ? mRect.width : mRect.height
-                sw = (mProps.getStrokeWidth() / max(mPainterKit.mViewBox.width,mPainterKit.mViewBox.height)) * size
-            }
-            super.shadowPath = fill() ? mPath.cgPath : mPath.cgPath.copy(strokingWithWidth: sw, lineCap: mProps.getCGStrokeCap(), lineJoin: mProps.getCGStrokeJoin(), miterLimit: mProps.getStrokeMiter())
+            
+          
+            //require rectpath , viewboxtransform
+            invalidateShadowPath()
+            invalidateCommonProps()
+            invalidateTransform()
         }
+        
+    }
+    
+    func invalidateShadowPath(){
+        var sw:CGFloat = mProps.getStrokeWidth()
+        if validateViewBox() {
+            let size = max(mRectPath.width,mRectPath.height)
+            sw = (mProps.getStrokeWidth() / max(mRectVb.size.width,mRectVb.size.height)) * size
+        }
+        super.shadowPath = fill() ? mPath.cgPath : mPath.cgPath.copy(strokingWithWidth: sw, lineCap: mProps.getCGStrokeCap(), lineJoin: mProps.getCGStrokeJoin(), miterLimit: mProps.getStrokeMiter())
         
     }
    
     
-    public func invalidateCommonProps(){
+     func invalidateCommonProps(){
         
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
-    
+        if(mBounds.width > 0 && mBounds.height > 0 ){
             disableAnimation()
-            if !mIgnoreFill { setupFill()}
-            if !mIgnoreStroke { setupStroke() }
+            if !mIgnoreFill { setupFill() }
+            setupStroke()
             setupShadow()
-            super.opacity = mProps.getOpacity()
             commit()
-     
-          
         }
     }
-    
-    
-    
-    private func fill()->Bool{
-        return !mIgnoreFill && mProps.getFillColor() != 0
-    }
-    
-    public func invalidateTransform(){
+       
+     func invalidateTransform(){
      
-        if(mRect.width > 0 && mRect.height > 0 && mPainterKit != nil){
+        if(mBounds.width > 0 && mBounds.height > 0 ){
             var matrix = CATransform3DIdentity
           
             
@@ -392,11 +410,11 @@ public class Paintable: CAShapeLayer  {
                 var transX = mTransform.mTranslationX
                 var transY = mTransform.mTranslationY
                 if mTransform.mTranslationIsPercent{
-                    transX = mTransform.mTranslationX * mRect.width
-                    transY = mTransform.mTranslationY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled {
-                    transX = (mTransform.mTranslationX / mPainterKit.mViewBox.width) * mRect.width
-                    transY = (mTransform.mTranslationY / mPainterKit.mViewBox.height) * mRect.height
+                    transX = mTransform.mTranslationX * mRectPath.width
+                    transY = mTransform.mTranslationY * mRectPath.height
+                }else if validateViewBox() {
+                    transX = (mTransform.mTranslationX / mRectVb.size.width) * mRectPath.width
+                    transY = (mTransform.mTranslationY / mRectVb.size.height) * mRectPath.height
                 }
                 
                 matrix = CATransform3DTranslate(matrix, transX, transY, 0)
@@ -406,12 +424,12 @@ public class Paintable: CAShapeLayer  {
                 var rotX = mTransform.mRotationOriginX
                 var rotY = mTransform.mRotationOriginY
                 if mTransform.mRotationIsPercent{
-                    rotX = mTransform.mRotationOriginX * mRect.width
-                    rotY = mTransform.mRotationOriginY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled {
+                    rotX = mTransform.mRotationOriginX * mRectPath.width
+                    rotY = mTransform.mRotationOriginY * mRectPath.height
+                }else if validateViewBox(){
                    
-                    rotX = mTransform.mRotationOriginX.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-                    rotY = mTransform.mRotationOriginY.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
+                    rotX = mRectPath.left + mTransform.mRotationOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                    rotY = mRectPath.top + mTransform.mRotationOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
                 }
                 matrix = CATransform3DTranslate(matrix, rotX, rotY, 0)
                 matrix = CATransform3DRotate(matrix, mTransform.mRotation.toRadians(), 0, 0, 1)
@@ -423,11 +441,11 @@ public class Paintable: CAShapeLayer  {
                 var ox = mTransform.mScaleOriginX
                 var oy = mTransform.mScaleOriginY
                 if mTransform.mScaleIsPercent {
-                    ox = mTransform.mScaleOriginX * mRect.width
-                    oy = mTransform.mScaleOriginY * mRect.height
-                }else if mPainterKit.mIsViewBoxEnabled{
-                    ox = mTransform.mScaleOriginX.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width)
-                    oy = mTransform.mScaleOriginY.asViewBoxToHeight(mPainterKit.mViewBox, mRect.height)
+                    ox = mTransform.mScaleOriginX * mRectPath.width
+                    oy = mTransform.mScaleOriginY * mRectPath.height
+                }else if validateViewBox() {
+                    ox = mRectPath.left + mTransform.mScaleOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                    oy = mRectPath.top +  mTransform.mScaleOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
                 }
                 matrix = CATransform3DTranslate(matrix, ox, oy, 0)
                 matrix = CATransform3DScale(matrix, mTransform.mScaleX, mTransform.mScaleY, 1)
@@ -440,31 +458,33 @@ public class Paintable: CAShapeLayer  {
         }
     }
     
-    private func transformPathToViewbox(){
-         if mPainterKit.mViewBox.width > 0 && mPainterKit.mViewBox.height > 0{
-            let aspect : SVGViewBox.AspectRatio = mPainterKit.mAspect == "meet" ? .meet : ( mPainterKit.mAspect == "slice" ? .slice : .none )
-            let trans = SVGViewBox.transform(vbRect: mPainterKit.mViewBox, eRect: mRect, align: mPainterKit.mAlign, meetOrSlice: aspect )
+     func viewBoxTransform(){
+         if validateViewBox() {
+            mRectPath.set(rect: mRectVb)
+            let trans = SVGViewBox.transform(vbRect: mRectVb, eRect: mBounds, align: mAlign, meetOrSlice: mAspect )
             mPath.apply(trans)
-        }
+            mRectPath = mRectPath.applying(trans)
+         }else{
+            mRectPath.set(rect: mBounds)
+         }
     }
     
+   
+    
     private func setupFill(){
-        let c = UIColor.parseInt(argb: mProps.getFillColor(), opacity: mProps.getFillOpacity()
-//                                    * CGFloat(mProps.getOpacity())
-        )
+        let c = UIColor.parseInt(argb: mProps.getFillColor(), opacity: mProps.getFillOpacity())
         super.fillColor = c.cgColor
     }
     
     private func setupStroke(){
         var sw:CGFloat = mProps.getStrokeWidth()
-        if mPainterKit.mIsViewBoxEnabled {
-            let size = mPainterKit.mViewBox.width > mPainterKit.mViewBox.height ? mRect.width : mRect.height
-            sw = (mProps.getStrokeWidth() / max(mPainterKit.mViewBox.width,mPainterKit.mViewBox.height)) * size
+        if validateViewBox() {
+            let size = max(mRectPath.width,mRectPath.height)
+            sw = (mProps.getStrokeWidth() / max(mRectVb.size.width,mRectVb.size.height)) * size
         }
+
         super.lineWidth = sw
-        let c = UIColor.parseInt(argb: mProps.getStrokeColor(), opacity: mProps.getStrokeOpacity()
-//                                    * CGFloat(mProps.getOpacity())
-        )
+        let c = UIColor.parseInt(argb: mProps.getStrokeColor(), opacity: mProps.getStrokeOpacity())
         super.strokeColor = c.cgColor
         
         super.lineCap = mProps.getStrokeCap().toTarget()
@@ -480,11 +500,11 @@ public class Paintable: CAShapeLayer  {
         
         var offset = CGSize(width: 0, height: 0)
         if mProps.getShadowOffsetIsPercent(){
-            offset.width = mProps.getShadowOffsetX() * mRect.width
-            offset.height = mProps.getShadowOffsetY() * mRect.height
-        }else if mPainterKit.mIsViewBoxEnabled {
-            offset.width = (mProps.getShadowOffsetX() / mPainterKit.mViewBox.width) * mRect.width
-            offset.height = (mProps.getShadowOffsetY() / mPainterKit.mViewBox.height) * mRect.height
+            offset.width = mProps.getShadowOffsetX() * mRectPath.width
+            offset.height = mProps.getShadowOffsetY() * mRectPath.height
+        }else if validateViewBox() {
+            offset.width = (mProps.getShadowOffsetX() / mRectVb.size.width) * mRectPath.width
+            offset.height = (mProps.getShadowOffsetY() / mRectVb.size.height) * mRectPath.height
         }else{
             offset.width = mProps.getShadowOffsetX()
             offset.height = mProps.getShadowOffsetY()
@@ -492,15 +512,21 @@ public class Paintable: CAShapeLayer  {
         super.shadowOffset = offset
         
         var radius = mProps.getShadowRadius()
-        if mPainterKit.mIsViewBoxEnabled {
-            let size = mPainterKit.mViewBox.width > mPainterKit.mViewBox.height ? mRect.width : mRect.height
-            radius = (mProps.getShadowRadius() / max(mPainterKit.mViewBox.width,mPainterKit.mViewBox.height)) * size
+        if validateViewBox() {
+            let size = max(mRectPath.width,mRectPath.height)
+            radius = (mProps.getShadowRadius() / max(mRectVb.size.width,mRectVb.size.height)) * size
         }
         super.shadowRadius = radius
         super.shadowOpacity = mProps.getShadowOpacity()
         
     }
  
+    private func validateViewBox() -> Bool {
+        return mRectVb.size.width >= 0 && mRectVb.size.height >= 0
+    }
+    private func fill()->Bool{
+        return !mIgnoreFill && mProps.getFillColor() != 0
+    }
     
      func disableAnimation(){
         CATransaction.begin()
@@ -513,14 +539,15 @@ public class Paintable: CAShapeLayer  {
     
 
    
-    public override init(layer: Any) {
+     override init(layer: Any) {
         super.init(layer: layer)
 
     }
-    public required init?(coder: NSCoder) {
+     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
  
 
+   
       
 }

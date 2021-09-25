@@ -27,18 +27,22 @@ extension UIBezierPath {
     }
     
     
-    func addRoundRect(_ r:CGRect?,radius:[CGFloat]){
-        guard let rect = r else { return }
+    func addRoundRect(_ rect:CGRect,radius:[CGFloat]){
         var rtl = radius[0]
         var rtr = radius[1]
         var rbl = radius[2]
         var rbr = radius[3]
         
+        if rtl <= 0 && rtr <= 0 && rbl <= 0 && rbr <= 0 {
+            addRect(rect)
+            return
+        }
+        
         var maxValue = max(rtl + rtr, rbl + rbr)
         maxValue = max(rtl + rbl, rtr + rbr)
         
-        if(maxValue > rect.height || maxValue > rect.width){
-            let size = min(rect.height, rect.width)
+        if(maxValue > rect.size.height || maxValue > rect.size.width){
+            let size = min(rect.size.height, rect.size.width)
             rtl = (radius[0] / maxValue ) * size
             rtr = (radius[1] / maxValue ) * size
             rbl = (radius[2] / maxValue ) * size
@@ -48,8 +52,8 @@ extension UIBezierPath {
         
 
         let l = rect.origin.x
-        let r = rect.origin.x + rect.width
-        let b = rect.origin.y + rect.height
+        let r = rect.origin.x + rect.size.width
+        let b = rect.origin.y + rect.size.height
         let t = rect.origin.y
         
         

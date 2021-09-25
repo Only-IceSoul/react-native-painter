@@ -24,42 +24,42 @@ class ImageContentLayer: CALayer , ViewTarget {
         mImageLayer.anchorPoint = CGPoint(x: 0, y: 0)
     }
     
-    public func setSrc(_ v:String){
+     func setSrc(_ v:String){
         mSource = v
         handleSource()
     }
     
     
-    public func setAlign(_ v:String){
+     func setAlign(_ v:String){
         if mAlign != v {
             mAlign = v
             invalidateImageTransform()
         }
     }
-    public func setAspect(_ v:String){
+     func setAspect(_ v:String){
         if mAspect != v {
             mAspect = v
             invalidateImageTransform()
         }
     }
-    public func setClipToBounds(_ v:Bool){
+     func setClipToBounds(_ v:Bool){
         disableAnimation()
         mContainer.masksToBounds = v
         commit()
        
     }
     
-    public func getContainer()->CALayer{
+     func getContainer()->CALayer{
         return mContainer
     }
     
-    public func getImageLayer() -> CALayer{
+     func getImageLayer() -> CALayer{
         return mImageLayer
     }
     
-    public func setBounds(_ x:CGFloat,_ y:CGFloat,_ w:CGFloat,_ h:CGFloat){
-        disableAnimation()
+     func setBounds(_ x:CGFloat,_ y:CGFloat,_ w:CGFloat,_ h:CGFloat){
         let b = CGRect(x: 0, y: 0, width:w, height: h)
+        disableAnimation()
         self.frame = b
         self.position = CGPoint(x: x , y: y)
         mContainer.frame = b

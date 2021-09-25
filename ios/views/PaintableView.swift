@@ -11,14 +11,14 @@ import UIKit
 
 
 @objc(PaintableView)
-public class PaintableView: UIView {
+ class PaintableView: UIView {
     
 
-    public init() {
+     init() {
         super.init(frame: .zero)
     }
     
-    public override var bounds: CGRect {
+     override var bounds: CGRect {
         didSet{
             getLayer()?.onBoundsChange(bounds)
         }
@@ -55,7 +55,7 @@ public class PaintableView: UIView {
         if  mPainter != nil  {
             if !mMask.isEmpty{
                 if let m = mPainter.mMaskViews[mMask]{
-                    getCALayer()?.mask = m.layer
+                    layer.mask = m.layer
                 }else{
                     self.mask = nil
                 }
@@ -93,13 +93,12 @@ public class PaintableView: UIView {
     
     @objc func setOpacity(_ v:NSNumber?) {
         let ev = Float(truncating: v ?? 1)
-        
-        getLayer()?.setOpacity(ev, v != nil)
+        layer.opacity = ev
     }
     
     
     @objc func setFill(_ v:NSNumber?) {
-        let ev = Int(truncating: v ?? 0)
+        let ev = Int(truncating: v ?? 0xFF000000)
         getLayer()?.setFill(ev, v != nil)
        
    }
@@ -170,7 +169,7 @@ public class PaintableView: UIView {
     
     
     @objc func setShadow(_ v:NSNumber?) {
-        let ev = Int(truncating: v ?? 0)
+        let ev = Int(truncating: v ?? 0xFF000000)
         getLayer()?.setShadow(ev, v != nil)
        
     }
@@ -187,78 +186,90 @@ public class PaintableView: UIView {
     }
     
     
-    @objc func setShadowOffset(_ v:[String:Any]?) {
-        let x = v?["x"] as? CGFloat ?? 2
-        let y = v?["y"] as? CGFloat ?? 2
-        let percent = v?["percentageValue"] as? Bool ?? false
-        getLayer()?.setShadowOffset(x, y, percent, v != nil)
+
+    @objc func setShadowOffset(_ v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 2)
+        getLayer()?.setShadowOffset(ev, v != nil)
     }
-    
+    @objc func setShadowOffsetX(_ v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 2)
+        getLayer()?.setShadowOffsetX(ev,v != nil)
+    }
+    @objc func setShadowOffsetY(_ v:NSNumber?) {
+        let ev = CGFloat(truncating: v ?? 2)
+        getLayer()?.setShadowOffsetY(ev,v != nil)
+    }
+    @objc func setShadowPercentageValue(_ v:NSNumber?) {
+        let n = v == nil ? 0 : Int(truncating: v!)
+        let b = n >= 1 ? true : false
+        getLayer()?.setShadowPercentageValue(b,v != nil)
+        
+    }
  
     //MARK: Transform props
 
-    @objc func setTransX(v:NSNumber?) {
+    @objc func setTransX(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setTransX(v: ev)
        }
-    @objc func setTransY(v:NSNumber?) {
+    @objc func setTransY(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setTransY(v: ev)
        }
-    @objc func setTransPercentageValue(v:NSNumber?) {
+    @objc func setTransPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         getLayer()?.setTransPercentageValue(v: b)
        }
 
-    @objc func setRot(v:NSNumber?) {
+    @objc func setRot(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setRot(v: ev)
        }
-    @objc func setRotO(v:NSNumber?) {
+    @objc func setRotO(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setRotO(v: ev)
        }
-    @objc func setRotOx(v:NSNumber?) {
+    @objc func setRotOx(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setRotOx(v: ev)
        }
-    @objc func setRotOy(v:NSNumber?) {
+    @objc func setRotOy(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setRotOy(v: ev)
        }
-    @objc func setRotPercentageValue(v:NSNumber?) {
+    @objc func setRotPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         getLayer()?.setRotPercentageValue(v: b)
        }
 
-    @objc func setSc(v:NSNumber?){
+    @objc func setSc(_ v:NSNumber?){
         let ev = CGFloat(truncating: v ?? 1)
         getLayer()?.setSc(v: ev)
        }
-    @objc func setScX(v:NSNumber?) {
+    @objc func setScX(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 1)
         getLayer()?.setScX(v: ev)
        }
 
-    @objc func setScY(v:NSNumber?) {
+    @objc func setScY(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 1)
         getLayer()?.setScY(v: ev)
        }
-    @objc func setScO(v:NSNumber?){
+    @objc func setScO(_ v:NSNumber?){
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setScO(v: ev)
        }
-    @objc func setScOx(v:NSNumber?) {
+    @objc func setScOx(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setScOx(v: ev)
        }
-    @objc func setScOy(v:NSNumber?) {
+    @objc func setScOy(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         getLayer()?.setScOy(v: ev)
        }
-    @objc func setScPercentageValue(v:NSNumber?) {
+    @objc func setScPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         getLayer()?.setScPercentageValue(v: b)
@@ -267,7 +278,7 @@ public class PaintableView: UIView {
     
   
     
-    public override func layoutSubviews() {
+     override func layoutSubviews() {
         super.layoutSubviews()
         if(mLazyInvalidateMask){
             mLazyInvalidateMask = false

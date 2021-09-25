@@ -9,7 +9,7 @@
 import UIKit
 
 
-public class SVGPathParser {
+ class SVGPathParser {
     
 
     private static var i :Int = 0;
@@ -58,7 +58,7 @@ public class SVGPathParser {
     private static let plus = "+".utf16.first!
     private static let x = "x".utf16.first!
     
-    public static func parse( d:String?) throws -> UIBezierPath {
+     static func parse( d:String?) throws -> UIBezierPath {
         mPath = UIBezierPath()
         if(d == nil ){
             return mPath;

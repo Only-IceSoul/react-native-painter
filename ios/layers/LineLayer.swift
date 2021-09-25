@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public class LineLayer : Paintable{
+ class LineLayer : Paintable{
     
     private var x1:CGFloat = 0
     private var y1:CGFloat = 0
@@ -18,56 +18,45 @@ public class LineLayer : Paintable{
     
     override init() {
         super.init()
-        mIgnoreVbTransform = true
         mIgnoreFill = true
         
     }
     
     
     
-    public func setX1(_ v:CGFloat){
+     func setX1(_ v:CGFloat){
         if x1 != v{
             x1 = v
-            invalidateCommonProps()
-            invalidatePath()
+            invalidate()
         }
     
     }
-    public func setY1(_ v:CGFloat){
+     func setY1(_ v:CGFloat){
         if y1 != v{
             y1 = v
-            invalidateCommonProps()
-            invalidatePath()
+            invalidate()
         }
     }
-    public func setX2(_ v:CGFloat){
+     func setX2(_ v:CGFloat){
         if x2 != v{
             x2 = v
-            invalidateCommonProps()
-            invalidatePath()
+            invalidate()
         }
     }
-    public func setY2(_ v:CGFloat){
+     func setY2(_ v:CGFloat){
         if y2 != v{
             y2 = v
-            invalidateCommonProps()
-            invalidatePath()
+            invalidate()
         }
     }
     
-    public override func setupPath() {
+     override func setupPath() {
         mPath.removeAllPoints()
-       
-        if mPainterKit.mIsViewBoxEnabled{
-            mPath.move(to: .init(x: x1.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width), y: y1.asViewBoxToHeight(mPainterKit.mViewBox,mRect.height)))
-            mPath.addLine(to: .init(x: x2.asViewBoxToWidth(mPainterKit.mViewBox, mRect.width), y: y2.asViewBoxToHeight(mPainterKit.mViewBox,mRect.height)))
-        }else{
-            mPath.move(to: .init(x: x1, y: y1))
-            mPath.addLine(to: .init(x: x2, y: y2))
-        }
+        mPath.move(to: .init(x: x1, y: y1))
+        mPath.addLine(to: .init(x: x2, y: y2))
      
     }
-    public required init?(coder: NSCoder) {
+     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     

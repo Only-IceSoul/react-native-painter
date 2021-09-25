@@ -21,11 +21,11 @@ enum PathParserError: Error {
   
 }
 
-public enum DrawableAxis {
+ enum DrawableAxis {
     case x, y , z
 }
 
-public enum DrawableLineCap : String{
+ enum DrawableLineCap : String{
     case butt,
          round,
          square
@@ -36,7 +36,7 @@ public enum DrawableLineCap : String{
     }
 }
 
-public enum GradientDrawableType : String{
+ enum GradientDrawableType : String{
     case axial,
          radial,
          conic
@@ -46,7 +46,7 @@ public enum GradientDrawableType : String{
     }
 }
 
-public enum DrawableLineJoin : String{
+ enum DrawableLineJoin : String{
     case bevel,
          miter,
          round

@@ -70,7 +70,7 @@ class LinearGradientView :  PaintableView {
 
    
 
-    public override var bounds: CGRect {
+     override var bounds: CGRect {
         didSet{
             mLayer.onBoundsChange(bounds)
         }
@@ -90,13 +90,7 @@ class LinearGradientView :  PaintableView {
     }
 
     //MARK: set and get
-    
-    @objc override func setOpacity(_ v:NSNumber?) {
-        let ev = Float(truncating: v ?? 1)
-        
-        mLayer.setOpacity(ev, v != nil)
-    }
-    
+
     
     @objc override func setFill(_ v:NSNumber?) {}
     @objc override func setFillRule(_ v:String?) {}
@@ -112,73 +106,73 @@ class LinearGradientView :  PaintableView {
     @objc override func setShadow(_ v:NSNumber?) {}
     @objc override func setShadowOpacity(_ v:NSNumber?) {}
     @objc override func setShadowRadius(_ v:NSNumber?) {}
-    @objc override func setShadowOffset(_ v:[String:Any]?) {}
+   
     
  
     //MARK: Transform props
 
-    @objc override func setTransX(v:NSNumber?) {
+    @objc override func setTransX(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setTransX(v: ev)
        }
-    @objc override func setTransY(v:NSNumber?) {
+    @objc override func setTransY(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setTransY(v: ev)
        }
-    @objc override func setTransPercentageValue(v:NSNumber?) {
+    @objc override func setTransPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         mLayer.setTransPercentageValue(v: b)
        }
 
-    @objc override func setRot(v:NSNumber?) {
+    @objc override func setRot(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setRot(v: ev)
        }
-    @objc override func setRotO(v:NSNumber?) {
+    @objc override func setRotO(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setRotO(v: ev)
        }
-    @objc override func setRotOx(v:NSNumber?) {
+    @objc override func setRotOx(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setRotOx(v: ev)
        }
-    @objc override func setRotOy(v:NSNumber?) {
+    @objc override func setRotOy(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setRotOy(v: ev)
        }
-    @objc override func setRotPercentageValue(v:NSNumber?) {
+    @objc override func setRotPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         mLayer.setRotPercentageValue(v: b)
        }
 
-    @objc override func setSc(v:NSNumber?){
+    @objc override func setSc(_ v:NSNumber?){
         let ev = CGFloat(truncating: v ?? 1)
         mLayer.setSc(v: ev)
        }
-    @objc override func setScX(v:NSNumber?) {
+    @objc override func setScX(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 1)
         mLayer.setScX(v: ev)
        }
 
-    @objc override func setScY(v:NSNumber?) {
+    @objc override func setScY(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 1)
         mLayer.setScY(v: ev)
        }
-    @objc override func setScO(v:NSNumber?){
+    @objc override func setScO(_ v:NSNumber?){
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setScO(v: ev)
        }
-    @objc override func setScOx(v:NSNumber?) {
+    @objc override func setScOx(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setScOx(v: ev)
        }
-    @objc override func setScOy(v:NSNumber?) {
+    @objc override func setScOy(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         mLayer.setScOy(v: ev)
        }
-    @objc override func setScPercentageValue(v:NSNumber?) {
+    @objc override func setScPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         mLayer.setScPercentageValue(v: b)

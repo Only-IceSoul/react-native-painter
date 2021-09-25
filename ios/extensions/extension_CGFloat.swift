@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-public extension CGFloat {
+ extension CGFloat {
     
     func toRadians()-> CGFloat{
         return (self * .pi) / 180
@@ -43,7 +43,7 @@ public extension CGFloat {
     }
 }
 
-public extension Float {
+ extension Float {
     
     func toRadians()-> Float{
     

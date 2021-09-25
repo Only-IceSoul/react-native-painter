@@ -7,10 +7,9 @@
 
 import UIKit
 
-public class CommonProps {
+ class CommonProps {
+  
     
-    var opacity:Float = 1
-    var opacityStatus :Bool = false
     var fillColor : Int = 0xFF000000
     var fillColorStatus : Bool = false
     var fillOpacity :CGFloat = 1
@@ -42,11 +41,11 @@ public class CommonProps {
     var shadowOffsetX :CGFloat = 2
     var shadowOffsetY :CGFloat = 2
     var shadowOffsetIsPercent = false
-    var shadowOffsetStatus = false
+    var shadowOffsetXStatus = false
+    var shadowOffsetYStatus = false
+    var shadowOffsetIsPerecentStatus = false
     
-    func getOpacity()-> Float {
-        return opacity.clamp()
-    }
+ 
     
     func getFillColor()->Int{
         return fillColor
@@ -109,8 +108,8 @@ public class CommonProps {
     }
     
     
-    public func set(_ props:CommonProps){
-        if(!opacityStatus) {opacity = props.opacity;}
+     func set(_ props:CommonProps){
+    
 
         if(!fillColorStatus){ fillColor = props.fillColor;}
         if(!fillOpacityStatus) {fillOpacity = props.fillOpacity;}
@@ -128,11 +127,10 @@ public class CommonProps {
         if(!shadowColorStatus) {shadowColor = props.shadowColor;}
         if(!shadowOpacityStatus) {shadowOpacity = props.shadowOpacity;}
         if(!shadowRadiusStatus) {shadowRadius = props.shadowRadius;}
-        if(!shadowOffsetStatus) {
-            shadowOffsetX = props.shadowOffsetX;
-            shadowOffsetY = props.shadowOffsetY;
-            shadowOffsetIsPercent = props.shadowOffsetIsPercent;
-        }
+        if(!shadowOffsetXStatus) {shadowOffsetX = props.shadowOffsetX;}
+        if(!shadowOffsetYStatus) {shadowOffsetY = props.shadowOffsetY;}
+        if(!shadowOffsetIsPerecentStatus) {shadowOffsetIsPercent = props.shadowOffsetIsPercent;}
+       
     }
     
 }

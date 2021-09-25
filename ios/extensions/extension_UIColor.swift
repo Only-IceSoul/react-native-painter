@@ -8,7 +8,7 @@
 
 import UIKit
 
-public extension UIColor{
+ extension UIColor{
     
     static func parseHex(_ hex: String) -> UIColor? {
           var chars = Array(hex.hasPrefix("#") ? hex.dropFirst() : hex[...])

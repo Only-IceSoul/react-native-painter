@@ -27,19 +27,21 @@ class PainterView: UIView {
    
  
     @objc func setViewBox(_ r:NSArray?){
-        mPainterKit.mIsViewBoxEnabled = r != nil
-        let arr = r as? [CGFloat] ?? [0 , 0 ,0 ,0]
-        mPainterKit.mViewBox = CGRect(x: arr[0], y: arr[1], width: arr[0] +
-                          arr[2], height: arr[1] + arr[3])
+        let arr = r as? [CGFloat] ?? [0 , 0 ,-1 ,-1]
+        mPainterKit.mViewBox = CGRect(x: arr[0], y: arr[1], width:
+                          arr[2], height: arr[3])
+        invalidatePainterKit()
     }
     @objc func setAlign(_ v:NSString?){
-        let align = v as String? ?? "none"
+        let align = v as String? ?? "xMidYMid"
         mPainterKit.mAlign = align
-            
+        invalidatePainterKit()
     }
     @objc func setAspect(_ v:NSString?){
-        let aspect = v as String? ?? "none"
-        mPainterKit.mAspect = aspect
+        let aspect = v as String? ?? "meet"
+        let a = aspect == "none" ? SVGViewBox.AspectRatio.none : ( aspect == "slice" ? SVGViewBox.AspectRatio.slice : SVGViewBox.AspectRatio.meet)
+        mPainterKit.mAspect = a
+        invalidatePainterKit()
     }
     
     override func didUpdateReactSubviews() {
@@ -62,6 +64,26 @@ class PainterView: UIView {
             }
 
         }
+    }
+    
+    
+     func invalidatePainterKit(){
+        
+        if reactSubviews() == nil {
+            return
+        }
+            for i in 0..<self.reactSubviews()!.count {
+                let v = self.reactSubviews()![i]
+                if let p = v as? PaintableView{
+                    p.setPainterKit(mPainterKit)
+                }
+                if let m = v as? MaskPaintableView{
+                    m.setPainterKit(mPainterKit)
+                   
+                }
+            }
+        
+      
     }
 
    

@@ -8,19 +8,25 @@
 import Foundation
 import UIKit
 @objc(MaskGPaintableView)
-public class MaskGPaintableView: PaintableView {
+ class MaskGPaintableView: PaintableView {
     
      
 
     private var mProps = CommonProps()
     private var mTransform = TransformProps()
-
+    private var mBounds = CGRect()
+    var mRectPath = CGRect()
+    var mRectVb = CGRect(x: 0, y: 0, width: -1, height: -1)
+    var mAlign = "xMidYMid"
+    var mAspect = SVGViewBox.AspectRatio.meet
+    
     override init() {
         super.init()
         
     }
-    public override var bounds: CGRect{
+     override var bounds: CGRect{
         didSet{
+            mBounds.set(rect: bounds)
             layer.anchorPoint = CGPoint(x: 0, y: 0)
             layer.position = CGPoint(x: 0, y: 0)
         }
@@ -29,32 +35,23 @@ public class MaskGPaintableView: PaintableView {
         
     }
     
-    public override func setProps(_ p : CommonProps){
+     override func setProps(_ p : CommonProps){
         mProps.set(p)
         invalidateGroupProps()
     }
-    public override func setPainterKit(_ p:PainterKit){
+     override func setPainterKit(_ p:PainterKit){
         mPainter = p
+        mRectVb.set(rect: p.mViewBox)
+        mAspect = p.mAspect
+        mAlign = p.mAlign
         invalidatePainterKit()
+        invalidateTransform()
     }
     
-    override func setTranslateZ(_ v: NSNumber?) {
-        
-    }
-    
-    @objc override func setOpacity(_ v:NSNumber?) {
-        let ev = Float(truncating: v ?? 1)
-        mProps.opacityStatus = v != nil
-        if mProps.opacity != ev{
-            mProps.opacity = ev
-            invalidateGroupProps()
-        }
-  
-    }
-    
+      
     
     @objc override func setFill(_ v:NSNumber?) {
-        let ev = Int(truncating: v ?? 0)
+        let ev = Int(truncating: v ?? 0xFF000000)
         mProps.fillColorStatus = v != nil
         if mProps.fillColor != ev{
             mProps.fillColor = ev
@@ -166,7 +163,7 @@ public class MaskGPaintableView: PaintableView {
     
     
     @objc override func setShadow(_ v:NSNumber?) {
-        let ev = Int(truncating: v ?? 0)
+        let ev = Int(truncating: v ?? 0xFF000000)
         mProps.shadowColorStatus = v != nil
         if mProps.shadowColor != ev{
             mProps.shadowColor = ev
@@ -192,39 +189,62 @@ public class MaskGPaintableView: PaintableView {
             invalidateGroupProps()
         }
     }
-    
-    
-    @objc override func setShadowOffset(_ v:[String:Any]?) {
-        let x = v?["x"] as? CGFloat ?? 2
-        let y = v?["y"] as? CGFloat ?? 2
-        let percent = v?["percentageValue"] as? Bool ?? false
-        mProps.shadowOffsetStatus = v != nil
-        if mProps.shadowOffsetX != x || mProps.shadowOffsetY != y || mProps.shadowOffsetIsPercent != percent {
-            mProps.shadowOffsetX = x
-            mProps.shadowOffsetY = y
-            mProps.shadowOffsetIsPercent = percent
-            invalidateGroupProps()
-        }
-    }
+    func setShadowOffset(_ v:CGFloat,_ status:Bool){
+       mProps.shadowOffsetXStatus = status
+       mProps.shadowOffsetYStatus = status
+       if mProps.shadowOffsetX != v || mProps.shadowOffsetY != v  {
+           mProps.shadowOffsetX = v
+           mProps.shadowOffsetY = v
+           invalidateGroupProps()
+       }
+ 
+   }
+   
+    func setShadowOffsetX(_ v:CGFloat,_ status:Bool){
+       mProps.shadowOffsetXStatus = status
+       if mProps.shadowOffsetX != v {
+           mProps.shadowOffsetX = v
+           invalidateGroupProps()
+       }
+
+   }
+   
+    func setShadowOffsetY(_ v:CGFloat,_ status:Bool){
+       mProps.shadowOffsetYStatus = status
+       if mProps.shadowOffsetY != v  {
+           mProps.shadowOffsetY = v
+           invalidateGroupProps()
+       }
+   }
+
+    func setShadowPercentageValue(_ v:Bool,_ status:Bool){
+       mProps.shadowOffsetIsPerecentStatus = status
+       if mProps.shadowOffsetIsPercent != v  {
+           mProps.shadowOffsetIsPercent = v
+           invalidateGroupProps()
+       }
+   }
+
+  
     
  
     //MARK: Transform props
 
-    @objc override func setTransX(v:NSNumber?) {
+    @objc override func setTransX(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mTranslationX != ev ){
             mTransform.mTranslationX = ev;
             invalidateTransform();
         }
        }
-    @objc override func setTransY(v:NSNumber?) {
+    @objc override func setTransY(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mTranslationY != ev ){
             mTransform.mTranslationY = ev;
             invalidateTransform();
         }
        }
-    @objc override func setTransPercentageValue(v:NSNumber?) {
+    @objc override func setTransPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         if(mTransform.mTranslationIsPercent != b ){
@@ -233,14 +253,14 @@ public class MaskGPaintableView: PaintableView {
         }
        }
 
-    @objc override func setRot(v:NSNumber?) {
+    @objc override func setRot(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mRotation != ev ){
             mTransform.mRotation = ev;
             invalidateTransform();
         }
        }
-    @objc override func setRotO(v:NSNumber?) {
+    @objc override func setRotO(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mRotationOriginX != ev || mTransform.mRotationOriginY != ev ){
             mTransform.mRotationOriginX = ev;
@@ -248,21 +268,21 @@ public class MaskGPaintableView: PaintableView {
             invalidateTransform();
         }
        }
-    @objc override func setRotOx(v:NSNumber?) {
+    @objc override func setRotOx(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mRotationOriginX != ev ){
             mTransform.mRotationOriginX = ev;
             invalidateTransform();
         }
        }
-    @objc override func setRotOy(v:NSNumber?) {
+    @objc override func setRotOy(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mRotationOriginY != ev ){
             mTransform.mRotationOriginY = ev;
             invalidateTransform();
         }
        }
-    @objc override func setRotPercentageValue(v:NSNumber?) {
+    @objc override func setRotPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         if(mTransform.mRotationIsPercent != b ){
@@ -271,7 +291,7 @@ public class MaskGPaintableView: PaintableView {
         }
        }
 
-    @objc override func setSc(v:NSNumber?){
+    @objc override func setSc(_ v:NSNumber?){
         let ev = CGFloat(truncating: v ?? 1)
         if(mTransform.mScaleX != ev || mTransform.mScaleY != ev){
             mTransform.mScaleX = ev;
@@ -279,7 +299,7 @@ public class MaskGPaintableView: PaintableView {
             invalidateTransform();
         }
        }
-    @objc override func setScX(v:NSNumber?) {
+    @objc override func setScX(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 1)
         if(mTransform.mScaleX != ev ){
             mTransform.mScaleX = ev;
@@ -287,14 +307,14 @@ public class MaskGPaintableView: PaintableView {
         }
        }
 
-    @objc override func setScY(v:NSNumber?) {
+    @objc override func setScY(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 1)
         if(mTransform.mScaleY != ev ){
             mTransform.mScaleY = ev;
             invalidateTransform();
         }
        }
-    @objc override func setScO(v:NSNumber?){
+    @objc override func setScO(_ v:NSNumber?){
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mScaleOriginX != ev || mTransform.mScaleOriginY != ev){
             mTransform.mScaleOriginX = ev;
@@ -302,21 +322,21 @@ public class MaskGPaintableView: PaintableView {
             invalidateTransform();
         }
        }
-    @objc override func setScOx(v:NSNumber?) {
+    @objc override func setScOx(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mScaleOriginX != ev ){
             mTransform.mScaleOriginX = ev;
             invalidateTransform();
         }
        }
-    @objc override func setScOy(v:NSNumber?) {
+    @objc override func setScOy(_ v:NSNumber?) {
         let ev = CGFloat(truncating: v ?? 0)
         if(mTransform.mScaleOriginY != ev ){
             mTransform.mScaleOriginY = ev;
             invalidateTransform();
         }
        }
-    @objc override func setScPercentageValue(v:NSNumber?) {
+    @objc override func setScPercentageValue(_ v:NSNumber?) {
         let n = v == nil ? 0 : Int(truncating: v!)
         let b = n >= 1 ? true : false
         if(mTransform.mScaleIsPercent != b ){
@@ -327,7 +347,7 @@ public class MaskGPaintableView: PaintableView {
     
     
     private var mLazyProps = false
-    public func invalidateGroupProps(){
+     func invalidateGroupProps(){
         if reactSubviews() == nil {
             mLazyProps = true
         }else{
@@ -342,7 +362,7 @@ public class MaskGPaintableView: PaintableView {
     }
     
     private var mLazyPainter = false
-    public func invalidatePainterKit(){
+     func invalidatePainterKit(){
         
         if reactSubviews() == nil {
             mLazyPainter = true
@@ -357,62 +377,82 @@ public class MaskGPaintableView: PaintableView {
       
     }
     
-    public func invalidateTransform(){
-        if(bounds.width > 0 && bounds.height > 0 && mPainter != nil){
-            var matrix = CATransform3DIdentity
-          
-            
-            if mTransform.mTranslationX != 0 || mTransform.mTranslationY != 0{
-                var transX = mTransform.mTranslationX
-                var transY = mTransform.mTranslationY
-                if mTransform.mTranslationIsPercent{
-                    transX = mTransform.mTranslationX * bounds.width
-                    transY = mTransform.mTranslationY * bounds.height
-                }else if mPainter.mIsViewBoxEnabled {
-                    transX = (mTransform.mTranslationX / mPainter.mViewBox.width) * bounds.width
-                    transY = (mTransform.mTranslationY / mPainter.mViewBox.height) * bounds.height
-                }
-                
-                matrix = CATransform3DTranslate(matrix, transX, transY, 0)
-            }
-            
-            if mTransform.mRotation != 0{
-                var rotX = mTransform.mRotationOriginX
-                var rotY = mTransform.mRotationOriginY
-                if mTransform.mRotationIsPercent{
-                    rotX = mTransform.mRotationOriginX * bounds.width
-                    rotY = mTransform.mRotationOriginY * bounds.height
-                }else if mPainter.mIsViewBoxEnabled {
-                   
-                    rotX = mTransform.mRotationOriginX.asViewBoxToWidth(mPainter.mViewBox, bounds.width)
-                    rotY = mTransform.mRotationOriginY.asViewBoxToHeight(mPainter.mViewBox, bounds.height)
-                }
-                matrix = CATransform3DTranslate(matrix, rotX, rotY, 0)
-                matrix = CATransform3DRotate(matrix, mTransform.mRotation.toRadians(), 0, 0, 1)
-                matrix = CATransform3DTranslate(matrix, -rotX, -rotY, 0)
-            }
-            
-            if mTransform.mScaleX != 1 || mTransform.mScaleY != 1{
-                var ox = mTransform.mScaleOriginX
-                var oy = mTransform.mScaleOriginY
-                if mTransform.mScaleIsPercent {
-                    ox = mTransform.mScaleOriginX * bounds.width
-                    oy = mTransform.mScaleOriginY * bounds.height
-                }else if mPainter.mIsViewBoxEnabled{
-                    ox = mTransform.mScaleOriginX.asViewBoxToWidth(mPainter.mViewBox, bounds.width)
-                    oy = mTransform.mScaleOriginY.asViewBoxToHeight(mPainter.mViewBox, bounds.height)
-                }
-                matrix = CATransform3DTranslate(matrix, ox, oy, 0)
-                matrix = CATransform3DScale(matrix, mTransform.mScaleX, mTransform.mScaleY, 1)
-                matrix = CATransform3DTranslate(matrix, -ox, -oy, 0)
-            }
+    func invalidateTransform(){
+    
+       if(mBounds.width > 0 && mBounds.height > 0 ){
+        
+          viewBoxTransform()
+        
+           var matrix = CATransform3DIdentity
+         
+           
+           if mTransform.mTranslationX != 0 || mTransform.mTranslationY != 0{
+               var transX = mTransform.mTranslationX
+               var transY = mTransform.mTranslationY
+               if mTransform.mTranslationIsPercent{
+                   transX = mTransform.mTranslationX * mRectPath.width
+                   transY = mTransform.mTranslationY * mRectPath.height
+               }else if validateViewBox() {
+                   transX = (mTransform.mTranslationX / mRectVb.size.width) * mRectPath.width
+                   transY = (mTransform.mTranslationY / mRectVb.size.height) * mRectPath.height
+               }
+               
+               matrix = CATransform3DTranslate(matrix, transX, transY, 0)
+           }
+           
+           if mTransform.mRotation != 0{
+               var rotX = mTransform.mRotationOriginX
+               var rotY = mTransform.mRotationOriginY
+               if mTransform.mRotationIsPercent{
+                   rotX = mTransform.mRotationOriginX * mRectPath.width
+                   rotY = mTransform.mRotationOriginY * mRectPath.height
+               }else if validateViewBox(){
+                  
+                   rotX = mRectPath.left + mTransform.mRotationOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                   rotY = mRectPath.top + mTransform.mRotationOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
+               }
+               matrix = CATransform3DTranslate(matrix, rotX, rotY, 0)
+               matrix = CATransform3DRotate(matrix, mTransform.mRotation.toRadians(), 0, 0, 1)
+               matrix = CATransform3DTranslate(matrix, -rotX, -rotY, 0)
+           }
+      
+           if mTransform.mScaleX != 1 || mTransform.mScaleY != 1{
+           
+               var ox = mTransform.mScaleOriginX
+               var oy = mTransform.mScaleOriginY
+               if mTransform.mScaleIsPercent {
+                   ox = mTransform.mScaleOriginX * mRectPath.width
+                   oy = mTransform.mScaleOriginY * mRectPath.height
+               }else if validateViewBox() {
+                   ox = mRectPath.left + mTransform.mScaleOriginX.asViewBoxToWidth(mRectVb, mRectPath.width)
+                   oy = mRectPath.top +  mTransform.mScaleOriginY.asViewBoxToHeight(mRectVb, mRectPath.height)
+               }
+               matrix = CATransform3DTranslate(matrix, ox, oy, 0)
+               matrix = CATransform3DScale(matrix, mTransform.mScaleX, mTransform.mScaleY, 1)
+               matrix = CATransform3DTranslate(matrix, -ox, -oy, 0)
+           }
 
-            disableAnimation()
-            layer.transform = matrix
-            commit()
+           disableAnimation()
+           layer.transform = matrix
+           commit()
+       }
+   }
+   
+    func viewBoxTransform(){
+        if validateViewBox() {
+           mRectPath.set(rect: mRectVb)
+           let trans = SVGViewBox.transform(vbRect: mRectVb, eRect: mBounds, align: mAlign, meetOrSlice: mAspect )
+           mRectPath = mRectPath.applying(trans)
+        }else{
+           mRectPath.set(rect: mBounds)
         }
+   }
+    private func validateViewBox() -> Bool {
+        return mRectVb.size.width >= 0 && mRectVb.size.height >= 0
     }
-    public override func didUpdateReactSubviews() {
+   
+  
+     override func didUpdateReactSubviews() {
         if reactSubviews() == nil {
             return
         }
@@ -424,7 +464,7 @@ public class MaskGPaintableView: PaintableView {
     }
 
     
-    public override func layoutSubviews() {
+     override func layoutSubviews() {
         super.layoutSubviews()
         if(mLazyProps || mLazyPainter && self.reactSubviews() != nil){
             let pr = mLazyProps
