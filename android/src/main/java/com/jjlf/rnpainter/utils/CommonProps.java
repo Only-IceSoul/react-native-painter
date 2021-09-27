@@ -58,7 +58,7 @@ public class CommonProps {
         return ModUtil.clamp(mFillOpacity);
     }
     public Path.FillType getFillRule(){
-        return mFillRule.equals("evenodd ") ? Path.FillType.EVEN_ODD :  Path.FillType.WINDING;
+        return mFillRule.equals("evenodd") ? Path.FillType.EVEN_ODD :  Path.FillType.WINDING;
     }
 
     public int getStrokeColor(){

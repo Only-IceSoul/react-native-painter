@@ -3,7 +3,7 @@ The G element is a container used to group other elements.
 Attributes are inherited by its children.
 
 Android:  
-GS: (Software < api 28) - (None >= api 28) ,  supporting shadows  
+GS: Software , shadow  (api < 24)
 GH: Hardware
 
 
