@@ -27,6 +27,7 @@ public class TextView extends PaintableView {
     protected float verticalOffset = 0f;
     private float x = 0f;
     private float y = 0f;
+    private Typeface mTypeFace = Typeface.DEFAULT;
 
     protected Rect mBoundsText = new Rect();
 
@@ -72,6 +73,11 @@ public class TextView extends PaintableView {
     public void setFont(String v) {
         if(!font.equals(v)){
             font = v;
+             mTypeFace = font.equals("default") ? Typeface.DEFAULT : ReactFontManager.getInstance().getTypeface(font,Typeface.NORMAL,getResources().getAssets());
+//                Typeface.createFromAsset(getContext().getAssets(), "fonts/"+font);
+            if(font.equals("default") && (fontStyle.equals("bold") || fontStyle.equals("italic"))){
+                mTypeFace =  Typeface.create(mTypeFace,fontStyle.equals("bold") ? Typeface.BOLD : Typeface.ITALIC);
+            }
             invalidateWithChildMask();
         }
     }
@@ -267,13 +273,8 @@ public class TextView extends PaintableView {
         mPainter.textPaint.setTextAlign(Paint.Align.LEFT);
         mPainter.textPaint.setTextSize(validateViewBox() ?  ModUtil.viewBoxToMax(fontSize,mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(fontSize));
 
-        //font
-        Typeface f = font.equals("default") ? Typeface.DEFAULT : Typeface.createFromAsset(getContext().getAssets(), "fonts/"+font);
-
-        if(font.equals("default") && (fontStyle.equals("bold") || fontStyle.equals("italic"))){
-            f =  Typeface.create(f,fontStyle.equals("bold") ? Typeface.BOLD : Typeface.ITALIC);
-        }
-        mPainter.textPaint.setTypeface(f);
+      
+        mPainter.textPaint.setTypeface(mTypeFace);
 
     }
 
