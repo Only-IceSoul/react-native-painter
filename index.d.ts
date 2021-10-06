@@ -213,5 +213,4 @@ export class GH extends GBase {}
 export class Painter extends PainterBase {}
 export class PainterH extends PainterBase {}
 export class PainterS extends PainterBase {}
-export function ColorWorklet(color:number | number[] | string): number; 
 export function Color(color:number | number[] | string): number; 

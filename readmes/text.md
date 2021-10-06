@@ -14,7 +14,7 @@ The element is used to define text.
 | Name | description | type | default |
 | --- | --- | --- | --- |
 | text | content | String | "" |
-| font | which font will be used to render the text [CustomFont](https://mehrankhandev.medium.com/ultimate-guide-to-use-custom-fonts-in-react-native-77fcdf859cf4) | String | default |
+| font | which font will be used to render the text (font name 'Ephesia-Regular' ) | String | default |
 | fontStyle | the font style for the text. | String | normal |
 | fontSize | the size of the font | Number | 12|
 | x | define x-axis coordinate | Number | 0 |

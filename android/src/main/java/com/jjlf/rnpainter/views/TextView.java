@@ -73,12 +73,17 @@ public class TextView extends PaintableView {
     public void setFont(String v) {
         if(!font.equals(v)){
             font = v;
-             mTypeFace = font.equals("default") ? Typeface.DEFAULT : ReactFontManager.getInstance().getTypeface(font,Typeface.NORMAL,getResources().getAssets());
+            try{
+                mTypeFace = font.equals("default") ? Typeface.DEFAULT : ReactFontManager.getInstance().getTypeface(font,Typeface.NORMAL,getResources().getAssets());
 //                Typeface.createFromAsset(getContext().getAssets(), "fonts/"+font);
-            if(font.equals("default") && (fontStyle.equals("bold") || fontStyle.equals("italic"))){
-                mTypeFace =  Typeface.create(mTypeFace,fontStyle.equals("bold") ? Typeface.BOLD : Typeface.ITALIC);
+                if(font.equals("default") && (fontStyle.equals("bold") || fontStyle.equals("italic"))){
+                    mTypeFace =  Typeface.create(mTypeFace,fontStyle.equals("bold") ? Typeface.BOLD : Typeface.ITALIC);
+                }
+            }catch (Exception ignored){
+                mTypeFace = Typeface.DEFAULT;
+            }finally {
+                invalidateWithChildMask();
             }
-            invalidateWithChildMask();
         }
     }
 

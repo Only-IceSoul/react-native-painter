@@ -2,7 +2,7 @@
 import React from 'react'
 import { Platform, requireNativeComponent, StyleSheet } from 'react-native';
 import ExtractColor from './src/Color'
-import ExtractColorWorklet from './src/ColorWorklet'
+
 
 const MaskGView = requireNativeComponent("MaskGView",null);
 const MaskView = requireNativeComponent("MaskView",null);
@@ -174,4 +174,3 @@ export const PainterS = Platform.OS === 'android' ? PainterSoftware : PainterNon
 export const Painter = PainterNone
 export const PainterH = Platform.OS === 'android' ? PainterHarwdare : PainterNone
 export const Color = ExtractColor
-export const ColorWorklet = ExtractColorWorklet
