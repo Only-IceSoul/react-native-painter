@@ -7,14 +7,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
-import android.os.Build;
 
-import com.jjlf.rnpainter.utils.MaskInterface;
+import com.facebook.react.views.text.ReactFontManager;
 import com.jjlf.rnpainter.utils.ModUtil;
-import com.jjlf.rnpainter.utils.PainterKit;
 import com.jjlf.rnpainter.utils.SVGViewBox;
-
-import java.lang.ref.WeakReference;
 
 public class TextView extends PaintableView {
 

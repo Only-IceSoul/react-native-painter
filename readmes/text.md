@@ -14,7 +14,7 @@ The element is used to define text.
 | Name | description | type | default |
 | --- | --- | --- | --- |
 | text | content | String | "" |
-| font | which font will be used to render the text [CustomFont](./guidefont.md) | default |
+| font | which font will be used to render the text [CustomFont](./guidefont.md) | String | default 
 | fontStyle | the font style for the text. | String | normal |
 | fontSize | the size of the font | Number | 12|
 | x | define x-axis coordinate | Number | 0 |
