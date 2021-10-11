@@ -60,7 +60,10 @@ import UIKit
     
      func setText(_ v:String){
         mText.mutableString.setString(v)
-        invalidateText()
+        disableAnimation()
+        mLayer.string = mText
+        commit()
+        invalidatePosition(false)
     }
      func setBaseline(_ v:String){
         if mBaseline != v{
