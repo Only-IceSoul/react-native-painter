@@ -20,7 +20,9 @@ import UIKit
         super.init()
     }
     
-    
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
     
      func setCx(_ v:CGFloat){
         if cx != v{

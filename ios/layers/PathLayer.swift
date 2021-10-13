@@ -17,7 +17,9 @@ import UIKit
         super.init()
     }
     
-    
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
     
      func setD(_ v:String){
         if d != v{

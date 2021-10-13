@@ -180,7 +180,9 @@ class ImageContentLayer: CALayer , ViewTarget {
         super.init(coder: coder)
     }
     
-    
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
      func disableAnimation(){
         CATransaction.begin()
         CATransaction.setDisableActions(true)

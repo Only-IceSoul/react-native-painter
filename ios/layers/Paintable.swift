@@ -340,10 +340,11 @@ import UIKit
     
      func onBoundsChange(_ frame: CGRect){
         mBounds.set(rect: frame)
+        disableAnimation()
         super.frame = mBounds
         super.position = CGPoint(x: 0, y: 0)
         super.anchorPoint = CGPoint(x: 0, y: 0)
-        
+        commit()
         invalidate()
         
     }

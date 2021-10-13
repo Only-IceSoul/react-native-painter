@@ -209,9 +209,11 @@ class LinearGradientLayer: CALayer {
     
      func onBoundsChange(_ frame: CGRect){
         mBounds.set(rect: frame)
+        disableAnimation()
         super.frame = mBounds
         super.position = CGPoint(x: 0, y: 0)
         super.anchorPoint = CGPoint(x: 0, y: 0)
+        commit()
         invalidate()
     }
     
@@ -344,6 +346,9 @@ class LinearGradientLayer: CALayer {
         CATransaction.commit()
     }
     
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
