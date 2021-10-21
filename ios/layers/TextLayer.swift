@@ -58,8 +58,9 @@ import UIKit
 
     //MARK: set and get
     
-     func setText(_ v:String){
-        mText.mutableString.setString(v)
+    func setText(_ v:String){
+        mText = NSMutableAttributedString(string: v)
+        mText.addAttributes(mTextAttrs, range: NSRange(location: 0, length: self.mText.length))
         disableAnimation()
         mLayer.string = mText
         commit()
