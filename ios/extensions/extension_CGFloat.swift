@@ -37,9 +37,15 @@ import UIKit
         return self.asFraction(vb.top, vb.bottom) * h
     }
     func asViewBoxToMax(_ vb:CGRect,_ w:CGFloat,_ h:CGFloat)->CGFloat{
-        let size = vb.width > vb.height ? w : h
-        let maxx = vb.width > vb.height ? vb.width : vb.height
-        return ( self / maxx) * size
+        let size = w > h ? w : h
+        let maxVb = w > h ?  vb.width : vb.height
+        return ( self / maxVb) * size
+    }
+    
+    func asViewBoxToMin(_ vb:CGRect,_ w:CGFloat,_ h:CGFloat)->CGFloat{
+        let size = w > h ? h : w
+        let minVb = w > h ?  vb.height : vb.width
+        return ( self / minVb) * size
     }
 }
 

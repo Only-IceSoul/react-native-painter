@@ -404,7 +404,7 @@ import UIKit
     
      func setupFont(){
         
-        let fs = validateViewBox() ? mFontSize.asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mFontSize
+        let fs = validateViewBox() ? mFontSize.asViewBoxToMin(mRectVb, mRectPath.width, mRectPath.height) : mFontSize
         
         if mFont == "default"{
             if mFontStyle == "bold"{
