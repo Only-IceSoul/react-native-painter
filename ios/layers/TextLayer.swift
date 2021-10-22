@@ -481,11 +481,8 @@ import UIKit
             let fillColor = UIColor.parseInt(argb: mProps.getFillColor(), opacity: mProps.getFillOpacity())
             mTextAttrs[.foregroundColor ] = fillColor
         
-            var strokeWidth:CGFloat = mProps.getStrokeWidth()
-            if validateViewBox() {
-                let size = max(mRectPath.width,mRectPath.height)
-                strokeWidth = ( mProps.getStrokeWidth() / max(mRectVb.size.width,mRectVb.size.height) ) * size
-            }
+            var strokeWidth:CGFloat = validateViewBox() ? mProps.getStrokeWidth().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getStrokeWidth()
+                
             mTextAttrs[.strokeWidth ] = -strokeWidth
             
             let strokeColor = UIColor.parseInt(argb: mProps.getStrokeColor(), opacity: mProps.getStrokeOpacity())
@@ -523,11 +520,8 @@ import UIKit
         }
         
         
-        var radius = mProps.getShadowRadius()
-        if validateViewBox() {
-            let size = max(mRectPath.width,mRectPath.height)
-            radius = (mProps.getShadowRadius() / max(mRectVb.size.width,mRectVb.size.height)) * size
-        }
+        var radius =  validateViewBox() ? mProps.getShadowRadius().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getShadowRadius()
+        
         disableAnimation()
         mLayer.shadowColor = c.cgColor
         mLayer.shadowOffset = offset

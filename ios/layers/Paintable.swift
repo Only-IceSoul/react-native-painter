@@ -380,11 +380,8 @@ import UIKit
     }
     
     func invalidateShadowPath(){
-        var sw:CGFloat = mProps.getStrokeWidth()
-        if validateViewBox() {
-            let size = max(mRectPath.width,mRectPath.height)
-            sw = (mProps.getStrokeWidth() / max(mRectVb.size.width,mRectVb.size.height)) * size
-        }
+        var sw:CGFloat = validateViewBox() ? mProps.getStrokeWidth().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getStrokeWidth()
+       
         super.shadowPath = fill() ? mPath.cgPath : mPath.cgPath.copy(strokingWithWidth: sw, lineCap: mProps.getCGStrokeCap(), lineJoin: mProps.getCGStrokeJoin(), miterLimit: mProps.getStrokeMiter())
         
     }
@@ -478,11 +475,7 @@ import UIKit
     }
     
     private func setupStroke(){
-        var sw:CGFloat = mProps.getStrokeWidth()
-        if validateViewBox() {
-            let size = max(mRectPath.width,mRectPath.height)
-            sw = (mProps.getStrokeWidth() / max(mRectVb.size.width,mRectVb.size.height)) * size
-        }
+        var sw:CGFloat = validateViewBox() ? mProps.getStrokeWidth().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getStrokeWidth()
 
         super.lineWidth = sw
         let c = UIColor.parseInt(argb: mProps.getStrokeColor(), opacity: mProps.getStrokeOpacity())
@@ -512,11 +505,7 @@ import UIKit
         }
         super.shadowOffset = offset
         
-        var radius = mProps.getShadowRadius()
-        if validateViewBox() {
-            let size = max(mRectPath.width,mRectPath.height)
-            radius = (mProps.getShadowRadius() / max(mRectVb.size.width,mRectVb.size.height)) * size
-        }
+        var radius = validateViewBox() ? mProps.getShadowRadius().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getShadowRadius()
         super.shadowRadius = radius
         super.shadowOpacity = mProps.getShadowOpacity()
         

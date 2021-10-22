@@ -411,11 +411,7 @@ class ImageLayer: CALayer {
         }
         layer.shadowOffset = offset
         
-        var radius = mProps.getShadowRadius()
-        if validateViewBox() {
-            let size = max(mRectPath.width,mRectPath.height)
-            radius = (mProps.getShadowRadius() / max(mRectVb.size.width,mRectVb.size.height)) * size
-        }
+        var radius = validateViewBox() ? mProps.getShadowRadius().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getShadowRadius()
         layer.shadowRadius = radius
         layer.shadowOpacity = mProps.getShadowOpacity()
         
