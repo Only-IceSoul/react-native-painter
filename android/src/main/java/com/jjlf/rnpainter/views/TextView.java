@@ -242,13 +242,7 @@ public class TextView extends PaintableView {
                 oy = toDip(mProps.getShadowOffsetY());
             }
 
-            float radius;
-            if (validateViewBox()) {
-                float size = Math.max( mPainter.rectPath.width(), mPainter.rectPath.height() );
-                radius =  (mProps.getShadowRadius() /  Math.max( mPainter.viewBox.width(), mPainter.viewBox.height() ) ) * size;
-            }else{
-                radius = toDip(mProps.getShadowRadius());
-            }
+            float radius = validateViewBox() ?  ModUtil.viewBoxToMax(mProps.getShadowRadius(),mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(mProps.getShadowRadius());
             paint.setShadowLayer(radius, ox, oy, c);
 
         }
@@ -288,13 +282,7 @@ public class TextView extends PaintableView {
         mPainter.textPaint2.setColor(mProps.getStrokeColor());
         mPainter.textPaint2.setAlpha((int) (mProps.getStrokeOpacity() * 255f));
 
-        float sw ;
-        if (validateViewBox()) {
-            float size = Math.max( mPainter.rectPath.width(), mPainter.rectPath.height() );
-            sw =  mProps.getStrokeWidth() / Math.max( mPainter.viewBox.width(), mPainter.viewBox.height() ) * size;
-        }else{
-            sw = toDip(mProps.getStrokeWidth());
-        }
+        float sw = validateViewBox() ?  ModUtil.viewBoxToMax(mProps.getStrokeWidth(),mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(mProps.getStrokeWidth());
         mPainter.textPaint2.setStrokeWidth(sw);
 
         mPainter.textPaint2.clearShadowLayer();

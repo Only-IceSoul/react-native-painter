@@ -513,13 +513,7 @@ public class ImageView extends View implements PaintableInterface {
                 oy = toDip(mProps.getShadowOffsetY());
             }
 
-            float radius;
-            if (validateViewBox()) {
-                float size = Math.max( mPainter.rectPath.width(), mPainter.rectPath.height() );
-                radius =  (mProps.getShadowRadius() /  Math.max( mPainter.viewBox.width(), mPainter.viewBox.height() ) ) * size;
-            }else{
-                radius = toDip(mProps.getShadowRadius());
-            }
+            float radius = validateViewBox() ?  ModUtil.viewBoxToMax(mProps.getShadowRadius(),mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(mProps.getShadowRadius());
             paint.setShadowLayer(radius, ox, oy, c);
 
         }
