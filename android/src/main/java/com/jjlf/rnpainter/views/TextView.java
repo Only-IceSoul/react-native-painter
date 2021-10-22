@@ -272,7 +272,7 @@ public class TextView extends PaintableView {
         mPainter.textPaint.setAlpha((int) (mProps.getFillOpacity() * 255f));
 
         mPainter.textPaint.setTextAlign(Paint.Align.LEFT);
-        mPainter.textPaint.setTextSize(validateViewBox() ?  ModUtil.viewBoxToMax(fontSize,mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(fontSize));
+       mPainter.textPaint.setTextSize(validateViewBox() ?  ModUtil.viewBoxToMin(fontSize,mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(fontSize));
 
       
         mPainter.textPaint.setTypeface(mTypeFace);
