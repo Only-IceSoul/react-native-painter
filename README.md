@@ -51,7 +51,7 @@ add a .swift file
 
 
 ```js
-   import { Color,ColorWorklet } from 'react-native-painter'
+   import { Color } from 'react-native-painter'
 
     const colorRed = Color('red')
     const colorBlack = Color('rgba(0,0,0,1)')

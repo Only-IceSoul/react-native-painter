@@ -40,6 +40,7 @@ interface CommonPathProps extends CommonFillProps , CommonStrokeProps {
 }
 
 interface CommonTransformProps {
+    painterKey?:string
     mask?:string
     opacity?:number
     translateZ?:number
