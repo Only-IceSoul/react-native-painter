@@ -6,7 +6,7 @@
     
     <Painter style={styles.Painter} 
     >
-        <Image source=`static;${ImageReact.resolveAssetSource(require('./myImage.jpg')).uri}` />   
+        <Image source={Platform.os === "web" ? require('./myImage.jpg') : `static;${ImageReact.resolveAssetSource(require('./myImage.jpg')).uri}`} />   
 
     </Painter>
 ```
@@ -21,7 +21,6 @@
 | h | the height | Number | 0 |
 | align | Alignment value | String | xMidYMid |
 | aspect |   Meet or slice  | String | meet |
-| clipToBounds | A Boolean value that determines whether Imgae is confined to the bounds.   | boolean | false |
 | source | uri to load the image  | String | undefined |
 
 
@@ -29,7 +28,11 @@
 ---
 
 ### `source: string`
+WEB:  
+ 
+  href: value
 
+MOBILE:   
 uri to load the image from. e.g. 
 `https://facebook........./logo_og.png`.    
 

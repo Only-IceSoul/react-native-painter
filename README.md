@@ -4,6 +4,7 @@ Paint your imagination
 
 android: api 21+    
 ios : 10.0+   
+web : SVG
 
 
 ## Getting started

@@ -11,24 +11,32 @@ interface ShadowProps {
     shadowOffsetX?:number
     shadowOffsetY?:number
     shadowPercentageValue?:boolean
+    shadowRect?:{ x:number,y:number,w:number,h:number, units:'userSpaceOnUse' | 'objectBoundingBox'} //web
  
 }
 
-interface CommonPathProps {
-    
+interface CommonFillProps {
     fill?:ColorType
     fillRule?: 'evenodd' | 'nonzero'
     fillOpacity?:number
+}
 
+interface CommonStrokeProps {
     stroke?: ColorType
     strokeOpacity?:number
     strokeWidth?:number
     strokeStart?:number
     strokeEnd?:number
+    dashArray?:number
+    dashClipValue?:number  // WHEN strokeStart > 0 && strokeEnd < 1 useful with cap round
     strokeCap?:'butt' | 'round' | 'square'
     strokeJoin?: 'bevel' | 'miter' | 'round'
     strokeMiter?:number
+}
 
+
+
+interface CommonPathProps extends CommonFillProps , CommonStrokeProps {
 }
 
 interface CommonTransformProps {
@@ -82,6 +90,10 @@ interface PainterProps extends ViewProps ,PreserveAspectRatioProps {
 }
 
 interface CommonProps extends ShadowProps, CommonPathProps ,CommonTransformProps {}
+interface CommonGroupProps extends CommonTransformProps {
+    fillRule?: 'evenodd' | 'nonzero'
+    fillOpacity?:number
+}
 
 interface LineProps extends CommonProps , ViewProps{
     x1?:number
@@ -98,6 +110,7 @@ interface TextProps extends CommonProps , ViewProps{
     fontStyle?:'normal' | 'bold' | 'italic'
     font?: 'default' | string
     baseline?:'ascender' | 'middle' | 'descender' | 'none'  | 'center' | 'capHeight'
+    textAnchor?:string
     verticalOffset?:number
     horizontalOffset?:number
 
@@ -110,7 +123,7 @@ interface CircleProps extends CommonProps , ViewProps{
 }
 
 interface PathProps extends CommonProps , ViewProps{ d?:string  }
-interface GProps extends CommonProps , ViewProps{}
+interface GProps extends CommonGroupProps , ViewProps{}
 interface RectProps extends CommonProps , ViewProps,LayoutProps{
     rtl?:number
     rtr?:number
@@ -120,7 +133,7 @@ interface RectProps extends CommonProps , ViewProps,LayoutProps{
 interface MaskProps extends ViewProps{
     name:string
 }
-interface MaskGProps extends CommonProps , ViewProps{
+interface MaskGProps extends CommonGroupProps , ViewProps{
 
 }
 interface EllipseProps extends CommonProps , ViewProps{
@@ -150,7 +163,7 @@ interface RadialGradientProps extends GradientProps,  ViewProps{
 }
 interface ImageProps extends  ViewProps,CustomViewProps,PreserveAspectRatioProps,ShadowProps{
     source?:string
-    clipToBounds?:boolean
+    // clipToBounds?:boolean
     fill?:ColorType
  
 }
