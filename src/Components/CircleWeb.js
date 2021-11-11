@@ -16,6 +16,7 @@ const CircleWeb = (props)=>{
         cy,
         r,
 
+        painterKey,
         isChildMask,
 
         viewBox,
@@ -83,6 +84,7 @@ const CircleWeb = (props)=>{
     const isMasking = isChildMask === undefined ? false : isChildMask
 
     //MARK : Paintable
+    const userKey = painterKey === undefined ? "" : painterKey
 
     const dashClip = dashClipValue === undefined ? 0 : dashClipValue
     const dasharr = dashArray === undefined ? 0 : dashArray
@@ -129,9 +131,9 @@ const CircleWeb = (props)=>{
     const transform = `rotate(${rotation} ${rotationOX} ${rotationOY}) translate(${scaleOX} ${scaleOY}) scale(${scaleX} ${scaleY}) translate(${-scaleOX} ${-scaleOY}) translate(${dx} ${dy})`
   
 
-    const keyFilter = `jjlfshadowfilter`
-    const keyMaskStroke = `jjlfMaskfilterNotButt`
-    const keyMaskStroke2 = `jjlfMaskfilterNotButt2`
+    const keyFilter = `jjlfshadowfilter${userKey}`
+    const keyMaskStroke = `jjlfMaskfilterNotButt${userKey}`
+    const keyMaskStroke2 = `jjlfMaskfilterNotButt2${userKey}`
     const filterShadowProp = sho > 0 ? `url(#${keyFilter})` : ""
     
     const isFillTransparent = fc === `rgba(0, 0, 0, 0)` || fc === "transparent"

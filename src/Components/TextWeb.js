@@ -54,7 +54,7 @@ const CircleWeb = (props)=>{
         horizontalOffset,
         
         isChildMask,
-
+        painterKey,
         viewBox,
         align,
         aspect,
@@ -152,9 +152,9 @@ const CircleWeb = (props)=>{
 
 
     const transform = `rotate(${rotation} ${rotationOX} ${rotationOY}) translate(${scaleOX} ${scaleOY}) scale(${scaleX} ${scaleY}) translate(${-scaleOX} ${-scaleOY}) translate(${dx} ${dy})`
-  
+    const userKey = painterKey === undefined ? "" : painterKey
 
-    const keyFilter = `jjlfshadowfilter`
+    const keyFilter = `jjlfshadowfilter${userKey}`
 
     const filterShadowProp = sho > 0 ? `url(#${keyFilter})` : ""
 

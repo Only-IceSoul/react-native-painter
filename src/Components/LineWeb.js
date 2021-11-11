@@ -19,7 +19,7 @@ const LineWeb = (props)=>{
 
         //MARK: Paintable
         isChildMask,
-
+        painterKey,
         viewBox,
         align,
         aspect,
@@ -100,6 +100,7 @@ const LineWeb = (props)=>{
     const shoy =  shadowOffset === undefined ? (shadowOffsetY === undefined ? 2 : shadowOffsetY) : shadowOffset
     const shRect = shadowRect === undefined ? {x:-2, y:-2 , w:5,h:5, units:'objectBoundingBox'} : shadowRect
 
+    const userKey = painterKey === undefined ? "" : painterKey
 
     const mk = mask === undefined ? "" : mask
     const op = opacity === undefined ? "" : `${opacity}`
@@ -120,9 +121,9 @@ const LineWeb = (props)=>{
     const transform = `rotate(${rotation} ${rotationOX} ${rotationOY}) translate(${scaleOX} ${scaleOY}) scale(${scaleX} ${scaleY}) translate(${-scaleOX} ${-scaleOY}) translate(${dx} ${dy})`
   
 
-    const keyFilter = `jjlfshadowfilter`
-    const keyMaskStroke = `jjlfMaskfilterNotButt`
-    const keyMaskStroke2 = `jjlfMaskfilterNotButt2`
+    const keyFilter = `jjlfshadowfilter${userKey}`
+    const keyMaskStroke = `jjlfMaskfilterNotButt${userKey}`
+    const keyMaskStroke2 = `jjlfMaskfilterNotButt2${userKey}`
     const filterShadowProp = sho > 0 ? `url(#${keyFilter})` : ""
     
 

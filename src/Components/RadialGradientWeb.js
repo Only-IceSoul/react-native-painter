@@ -33,7 +33,7 @@ const RadialGradientWeb = (props)=>{
         colors,
 
         isChildMask,
-
+        painterKey,
         viewBox,
         align,
         aspect,
@@ -96,8 +96,8 @@ const RadialGradientWeb = (props)=>{
 
     const transform = `rotate(${rotation} ${rotationOX} ${rotationOY}) translate(${scaleOX} ${scaleOY}) scale(${scaleX} ${scaleY}) translate(${-scaleOX} ${-scaleOY}) translate(${dx} ${dy})`
   
-
-    const keyGradient = "jjlfRadialGradient"
+    const userKey = painterKey === undefined ? "" : painterKey
+    const keyGradient = `jjlfRadialGradient${userKey}`
 
     return(
         <g opacity={op}    mask={ !isMasking ? `url(#${mk})` : "" } transform={transform}  >

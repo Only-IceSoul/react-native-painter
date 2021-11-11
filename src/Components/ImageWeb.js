@@ -18,6 +18,7 @@ const ImageWeb = (props)=>{
         fill,
 
         isChildMask,
+        painterKey,
 
         viewBox,
         alignParent,
@@ -68,6 +69,7 @@ const ImageWeb = (props)=>{
     const asp = aspect === undefined ? "meet" : aspect
     const alg = align === undefined ? "xMidYMid" : align
 
+    const userKey = painterKey === undefined ? "" : painterKey
 
     const shc = shadow === undefined ? 'rgba(0,0,0,1)'.split(",") : shadow.split(",")
     const sho = shadowOpacity === undefined ? 0 : clamp(shadowOpacity)
@@ -97,7 +99,7 @@ const ImageWeb = (props)=>{
     const transform = `rotate(${rotation} ${rotationOX} ${rotationOY}) translate(${scaleOX} ${scaleOY}) scale(${scaleX} ${scaleY}) translate(${-scaleOX} ${-scaleOY}) translate(${dx} ${dy})`
   
 
-    const keyShadow = "jjlfFilterShadow"
+    const keyShadow = `jjlfFilterShadow${userKey}`
     const filterShadowProp = sho > 0 ? `url(#${keyShadow})` : ""
 
     return(

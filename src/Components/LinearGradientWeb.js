@@ -29,7 +29,7 @@ const LinearGradientWeb = (props)=>{
         colors,
 
         isChildMask,
-
+        painterKey,
         viewBox,
         align,
         aspect,
@@ -72,6 +72,8 @@ const LinearGradientWeb = (props)=>{
 
     const isMasking = isChildMask === undefined ? false : isChildMask
 
+    const userKey = painterKey === undefined ? "" : painterKey
+
     const mk = mask === undefined ? "" : mask
     const op = opacity === undefined ? "" : `${opacity}`
    
@@ -91,7 +93,7 @@ const LinearGradientWeb = (props)=>{
     const transform = `rotate(${rotation} ${rotationOX} ${rotationOY}) translate(${scaleOX} ${scaleOY}) scale(${scaleX} ${scaleY}) translate(${-scaleOX} ${-scaleOY}) translate(${dx} ${dy})`
   
 
-    const keyGradient = "jjlfLinearGradient"
+    const keyGradient = `jjlfLinearGradient${userKey}`
 
     return(
         <g opacity={op}    mask={ !isMasking ? `url(#${mk})` : "" } transform={transform}  >
