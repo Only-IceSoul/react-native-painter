@@ -66,7 +66,7 @@ add a .swift file
 
 | Name | description | type | default |
 | --- | --- | --- | --- |
-| painterKey | (Web) requerid to shadow,gradient, stroke start, end  | String | "" |
+| painterKey | (Web) required to shadow,gradient, stroke start, end  | String | "" |
 | mask | Reference of a Mask element | String | undefined |
 | opacity | The opacity attribute specifies the transparency | Number | 1 |
 | fill | The fill prop refers to the color inside the shape.        | Color | black |
@@ -81,7 +81,7 @@ add a .swift file
 | strokeStart | the start | Number | 0 |
 | strokeEnd | the end | Number | 1 |
 | dashArray |(Web) required for stroke start and end  | Number | 0 |
-| dashClipValue | (Web) useful with cap round & stroke start > 0 - stroke end < 1 | Number | 0 |
+| dashClipValue | (Web) useful with cap round & stroke start > 0 & stroke end < 1 | Number | 0 |
 | shadow | set the sahdow color  | Color | 'black' |
 | shadowOpacity | set the shadow opacity [0 - 1]  | Number | 0 |
 | shadowRadius | the radius | Number | 2 |
@@ -102,7 +102,7 @@ The percentageValue property refers to the fact that the Origin will be multipli
   
 | Name | type | default |
 | --- | --- | --- |
-| translateZ | Number (zIndex)(mobile) | 0 |
+| translateZ (zIndex)(mobile) | Number  | 0 |
 | transX | Number | 0 |
 | transY | Number | 0 |
 | transPercentageValue (mobile) | Bool | false |

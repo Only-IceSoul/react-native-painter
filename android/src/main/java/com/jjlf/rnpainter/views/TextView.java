@@ -69,24 +69,14 @@ public class TextView extends PaintableView {
     public void setFont(String v) {
         if(!font.equals(v)){
             font = v;
-            try{
-                mTypeFace = font.equals("default") ? Typeface.DEFAULT : ReactFontManager.getInstance().getTypeface(font,Typeface.NORMAL,getResources().getAssets());
-//                Typeface.createFromAsset(getContext().getAssets(), "fonts/"+font);
-                if(font.equals("default") && (fontStyle.equals("bold") || fontStyle.equals("italic"))){
-                    mTypeFace =  Typeface.create(mTypeFace,fontStyle.equals("bold") ? Typeface.BOLD : Typeface.ITALIC);
-                }
-            }catch (Exception ignored){
-                mTypeFace = Typeface.DEFAULT;
-            }finally {
-                invalidateWithChildMask();
-            }
+            invalidateFont();
         }
     }
 
     public void setFontStyle(String v) {
         if(!fontStyle.equals(v)){
             fontStyle = v;
-            invalidateWithChildMask();
+            invalidateFont();
         }
     }
     public void setFontSize(float v) {
@@ -96,6 +86,19 @@ public class TextView extends PaintableView {
         }
     }
 
+    public void invalidateFont(){
+        try{
+            mTypeFace = font.equals("default") ? Typeface.DEFAULT : ReactFontManager.getInstance().getTypeface(font,Typeface.NORMAL,getResources().getAssets());
+//                Typeface.createFromAsset(getContext().getAssets(), "fonts/"+font);
+            if(font.equals("default") && (fontStyle.equals("bold") || fontStyle.equals("italic"))){
+                mTypeFace =  Typeface.create(mTypeFace,fontStyle.equals("bold") ? Typeface.BOLD : Typeface.ITALIC);
+            }
+        }catch (Exception ignored){
+            mTypeFace = Typeface.DEFAULT;
+        }finally {
+            invalidateWithChildMask();
+        }
+    }
 
     //Mark: Paintable
 
@@ -183,8 +186,9 @@ public class TextView extends PaintableView {
         //baseline
         switch (baseline) {
             case "middle": {
-                setupTextBounds();
-                mPy -= mBoundsText.exactCenterY();
+                setupTextBoundsWithDescender();
+                float offsetY = mBoundsText.exactCenterY();
+                mPy -= offsetY;
                 break;
             }
             case "capHeight": {
@@ -255,6 +259,11 @@ public class TextView extends PaintableView {
         mPainter.textPaint.getTextBounds(text,0,text.length(),mBoundsText);
     }
 
+    protected void setupTextBoundsWithDescender(){
+        mBoundsText.setEmpty();
+        String t = text + "j";
+        mPainter.textPaint.getTextBounds(t,0,t.length(),mBoundsText);
+    }
 
 
     protected void setupTextPaintFill(){
