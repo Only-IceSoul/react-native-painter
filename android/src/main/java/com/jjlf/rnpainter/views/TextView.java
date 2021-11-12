@@ -261,7 +261,7 @@ public class TextView extends PaintableView {
 
     protected void setupTextBoundsWithDescender(){
         mBoundsText.setEmpty();
-        String t = text + "j";
+        String t = text + "Hj";
         mPainter.textPaint.getTextBounds(t,0,t.length(),mBoundsText);
     }
 
