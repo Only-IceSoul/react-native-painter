@@ -20,13 +20,12 @@ const MaskWeb = (props)=>{
         <mask id={idMask}  maskUnits="userSpaceOnUse" >
 
                     {React.Children.map(children,(child,index)=>{
-                        var p = child.props
-                            return React.cloneElement(child, child.type.name === "ImageWeb" ? 
-                            {viewBox,
-                                alignParent:align,aspectParent:aspect,
-                                isChildMask: true
-                            } :
-                            {viewBox,align,aspect,
+                      
+                            return React.cloneElement(child, 
+                            {
+                                viewBox,
+                                align,
+                                aspect,
                                 isChildMask: true
                             } )
                         })}

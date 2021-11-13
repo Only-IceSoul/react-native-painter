@@ -39,8 +39,7 @@ interface CommonStrokeProps {
 interface CommonPathProps extends CommonFillProps , CommonStrokeProps {
 }
 
-interface CommonTransformProps {
-    painterKey?:string
+interface CommonTransformProps extends BaseSvgProps {
     mask?:string
     opacity?:number
     translateZ?:number
@@ -65,7 +64,9 @@ interface CommonTransformProps {
 
 }
 
-interface PreserveAspectRatioProps {
+interface BaseSvgProps {
+    painterKey?:string
+    viewBox?:number[] 
     aspect?: 'meet' | 'slice' | 'none'
     align?:'xMinYMin'|
     'xMidYMin' |
@@ -86,8 +87,8 @@ interface LayoutProps{
     h?:number
 }
 
-interface PainterProps extends ViewProps ,PreserveAspectRatioProps {
-    viewBox?:number[] 
+interface PainterProps extends ViewProps ,BaseSvgProps {
+ 
 }
 
 interface CommonProps extends ShadowProps, CommonPathProps ,CommonTransformProps {}
@@ -162,10 +163,21 @@ interface RadialGradientProps extends GradientProps,  ViewProps{
     rx?:number
     ry?:number
 }
-interface ImageProps extends  ViewProps,CustomViewProps,PreserveAspectRatioProps,ShadowProps{
+interface ImageProps extends  ViewProps,CustomViewProps,ShadowProps{
     source?:string
     // clipToBounds?:boolean
     fill?:ColorType
+    aspectImage?: 'meet' | 'slice' | 'none'
+    alignImage?:'xMinYMin'|
+    'xMidYMin' |
+    'xMaxYMin' |
+    'xMinYMid' |
+    'xMidYMid' |
+    'xMaxYMid' |
+    'xMinYMax' |
+    'xMidYMax' |
+    'xMaxYMax' |
+    'none'
  
 }
 

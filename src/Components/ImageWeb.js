@@ -13,16 +13,16 @@ const ImageWeb = (props)=>{
         w,
         h,
         source,
-        align,
-        aspect,
+        alignImage,
+        aspectImage,
         fill,
 
         isChildMask,
         painterKey,
 
         viewBox,
-        alignParent,
-        aspectParent,
+        align,
+        aspect,
 
         shadow,
         shadowOpacity,
@@ -66,8 +66,8 @@ const ImageWeb = (props)=>{
 
     const src = source === undefined ? "" : source
     const fc = fill === undefined ? '' : fill
-    const asp = aspect === undefined ? "meet" : aspect
-    const alg = align === undefined ? "xMidYMid" : align
+    const asp = aspectImage === undefined ? "meet" : aspectImage
+    const alg = alignImage === undefined ? "xMidYMid" : alignImage
 
     const userKey = painterKey === undefined ? "" : painterKey
 
@@ -105,7 +105,7 @@ const ImageWeb = (props)=>{
     return(
         <g opacity={op}    mask={ !isMasking ? `url(#${mk})` : "" } transform={transform}  >
             <svg style={{width:'100%',height:'100%',overflow:'visible'}} viewBox={viewBox} 
-                    preserveAspectRatio={`${alignParent} ${aspectParent}`}>
+                    preserveAspectRatio={`${align} ${aspect}`}>
                         { sho > 0 &&
                             <defs>
                                 <filter id={keyShadow}

@@ -47,14 +47,15 @@ const Painter = (props)=>{
                              preserveAspectRatio={`${alg} ${asp}`}>
                                 
                               {React.Children.map(children,(child,index)=>{
-                                      var p = child.props
-                                        return React.cloneElement(child, child.type.name === "ImageWeb" ? 
-                                        {viewBox:vb,
-                                              alignParent:alg,aspectParent:asp
-                                        } :
-                                        {viewBox: vb,align:alg,aspect:asp
+                                   
+                                        return React.cloneElement(child,
+                                        {
+                                          viewBox: vb,
+                                          align:alg,
+                                          aspect:asp
 
-                                        } )
+                                        }
+                                         )
                                     })}
 
                             

@@ -19,8 +19,8 @@
 | y | top position | Number | 0 |
 | w | the width | Number | 0 |
 | h | the height | Number | 0 |
-| align | Alignment value | String | xMidYMid |
-| aspect |   Meet or slice  | String | meet |
+| alignImage | Alignment value | String | xMidYMid |
+| aspectImage |   Meet or slice  | String | meet |
 | source | uri to load the image  | String | undefined |
 
 
@@ -30,7 +30,7 @@
 ### `source: string`
 WEB:  
  
-  href: value
+  href value
 
 MOBILE:   
 uri to load the image from. e.g. 

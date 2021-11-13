@@ -78,12 +78,12 @@ const GWeb = (props)=>{
         transform={transform}  >
 
              {React.Children.map(children,(child,index)=>{
-                               var p = child.props
-                                 return React.cloneElement(child, child.type.name === "ImageWeb" ? 
-                                 {viewBox,
-                                        alignParent:align,aspectParent:aspect
-                                 } :
-                                 {viewBox,align,aspect,
+                              
+                                 return React.cloneElement(child,
+                                 {
+                                    viewBox,
+                                    align,
+                                    aspect,
             
                                  } )
                              })}

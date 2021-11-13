@@ -66,7 +66,6 @@ add a .swift file
 
 | Name | description | type | default |
 | --- | --- | --- | --- |
-| painterKey | (Web) required to shadow,gradient, stroke start, end  | String | "" |
 | mask | Reference of a Mask element | String | undefined |
 | opacity | The opacity attribute specifies the transparency | Number | 1 |
 | fill | The fill prop refers to the color inside the shape.        | Color | black |
@@ -80,8 +79,6 @@ add a .swift file
 | strokeMiter | control the behavior of miter | Number | 4 |
 | strokeStart | the start | Number | 0 |
 | strokeEnd | the end | Number | 1 |
-| dashArray |(Web) required for stroke start and end  | Number | 0 |
-| dashClipValue | (Web) useful with cap round & stroke start > 0 & stroke end < 1 | Number | 0 |
 | shadow | set the sahdow color  | Color | 'black' |
 | shadowOpacity | set the shadow opacity [0 - 1]  | Number | 0 |
 | shadowRadius | the radius | Number | 2 |
@@ -89,8 +86,20 @@ add a .swift file
 | shadowOffsetX | set the offset x | Number | 2  |
 | shadowOffsetY | set the offset y| Number | 2  |
 | shadowPercentageValue | offset * size (mobile)| Bool | false |
-| shadowRect | (Web) clip Region  | Object | size * 3 |
 
+
+
+### Web:  
+
+| Name | description | type | default |
+| --- | --- | --- | --- |
+| painterKey | required to shadow,gradient, stroke start, end  | String | "" |
+| viewBox | When creating custom views, you must pass the painter props | Array[Number] (4)| undefined |
+| align | When creating custom views, you must pass the painter props    | String | xMidYMid |
+| aspect | When creating custom views, you must pass the painter props   | String | meet |
+| dashArray | required for stroke start and end  | Number | 0 |
+| dashClipValue |  useful with cap round & stroke start > 0 & stroke end < 1 [ 0 to 1]| Number | 0 |
+| shadowRect | clip Region  | Object | size * 3 |
 
 <br>
 
