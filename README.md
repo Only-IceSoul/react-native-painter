@@ -101,7 +101,7 @@ add a .swift file
 | aspect | When creating custom views, you must pass the painter props   | String | meet |
 | dashArray | required for stroke start and end  | Number | 0 |
 | dashClipValue |  useful with cap round & stroke start > 0 & stroke end < 1 [ 0 to 1]| Number | 0 |
-| shadowRect | clip Region  | Object | size * 3 |
+| shadowRect | clip Region  | Object | size * 2 |
 
 <br>
 
@@ -118,6 +118,7 @@ The percentageValue property refers to the fact that the Origin will be multipli
 | transY | Number | 0 |
 | transPercentageValue (mobile) | Bool | false |
 | rot | Number | 0 |
+| rotO | Number | 0 |
 | rotOx | Number | 0 |
 | rotOy | Number | 0 |
 | rotPercentageValue (mobile) | Bool | false |
