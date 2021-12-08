@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
 
+
+
 import com.facebook.react.views.text.ReactFontManager;
 import com.jjlf.rnpainter.utils.ModUtil;
 import com.jjlf.rnpainter.utils.SVGViewBox;
@@ -143,8 +145,29 @@ public class TextView extends PaintableView {
 
     @Override
     protected void drawPath(Canvas canvas) {
-        if(fill()) canvas.drawText(text,mPx,mPy, mPainter.textPaint);
-        if(stroke()) canvas.drawText(text,mPx,mPy,mPainter.textPaint2);
+        if(validateViewBox()){
+            float fontPixelH = ModUtil.viewBoxToMin(fontSize,mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height());
+            float fontPixelW = ModUtil.viewBoxToWidth(fontSize,mPainter.viewBox,mPainter.rectPath.width());
+
+            float scx = fontPixelW / fontPixelH;
+
+            mPainter.matrix2.reset();
+            mPainter.matrix2.postScale(scx,1f);
+
+            int checkpoint = canvas.save();
+            canvas.concat(mPainter.matrix2);
+
+            try{
+                if(fill()) canvas.drawText(text,mPx,mPy, mPainter.textPaint);
+                if(stroke()) canvas.drawText(text,mPx,mPy,mPainter.textPaint2);
+            } finally {
+                canvas.restoreToCount(checkpoint);
+            }
+        }else{
+            if(fill()) canvas.drawText(text,mPx,mPy, mPainter.textPaint);
+            if(stroke()) canvas.drawText(text,mPx,mPy,mPainter.textPaint2);
+        }
+
     }
 
     protected void setupCoordinates(){
@@ -160,9 +183,11 @@ public class TextView extends PaintableView {
     @Override
     protected void viewBoxTransform() {
         if (validateViewBox()){
+
             mPainter.rectPath.set(mPainter.viewBoxDensity);
             SVGViewBox.transform(mPainter.viewBox, mPainter.bounds, mPainter.align, mPainter.aspect, getResources().getDisplayMetrics().density,mPainter.matrix);
             mPainter.matrix.mapRect(mPainter.rectPath);
+
         }else{
             mPainter.rectPath.set(mPainter.bounds);
         }
@@ -276,6 +301,7 @@ public class TextView extends PaintableView {
 
         mPainter.textPaint.setTextAlign(Paint.Align.LEFT);
        mPainter.textPaint.setTextSize(validateViewBox() ?  ModUtil.viewBoxToMin(fontSize,mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(fontSize));
+
 
       
         mPainter.textPaint.setTypeface(mTypeFace);
