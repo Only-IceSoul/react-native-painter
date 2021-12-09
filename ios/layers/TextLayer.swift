@@ -11,6 +11,7 @@ import UIKit
    
     
     var mLayer = CATextLayer()
+    let mLayerContainer = CALayer()
     var mProps = CommonProps()
     var mTransform = TransformProps()
     var mBounds = CGRect()
@@ -35,8 +36,9 @@ import UIKit
     
      override init() {
         super.init()
-        addSublayer(mLayer)
-        mLayer.anchorPoint = CGPoint(x: 0, y: 1)
+         addSublayer(mLayerContainer)
+         mLayerContainer.addSublayer(mLayer)
+         mLayer.anchorPoint = CGPoint(x: 0, y: 1)
     }
     
     //MARK: Paintable
@@ -385,6 +387,9 @@ import UIKit
      func onBoundsChange(_ frame: CGRect){
         mBounds.set(rect: frame)
         disableAnimation()
+         mLayerContainer.frame = CGRect(x: 0, y: 0, width: mBounds.width, height: mBounds.height)
+         mLayerContainer.position = CGPoint(x: 0, y: 0)
+         mLayerContainer.anchorPoint = CGPoint(x: 0, y: 0)
         super.frame = mBounds
         super.position = CGPoint(x: 0, y: 0)
         super.anchorPoint = CGPoint(x: 0, y: 0)
@@ -462,9 +467,18 @@ import UIKit
         if mHorizontalOffset != 0{
             x += mHorizontalOffset * mBoundsText.width
         }
+      var scx : CGFloat = 1
+      var matrix = CATransform3DIdentity
+          if(validateViewBox()){
+              let fs = mFontSize.asViewBoxToMin(mRectVb, mRectPath.width, mRectPath.height)
+              let fsW = mFontSize.asViewBoxToWidth(mRectVb, mRectPath.width)
+              scx = fsW / fs
+              matrix = CATransform3DScale(matrix, scx, 1, 1)
+          }
         disableAnimation()
         mLayer.frame = CGRect(x: 0, y: 0, width: mBoundsText.width, height: mBoundsText.height)
         mLayer.position = CGPoint(x: x , y: y)
+         mLayerContainer.transform = matrix
         commit()
         
     }
@@ -520,7 +534,7 @@ import UIKit
         }
         
         
-        var radius =  validateViewBox() ? mProps.getShadowRadius().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getShadowRadius()
+        let radius =  validateViewBox() ? mProps.getShadowRadius().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getShadowRadius()
         
         disableAnimation()
         mLayer.shadowColor = c.cgColor
