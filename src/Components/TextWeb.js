@@ -1,4 +1,5 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react'
+import Attributes from 'react-native-painter/src/Components/Constants'
 
 
 const clamp = (num) =>{
@@ -41,11 +42,7 @@ const getBaselineWeb = (b)=>{
 const TextWeb = React.forwardRef((props,ref)=>{
 
     const myRef = ref ? ref : useRef()
-    const textRef = useRef()
-    const textRef2 = useRef()
-    const containerRef = useRef()
-    const shadowRef = useRef()
-    const shadowFilter = useRef()
+  
 
     const {
 
@@ -74,7 +71,6 @@ const TextWeb = React.forwardRef((props,ref)=>{
         strokeWidth,
                 
         shadow,
-        shadowOpacity,
         shadowRadius,
         shadowOffset,
         shadowOffsetX,
@@ -135,8 +131,7 @@ const TextWeb = React.forwardRef((props,ref)=>{
     const sw = strokeWidth === undefined ? 1 : strokeWidth
    
 
-    const shc = shadow === undefined ? 'rgba(0,0,0,1)'.split(",") : shadow.split(",")
-    const sho = shadowOpacity === undefined ? 0 : clamp(shadowOpacity)
+    const shc = shadow === undefined ? 'rgba(0,0,0,0)'.split(",") : shadow.split(",")
     const shr = shadowRadius === undefined ? 2 : shadowRadius
     const shox = shadowOffset === undefined ? (shadowOffsetX === undefined ? 2 : shadowOffsetX ) : shadowOffset
     const shoy =  shadowOffset === undefined ? (shadowOffsetY === undefined ? 2 : shadowOffsetY) : shadowOffset
@@ -161,48 +156,42 @@ const TextWeb = React.forwardRef((props,ref)=>{
     const transform = `rotate(${rotation} ${rotationOX} ${rotationOY}) translate(${scaleOX} ${scaleOY}) scale(${scaleX} ${scaleY}) translate(${-scaleOX} ${-scaleOY}) translate(${dx} ${dy})`
     const userKey = painterKey === undefined ? "" : painterKey
 
-    const keyFilter = `jjlfshadowfilter${userKey}`
+    const keyElemet = Attributes.elements.prefix
+    const keyFilter = `${keyElemet}${Attributes.elements.filter}${userKey}`
 
-    const filterShadowProp = sho > 0 ? `url(#${keyFilter})` : ""
+    const filterShadowProp = `url(#${keyFilter})`
 
     const isFillTransparent = fc === `rgba(0, 0, 0, 0)` || fc === "transparent"
 
 
-    useLayoutEffect(()=>{
-        myRef.current = {
-            text1:textRef,
-            text2:textRef2,
-            container:containerRef,
-            shadow:shadowRef,
-            shadowFilter:shadowFilter
-        }
-    },[stc])
 
    
     return(
-        <g  ref={containerRef} opacity={op} mask={`url(#${mk})`}  transform={transform} 
-         currenttransform={`${rotation} ${rotationOX} ${rotationOY} ${scaleX} ${scaleY} ${scaleOX} ${scaleOY} ${dx} ${dy}`}>
+        <g  ref={myRef} opacity={op} mask={`url(#${mk})`}  transform={transform} 
+        curtransform={`${rotation} ${rotationOX} ${rotationOY} ${scaleX} ${scaleY} ${scaleOX} ${scaleOY} ${dx} ${dy}`}
+        >
 
     
         <svg style={{width:'100%',height:'100%',overflow:'visible'}} viewBox={viewBox} 
              preserveAspectRatio={`${align} ${aspect}`}>
         
-        {  sho > 0 &&
+      
             <defs>
-                <filter id={keyFilter} ref={shadowFilter}
+                <filter id={keyFilter}
                     filterUnits={`${shRect.units}`}
                     x={`${shRect.x}`} y={`${shRect.y}`} width={`${shRect.w}`} height={`${shRect.h}`}>
-                    <feDropShadow ref={shadowRef} dx={shox} dy={shoy} stdDeviation={shr} 
-                     floodColor={`${shc[0]},${shc[1]},${shc[2]},${sho * parseFloat(shc[3])})`} 
-                     currentopacity={sho}
+                    <feDropShadow 
+                      id={`${keyElemet}${Attributes.elements.shadow}${userKey}`}
+                     dx={shox} dy={shoy} stdDeviation={shr} 
+                     floodColor={shc} 
                      />
                 </filter>
 
             </defs>
-        }
+   
 
        
-            <text ref={textRef}
+            <text id={`${keyElemet}${Attributes.elements.fill}${userKey}`}
              x={lx} y={ly} fontFamily={typeface} fontSize={fontSiz} fontStyle={fontStyl} fontWeight={fontWeg} textAnchor={textAn}
             dominantBaseline={basel}
            
@@ -212,23 +201,23 @@ const TextWeb = React.forwardRef((props,ref)=>{
            >
                         {content}
             </text>
-           {stc !== "" ? 
-                <g   filter={isFillTransparent ? filterShadowProp : ""}   >
+           
+                <g    id={`${keyElemet}${Attributes.elements.gShadow}${userKey}`} 
+                filter={isFillTransparent ? filterShadowProp : ""}   >
 
-                    <text 
+                    <text  id={`${keyElemet}${Attributes.elements.stroke}${userKey}`}
                     x={lx} y={ly} fontFamily={typeface} fontSize={fontSiz} fontStyle={fontStyl} fontWeight={fontWeg} textAnchor={textAn}
                           dominantBaseline={basel}
                         fill={"none"}
                         stroke={stc} strokeOpacity={so}
-                        strokeWidth={`${sw}`} 
+                        strokeWidth={sw} 
                     >
 
                             {content}
                         </text>
               
                 </g>
-           : null
-           }
+          
       
     </svg>
     </g>
@@ -240,20 +229,22 @@ export default class Text extends React.PureComponent{
     
     constructor(props){
         super(props)
-
+        this.keyElemet = Attributes.elements.prefix
         this.myRef = React.createRef()
         this.setNativeProps = this.setNativeProps.bind(this)
         this.updateProp = this.updateProp.bind(this)
-        this.updateTextAtributte = this.updateTextAtributte.bind(this)
+        this.handleProps = this.handleProps.bind(this)
+        this.handleCommonProps = this.handleCommonProps.bind(this)
+        this.handleShadow = this.handleShadow.bind(this)
         this.updateAttribute = this.updateAttribute.bind(this)
-     
+        this.getAttribute = this.getAttribute.bind(this)
+        this.getElement = this.getElement.bind(this)
       
     }
 
 
     setNativeProps(object){
-        if(this.myRef){
-    
+        if(this.myRef.current && this.props.painterKey){
             let keys = Object.keys(object)
             for(var i = 0; i < keys.length;i++){
                 let k = keys[i]
@@ -277,221 +268,172 @@ export default class Text extends React.PureComponent{
     }
 
     updateProp(k,value){
-        var container = this.myRef.current.container.current
+        let isProp = this.handleProps(k,value)
+        if(!isProp){
+            this.handleCommonProps(k,value)
+        }
+    }
+
+
+    handleProps(k,value){
         switch(k){
             case "text":
-                if(this.myRef.current.text1.current) this.myRef.current.text1.current.textContent = value
-                if(this.myRef.current.text2.current) this.myRef.current.text2.current.textContent = value
-                break;
-            case "fontSize":
-                this.updateTextAtributte('font-size',value)
-                break
-            case "fontStyle":
-                if(value === 'bold') {
-                    this.updateTextAtributte('font-weight',value) 
-                    this.updateTextAtributte('font-style','normal')
-                }else{
-                    this.updateTextAtributte('font-weight','normal') 
-                    this.updateTextAtributte('font-style',value)
-                }
-                break
-            case "font":
-                this.updateTextAtributte('font-family',value)
-                break
-            case "baseline":
-                this.updateTextAtributte('dominant-baseline',getBaselineWeb(value))
-                break;
+      
+                let f = this.getElement(Attributes.elements.fill)
+                let s = this.getElement(Attributes.elements.stroke)
+                if(f) f.textContent = value
+                if(s) s.textContent = value
+                return true;
             case "x":
             case "y":
-                 this.updateTextAtributte(k,value)
-                break
+            case "font":
+            case "fontSize":
             case "textAnchor":
-                this.updateTextAtributte('text-anchor',value)
-                break
-            //common Props
-            case "opacity":
-                this.updateAttribute(k,clamp(value),container) 
-                break
-            case "fill":
-                this.updateTextAtributte('text-anchor',value,true,false)
-                break;
-            case "fillOpacity":
-                this.updateTextAtributte('fill-opacity',value,true,false)
-                break;
-                //stroke
-            case "stroke":
-                this.updateTextAtributte('fill-opacity',value,false,true)
-                break;
-            case "strokeOpacity":
-                this.updateTextAtributte('stroke-opacity',value,false,true)
-                 break;
-            case "strokeWidth":
-                this.updateTextAtributte('stroke-width',value,false,true)
-                break;
-                //shadow
+                this.updateAttribute(Attributes[k],value,this.getElement(Attributes.elements.fill))
+                this.updateAttribute(Attributes[k],value,this.getElement(Attributes.elements.stroke))
+                return true;
+            case "fontStyle":
+                if(value === 'bold') {
+                    this.updateAttribute(Attributes.fontWeight,value,this.getElement(Attributes.elements.fill)) 
+                    this.updateAttribute(Attributes.fontStyle,'normal',this.getElement(Attributes.elements.fill))
+                    this.updateAttribute(Attributes.fontWeight,value,this.getElement(Attributes.elements.stroke)) 
+                    this.updateAttribute(Attributes.fontStyle,'normal',this.getElement(Attributes.elements.stroke))
+                }else{
+                    this.updateAttribute(Attributes.fontWeight,'normal',this.getElement(Attributes.elements.fill)) 
+                    this.updateAttribute(Attributes.fontStyle,value,this.getElement(Attributes.elements.fill))
+                    this.updateAttribute(Attributes.fontWeight,'normal',this.getElement(Attributes.elements.stroke)) 
+                    this.updateAttribute(Attributes.fontStyle,value,this.getElement(Attributes.elements.stroke))
+                }
+                return true;
+            case "baseline":
+                this.updateAttribute(Attributes[k],getBaselineWeb(value),this.getElement(Attributes.elements.fill))
+                this.updateAttribute(Attributes[k],getBaselineWeb(value),this.getElement(Attributes.elements.stroke))
+                return true;
+      
+         }
+         return false
+    }
+
+    handleCommonProps(k,value){
+        
+        if(k.includes('fill')){
+            if(k === 'fill'){
+                let keyFilter = `${this.keyElemet}${Attributes.elements.filter}${this.props.painterKey}`
+                let filterShadowProp = `url(#${keyFilter})`
+                let isFillTransparent =  value === `rgba(0, 0, 0, 0)` || value === "transparent"
+                let elFill = this.getElement(Attributes.elements.fill)
+                this.updateAttribute(Attributes[k],value,elFill)
+                this.updateAttribute(Attributes.filter,!isFillTransparent ? filterShadowProp : "",elFill)
+                this.updateAttribute(Attributes.filter,isFillTransparent ? filterShadowProp : "",this.getElement(Attributes.elements.gShadow))
+            }else{
+                this.updateAttribute(Attributes[k],value,this.getElement(Attributes.elements.fill))
+            }
+        }else if(k.includes('stroke')){
+            this.updateAttribute( Attributes[k],value,this.getElement(Attributes.elements.stroke))
+        }else if(k.includes('shadow')){
+             this.handleShadow(k,value)
+        }else if(k === 'opacity'){
+            this.updateAttribute(Attributes.opacity,value,this.myRef.current)
+        }else if(k === 'mask'){
+            this.updateAttribute(Attributes.mask,`url(#${value})`,this.myRef.current)
+        }//transform
+        else{
+            var container = this.myRef.current
+            let t = this.getAttribute(Attributes.curTransform,container).split(' ')
+            var valueT = ""
+            var currT = ""
+            switch(k){
+                case "transX":
+                        valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${value} ${t[8]})`
+                        currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${value} ${t[8]}`
+                   break;
+                case "transY":
+                        valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${value})`
+                        currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${value}`
+                    break;
+                case "rot":
+                         valueT = `rotate(${value} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${value} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
+                     break;
+                case "rotO":
+                         valueT = `rotate(${t[0]} ${value} ${value}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${value} ${value} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
+                     break;
+                case "rotOx":
+                         valueT = `rotate(${t[0]} ${value} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${value} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
+                    break;
+                case "rotOy":
+                         valueT = `rotate(${t[0]} ${t[1]} ${value}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${t[1]} ${value} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
+                     break;
+                case "sc":
+                         valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${value} ${value}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${t[1]} ${t[2]} ${value} ${value} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
+                     break;
+                case "scX":
+                         valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${value} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${t[1]} ${t[2]} ${value} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
+                     break;
+                case "scY":
+                         valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${value}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${value} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
+                    break;
+                case "scO":
+                         valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${value} ${value}) scale(${t[3]} ${t[4]}) translate(${-value} ${-value}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${value} ${value} ${t[7]} ${t[8]}`
+                    break;
+                case "scOx":
+                         valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${value} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-value} ${-t[6]}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${value} ${t[6]} ${t[7]} ${t[8]}`
+                    break;
+                case "scOy":
+                         valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${value}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-value}) translate(${t[7]} ${t[8]})`
+                         currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${value} ${t[7]} ${t[8]}`
+                    break;
+            }
+
+            if(currT.length > 0 && valueT.length > 0 ){
+                this.updateAttribute(Attributes.transform,valueT,container) 
+                 this.updateAttribute(Attributes.curTransform,currT,container) 
+            }
+        }
+    }
+   
+    handleShadow(k,value){
+        switch(k){
             case "shadow":
-                if(this.myRef.current.shadow.current){ 
-                    let o =  this.myRef.current.shadow.current.hasAttribute('currentopacity') ? this.myRef.current.shadow.current.getAttribute('currentopacity') : "1"
-                    if(value.includes('rgba')){
-                        let colors = value.split(',')
-                        let cs = `${colors[0]},${colors[1]},${colors[2]},${parseFloat(o) * parseFloat(colors[3])})`
-                        this.updateAttribute('flood-color',cs,this.myRef.current.shadow.current)
-                    }
-                   
-                 }
-                break;
-            case "shadowOpacity":
-                 if(this.myRef.current.shadow.current){
-                    let c =  this.myRef.current.shadow.current.getAttribute('flood-color')
-                    if(c.includes('rgba')){
-                        let colors = c.split(',')
-                        let cs = `${colors[0]},${colors[1]},${colors[2]},${value * parseFloat(colors[3])})`
-                        this.updateAttribute('flood-color',cs,this.myRef.current.shadow.current)
-                        this.updateAttribute('currentopacity',value,this.myRef.current.shadow.current)
-                    }
-                   
-                 }
-               
-                break;
             case "shadowRadius":
-                this.updateAttribute('stdDeviation',value,this.myRef.current.shadow.current) 
+            case "shadowOffsetX":
+            case "shadowOffsetY":
+                this.updateAttribute(Attributes[k],value,this.getElement(Attributes.elements.shadow)) 
                 break;
             case "shadowOffset":
-                this.updateAttribute('dx',value,this.myRef.current.shadow.current) 
-                this.updateAttribute('dy',value,this.myRef.current.shadow.current) 
-                break;
-            case "shadowOffsetX":
-                this.updateAttribute('dx',value,this.myRef.current.shadow.current) 
-                break;
-            case "shadowOffsetY":
-                this.updateAttribute('dy',value,this.myRef.current.shadow.current) 
+                this.updateAttribute(Attributes.shadowOffsetX,value,this.getElement(Attributes.elements.shadow)) 
+                this.updateAttribute(Attributes.shadowOffsetY,value,this.getElement(Attributes.elements.shadow)) 
                 break;
             case "shadowRect":
-                this.updateAttribute('filterUnits',value.units,this.myRef.current.shadowFilter.current)
-                this.updateAttribute('x',value.x,this.myRef.current.shadowFilter.current)
-                this.updateAttribute('y',value.y,this.myRef.current.shadowFilter.current)
-                this.updateAttribute('width',value.w,this.myRef.current.shadowFilter.current)
-                this.updateAttribute('height',value.h,this.myRef.current.shadowFilter.current) 
+                let e = this.getElement(Attributes.elements.filter)
+                this.updateAttribute(Attributes.shadowRect.units,value.units,e)
+                this.updateAttribute(Attributes.shadowRect.x,value.x,e)
+                this.updateAttribute(Attributes.shadowRect.y,value.y,e)
+                this.updateAttribute(Attributes.shadowRect.w,value.w,e)
+                this.updateAttribute(Attributes.shadowRect.h,value.h,e) 
                 break
-            case "transX":
-              
-                 if(container){
-                     let t = container.getAttribute('currenttransform').split(' ')
-                     let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${value} ${t[8]})`
-                     let currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${value} ${t[8]}`
-                    this.updateAttribute('transform',valueT,container) 
-                    this.updateAttribute('currenttransform',currT,container) 
-                 }
-                
-                break;
-            case "transY":
-          
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${value})`
-                    let currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${value}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                break;
-            case "rot":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${value} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${value} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                 break;
-            case "rotO":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${value} ${value}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${value} ${value} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                 break;
-            case "rotOx":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${value} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${value} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                break;
-            case "rotOy":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${value}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${t[1]} ${value} ${t[3]} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                 break;
-            case "sc":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${value} ${value}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${t[1]} ${t[2]} ${value} ${value} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                 break;
-            case "scX":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${value} ${t[4]}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${t[1]} ${t[2]} ${value} ${t[4]} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                 break;
-            case "scY":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${t[6]}) scale(${t[3]} ${value}) translate(${-t[5]} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${value} ${t[5]} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                break;
-            case "scO":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${value} ${value}) scale(${t[3]} ${t[4]}) translate(${-value} ${-value}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${value} ${value} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                break;
-            case "scOx":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${value} ${t[6]}) scale(${t[3]} ${t[4]}) translate(${-value} ${-t[6]}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${value} ${t[6]} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                break;
-            case "scOy":
-                if(container){
-                    let t = container.getAttribute('currenttransform').split(' ')
-                    let valueT = `rotate(${t[0]} ${t[1]} ${t[2]}) translate(${t[5]} ${value}) scale(${t[3]} ${t[4]}) translate(${-t[5]} ${-value}) translate(${t[7]} ${t[8]})`
-                    let currT = `${t[0]} ${t[1]} ${t[2]} ${t[3]} ${t[4]} ${t[5]} ${value} ${t[7]} ${t[8]}`
-                   this.updateAttribute('transform',valueT,container) 
-                   this.updateAttribute('currenttransform',currT,container) 
-                }
-                break;
-         }
+        }
     }
-    updateTextAtributte(k,value,ignoreStroke,ignoreFill){
-        if(this.myRef.current.text1.current && !ignoreFill ) this.myRef.current.text1.current.setAttribute(k,value)
-        if(this.myRef.current.text2.current && !ignoreStroke) this.myRef.current.text2.current.setAttribute(k,value)
-    }
+    getElement(id){
+        return this.myRef.current.querySelector(`#${this.keyElemet}${id}${this.props.painterKey}`)
+     }
     updateAttribute(k,value,element){
         if(element) element.setAttribute(k,value)
+    }
+    getAttribute(k,element){
+        if(element)  {
+            let v = element.getAttribute(k)
+            return  v ? v : ""
+        }
+        return ""
     }
 
     render(){

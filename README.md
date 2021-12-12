@@ -6,7 +6,7 @@ android: api 21+
 ios : 10.0+   
 web : SVG
   
- Example -> [Demo](https://github.com/Only-IceSoul/canal/tree/master/react-native/RotaryLogin)  
+ Example(reanimated 2.2.0) -> [Demo](https://github.com/Only-IceSoul/canal/tree/master/react-native/RotaryLogin)  
 <img src="./src/demo.jpg" width="300">
 
 ## Getting started
@@ -95,12 +95,12 @@ add a .swift file
 
 | Name | description | type | default |
 | --- | --- | --- | --- |
-| painterKey | required to shadow,gradient, stroke start, end  | String | "" |
-| viewBox | When creating custom views, you must pass the painter props | Array[Number] (4)| undefined |
-| align | When creating custom views, you must pass the painter props    | String | xMidYMid |
-| aspect | When creating custom views, you must pass the painter props   | String | meet |
+| painterKey | required , unique key | String | "" |
+| viewBox | When creating custom components, you must pass the painter props | Array[Number] (4)| undefined |
+| align | When creating custom components, you must pass the painter props    | String | xMidYMid |
+| aspect | When creating custom components, you must pass the painter props   | String | meet |
 | dashArray | required for stroke start and end  | Number | 0 |
-| dashClipValue |  useful with cap round & stroke start > 0 & stroke end < 1 [ 0 to 1]| Number | 0 |
+| dashClipValue |  useful with cap round & stroke start > 0 & stroke end < 1 [ 0 to 1] rec:0.05| Number | 0 |
 | shadowRect | clip Region  | Object | size * 2 |
 
 <br>
