@@ -123,11 +123,11 @@ public class PaintableViewManager extends SimpleViewManager<PaintableView> {
         view.setShadow(ModUtil.getInt(v,Color.BLACK), ModUtil.isNotNull(v));
 
     }
-    @ReactProp(name = "shadowOpacity")
-    public void setShadowOpacity(PaintableView view ,Dynamic v) {
-        view.setShadowOpacity(ModUtil.getFloat(v,0f), ModUtil.isNotNull(v));
-
-    }
+//    @ReactProp(name = "shadowOpacity")
+//    public void setShadowOpacity(PaintableView view ,Dynamic v) {
+//        view.setShadowOpacity(ModUtil.getFloat(v,0f), ModUtil.isNotNull(v));
+//
+//    }
     @ReactProp(name = "shadowRadius")
     public void setShadowRadius(PaintableView view ,Dynamic v) {
         view.setShadowRadius(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));

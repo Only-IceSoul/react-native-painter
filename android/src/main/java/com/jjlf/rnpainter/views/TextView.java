@@ -251,12 +251,7 @@ public class TextView extends PaintableView {
         mPainter.textPaint.clearShadowLayer();
         mPainter.textPaint2.clearShadowLayer();
         Paint paint = stroke ?  mPainter.textPaint2 :  mPainter.textPaint;
-        if (mProps.getShadowOpacity() > 0f) {
-            final int alpha = Color.alpha(mProps.getShadowColor());
-            final int red = Color.red(mProps.getShadowColor());
-            final int green = Color.green(mProps.getShadowColor());
-            final int blue = Color.blue(mProps.getShadowColor());
-            final int c = Color.argb((int) (mProps.getShadowOpacity() * alpha), red, green, blue);
+        if (mProps.getShadowColor() != Color.TRANSPARENT) {
 
             float ox;
             float oy;
@@ -272,7 +267,7 @@ public class TextView extends PaintableView {
             }
 
             float radius = validateViewBox() ?  ModUtil.viewBoxToMax(mProps.getShadowRadius(),mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(mProps.getShadowRadius());
-            paint.setShadowLayer(radius, ox, oy, c);
+            paint.setShadowLayer(radius, ox, oy, mProps.getShadowColor());
 
         }
     }

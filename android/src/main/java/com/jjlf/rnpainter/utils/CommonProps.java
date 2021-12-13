@@ -33,9 +33,9 @@ public class CommonProps {
     public float mStrokeEnd =  1f;
     public boolean mStrokeEndStatus = false;
 
-    public int mShadowColor = Color.BLACK;
+    public int mShadowColor = Color.TRANSPARENT;
     public boolean mShadowColorStatus = false;
-    public float mShadowOpacity = 0f;
+    public float mShadowOpacity = 1f;
     public boolean mShadowOpacityStatus = false;
     public float mShadowRadius = 2f;
     public boolean mShadowRadiusStatus = false;

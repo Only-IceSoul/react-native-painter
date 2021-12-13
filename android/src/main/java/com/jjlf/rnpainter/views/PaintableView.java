@@ -462,12 +462,7 @@ public class PaintableView extends View implements PaintableInterface {
         mPainter.paint.clearShadowLayer();
         mPainter.paint2.clearShadowLayer();
         Paint paint = stroke ?  mPainter.paint2 :  mPainter.paint;
-        if (mProps.getShadowOpacity() > 0f) {
-            final int alpha = Color.alpha(mProps.getShadowColor());
-            final int red = Color.red(mProps.getShadowColor());
-            final int green = Color.green(mProps.getShadowColor());
-            final int blue = Color.blue(mProps.getShadowColor());
-            final int c = Color.argb((int) (mProps.getShadowOpacity() * alpha), red, green, blue);
+        if (mProps.getShadowColor() != Color.TRANSPARENT) {
 
             float ox;
             float oy;
@@ -483,7 +478,7 @@ public class PaintableView extends View implements PaintableInterface {
             }
 
             float radius = validateViewBox() ?  ModUtil.viewBoxToMax(mProps.getShadowRadius(),mPainter.viewBox,mPainter.rectPath.width(),mPainter.rectPath.height()) : toDip(mProps.getShadowRadius());
-            paint.setShadowLayer(radius, ox, oy, c);
+            paint.setShadowLayer(radius, ox, oy, mProps.getShadowColor());
 
         }
     }

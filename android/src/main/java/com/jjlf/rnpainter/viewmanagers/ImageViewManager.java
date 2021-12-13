@@ -106,11 +106,11 @@ public class ImageViewManager extends SimpleViewManager<ImageView> {
         view.setShadow(ModUtil.getInt(v,Color.BLACK), ModUtil.isNotNull(v));
 
     }
-    @ReactProp(name = "shadowOpacity")
-    public void setShadowOpacity(ImageView view ,Dynamic v) {
-        view.setShadowOpacity(ModUtil.getFloat(v,0f), ModUtil.isNotNull(v));
-
-    }
+//    @ReactProp(name = "shadowOpacity")
+//    public void setShadowOpacity(ImageView view ,Dynamic v) {
+//        view.setShadowOpacity(ModUtil.getFloat(v,0f), ModUtil.isNotNull(v));
+//
+//    }
     @ReactProp(name = "shadowRadius")
     public void setShadowRadius(ImageView view ,Dynamic v) {
         view.setShadowRadius(ModUtil.getFloat(v,2f),ModUtil.isNotNull(v));
