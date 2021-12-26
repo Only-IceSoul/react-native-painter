@@ -495,7 +495,7 @@ import UIKit
             let fillColor = UIColor.parseInt(argb: mProps.getFillColor(), opacity: mProps.getFillOpacity())
             mTextAttrs[.foregroundColor ] = fillColor
         
-            var strokeWidth:CGFloat = validateViewBox() ? mProps.getStrokeWidth().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getStrokeWidth()
+            let strokeWidth:CGFloat = validateViewBox() ? mProps.getStrokeWidth().asViewBoxToMax(mRectVb, mRectPath.width, mRectPath.height) : mProps.getStrokeWidth()
                 
             mTextAttrs[.strokeWidth ] = -strokeWidth
             

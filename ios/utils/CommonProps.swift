@@ -32,9 +32,9 @@ import UIKit
     var strokeEnd :CGFloat = 1
     var strokeEndStatus = false
     
-    var shadowColor = 0xFF000000
+    var shadowColor = 0
     var shadowColorStatus = false
-    var shadowOpacity:Float = 0
+    var shadowOpacity:Float = 1
     var shadowOpacityStatus  = false
     var shadowRadius:CGFloat = 2
     var shadowRadiusStatus = false
