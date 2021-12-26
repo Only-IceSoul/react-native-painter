@@ -82,7 +82,6 @@ add a .swift file
 | strokeStart | the start | Number | 0 |
 | strokeEnd | the end | Number | 1 |
 | shadow | set the sahdow color  | Color | 'black' |
-| shadowOpacity | set the shadow opacity [0 - 1]  | Number | 0 |
 | shadowRadius | the radius | Number | 2 |
 | shadowOffset | set the offset | Number | 2  |
 | shadowOffsetX | set the offset x | Number | 2  |

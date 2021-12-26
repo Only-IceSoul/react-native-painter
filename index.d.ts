@@ -5,7 +5,6 @@ type ColorType = number | string;
 
 interface ShadowProps {
     shadow?: ColorType
-    shadowOpacity?: number
     shadowRadius?:number
     shadowOffset?:number
     shadowOffsetX?:number
